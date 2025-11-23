@@ -1,0 +1,62 @@
+
+.btn{
+  display: block;
+  position:relative;
+  width:140px;
+  height:30px;
+  border: 2px solid #ffffff;
+  color: #000;
+  font-weight:900;
+  border-radius: 15px;
+  line-height:26px;
+  text-align: center;
+  cursor:pointer;
+  text-decoration: unset;
+
+  &.btn-40{
+    height: 40px;
+    line-height:36px;
+    border-radius: 25px;
+    border-width: 3px;
+    font-size: 24px;
+  }
+
+  &.btn-primary{
+        border: 2px solid #ffffff;
+        color: #ffffff;
+        background: #ffffffb5;
+        color: #000;
+    &:hover{
+      background-color:#ffffff;
+    }
+
+  }
+
+  &.btn-secondary{
+    background-color:#CEFB08;
+      color: #000;
+    
+
+    &:hover{
+      background-color:transparent;
+      color: #CEFB08;
+      
+    }
+  }
+
+  &.btn-hover-overlay{
+      &:hover{
+          &:after{
+            content:"";
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background: #000;
+            opacity:0.2;
+          }
+        }
+  }
+
+}

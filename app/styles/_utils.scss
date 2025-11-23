@@ -1,0 +1,171 @@
+.clearfix::after {
+    display: block;
+    visibility: hidden;
+    content: "";
+    clear: both;
+    height: 0;
+}
+
+.pointer-events-none{
+  pointer-events:none;
+}
+
+//// center utils
+.margin-0-auto{
+    margin: 0 auto;
+}
+
+.position-relative{
+  position:relative;
+}
+
+.float-left{
+    float:left;
+}
+
+.float-right{
+    float:right;
+}
+
+.clear-both{
+  clear:both;
+}
+
+.display-block{
+  display:block;
+}
+
+///// size utils
+
+.h-100{
+  height:100%;
+}
+
+.w-100{
+  width:100%;
+}
+
+.w-1\/2{
+    width:50%;
+}
+
+.h-40{
+    height:40px;
+}
+
+.fill-container{ 
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}
+
+.rotate-180{
+  transform: rotate(180deg)
+}
+.rotate-90{
+  transform: rotate(90deg)
+}
+
+/////// flex utils
+
+.flex-container {
+  display: flex;
+}
+
+.position-absolute{
+  position:absolute !important;
+}
+
+//////// text utils
+.font-bold{
+  font-weight: bold;
+}
+
+.font-regular{
+  font-weight:normal;
+}
+
+.text-uppercase{
+  text-transform: uppercase;
+}
+
+.font-size-30{
+  font-size: 30px !important;
+}
+
+.font-size-45{
+  font-size: 45px !important;
+}
+
+.hide-long-text {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+@mixin hide-long-text($lines) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@for $i from 2 through 12 {
+  .hide-long-text-#{$i} {
+    @include hide-long-text($i);
+  }
+}
+
+//////// sanity specific
+
+.has-portable-text p{
+  min-height: 12px;
+  width: 100%;
+}
+.has-portable-text a{
+  color:#000;
+}
+
+
+
+.object-cover
+{
+    object-fit: cover;
+}
+
+.object-contain
+{
+    object-fit: contain;
+}
+
+
+//////// mobile
+.is-mobile{
+  .hide-on-mobile{
+    display:none !important;
+  }
+}
+
+.hide-on-desktop{
+    display:none !important;
+  }
+
+.is-mobile{
+  .hide-on-desktop{
+    display:inline-block !important;
+  }
+}
+
+
+.hide-before-360{
+  display:none;
+  @media (max-width: 360px) {display:inline-block !important;}
+}
+
+.hide-before-480{
+  display:none;
+  @media (max-width: 480px) {display:inline-block !important;}
+}
+
+

@@ -1,0 +1,16 @@
+//// mobile higlight when clicking (tap)
+
+* {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0); 
+}
+
+@media (hover: none) and (pointer: coarse) {
+  a:not(.prevent-default-highlight), a:not(.prevent-default-highlight):hover, a:not(.prevent-default-highlight):active, 
+  [data-mobile-highlight]:hover, 
+  [data-mobile-highlight]:active  {
+
+
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.7) !important;
+
+  }
+}

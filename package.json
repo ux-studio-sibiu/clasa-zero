@@ -1,0 +1,31 @@
+{
+  "name": "game-dev",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@react-google-maps/api": "^2.20.7",
+    "@sanity/structure": "^2.36.2",
+    "@sanity/vision": "^4.2.0",
+    "next": "^15.4.1",
+    "next-sanity": "^10.0.6",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "sanity": "^4.2.0",
+    "sanity-plugin-media": "^4.0.0",
+    "sass": "^1.89.2",
+    "swiper": "^12.0.3",
+    "zustand": "^5.0.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5.8.3"
+  }
+}

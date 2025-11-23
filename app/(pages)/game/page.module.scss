@@ -1,0 +1,30 @@
+.namespace-container{
+  position:relative;
+  float:left;
+  width:100%;
+  height:100%;
+  overflow: hidden;
+  
+  
+  :global{
+    .swiper-questions{
+      height:100%;
+
+      .swiper-wrapper{
+        height:100%;
+      }
+
+      .swiper-button-next,
+        .swiper-button-prev{
+            width:100px;
+            height:100px;
+            color:#fff;
+            opacity:0.8;
+            background: #ffffff3b;
+            padding:10px
+
+        }
+    }
+  }
+
+}
