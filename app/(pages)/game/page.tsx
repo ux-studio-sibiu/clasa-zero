@@ -15,16 +15,19 @@ import type { Swiper as SwiperType } from "swiper";
 import Question_Add from "../../components/question-add";
 import { useSwiperStore } from "./swiper-store";
 import Question_Sanity from '@/app/components/question-sanity';
+import { useDataStore } from '@/app/components/data-store';
 // ------------------------------------------------------------------------
 
 export default function Game() {
   const swiperRef = useRef<SwiperType | null>(null);
   const { slides, addSlide, setSwiper, lockNext } = useSwiperStore();
  
-
   useEffect(() => { if (slides.length === 0) {
-    const newSlide = Math.random() < 0.5 ? <Question_Add /> : <Question_Sanity />;
-    addSlide(newSlide);
+    (async () => {
+      await useDataStore.getState().getQuestionsFromSanity(); 
+      await useDataStore.getState().getShapes(); 
+      addSlide();
+    })(); // iife
   }}, [slides]);
  
   return (

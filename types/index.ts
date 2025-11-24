@@ -10,4 +10,12 @@ export type QuestionType = {
   textColors?: string;
 };
 
+export type FigureFormType = {
+  _id: string;
+  image: {image: string };
+  answers: string[];
+  cssClass?: string;
+  textColors?: string;
+};
+
 

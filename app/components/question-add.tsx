@@ -38,7 +38,7 @@ export default function Question_Add() {
 
       <div className="answers clearfix position-absolute">
         {data.answers.map((ans, i) => (
-          <div key={i} className="answer btn btn-primary margin-0-auto" onClick={() => { const newSlide = Math.random() < 0.5 ? <Question_Add /> : <Question_Sanity />; addSlide(newSlide); unlockNext(); setTimeout(goToNext, 100);}}>{ans}</div>
+          <div key={i} className="answer btn btn-primary margin-0-auto" onClick={() => { addSlide(); unlockNext(); setTimeout(goToNext, 100);}}>{ans}</div>
         ))}
       </div>
     </div>

@@ -6,6 +6,7 @@ import styles from "./question-sanity.module.scss";
 import { useSwiperStore } from "../(pages)/game/swiper-store";
 import type { QuestionType } from "@/types"
 import Question_Add from "./question-add";
+import { useDataStore } from "./data-store";
 
 function generateRandomQuestion() {
   const randomBk = Math.floor(Math.random() * 53) + 1;
@@ -29,7 +30,8 @@ export default function Question_Sanity() {
   
   const [data] = useState(generateRandomQuestion);
 
-  const { addSlide, questionsSanity, unlockNext, goToNext } = useSwiperStore();
+  const { addSlide, unlockNext, goToNext } = useSwiperStore();
+  const {  questionsSanity } = useDataStore();
 
   const question : QuestionType = questionsSanity[Math.floor(Math.random() * questionsSanity.length)];
 
@@ -41,7 +43,7 @@ export default function Question_Sanity() {
 
       <div className="answers clearfix position-absolute">
         {question.answers.map((ans, i) => (
-          <div key={i} className="answer btn btn-primary margin-0-auto" onClick={() => { const newSlide = Math.random() < 0.5 ? <Question_Add /> : <Question_Sanity />; addSlide(newSlide); unlockNext(); setTimeout(goToNext, 100);}}>{ans}</div>
+          <div key={i} className="answer btn btn-primary margin-0-auto" onClick={() => { addSlide(); unlockNext(); setTimeout(goToNext, 100);}}>{ans}</div>
         ))}
       </div>
     </div>
