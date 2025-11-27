@@ -5,7 +5,9 @@ import Image from "next/image";
 import styles from "./question-shape.module.scss";
 import { useSwiperStore } from "../(pages)/game/swiper-store";
 import { useDataStore } from "./data-store";
-import { DARK_COLORS, randomColor } from "@/public/lib/colors";
+import { randomColor, randomShape, randomColorName, randomShapeName } from "@/public/lib/colors";
+import { RandomizeArray} from "@/public/lib/utils";
+import useFitText from "use-fit-text";
 
 function generateData() {
   
@@ -22,18 +24,32 @@ function generateData() {
   const randomBk = weightedIndices[Math.floor(Math.random() * weightedIndices.length)];
   const randomBk2 = Math.floor(Math.random() * 53) + 1;
 
-  const answers = ["vacă roz", "câine roșu", "câine roz", "vacă mov"];
-
   const shapes = useDataStore.getState().shapesList;
   const randomShapeUrl = shapes[Math.floor(Math.random() * shapes.length)];
+
+  const color = randomColor();
+  const darkShade = color.value.darkShades[Math.floor(Math.random() * color.value.darkShades.length)];
+  const lightShade = color.value.lightShades[Math.floor(Math.random() * color.value.lightShades.length)];
+  const shape = randomShape();
+
+  const correctShapeName = shape.value.string;
+  const correctColorName = shape.value.gender == "f" ? color.value.stringF : color.value.stringM;
+
+  const answers = [
+    { text: correctShapeName + " " + correctColorName, className: "correct-answer" },
+    { text: correctShapeName + " " + randomColorName(shape.value.gender, [color.key]), className: "wrong-answer " },
+    { text: randomShapeName([shape.key]) + " " + correctColorName, className: "wrong-answer" },
+    { text: randomShapeName([shape.key]) + " " + randomColorName(shape.value.gender, [color.key]), className: "wrong-answer hide-on-0-520" },
+  ];  
 
   return {
      backgroundUrl: `/images/backgrounds/bk${randomBk}.jpg`,
      backgroundUrl2: `/images/backgrounds/bk${randomBk2}.jpg`, 
-     randomColor: randomColor(DARK_COLORS),
-     shape:randomShapeUrl, 
+     randomColor: darkShade,
+     shape: `/images/shapes/${shape.value.file}`,
      shapeCssClass: `size-${Math.floor(Math.random() * 3) + 1}`,
-     answers : answers  };
+     answers : answers,
+  };
 }
 
 export default function Question_Shape() {
@@ -61,9 +77,15 @@ export default function Question_Shape() {
       <div className="question margin-0-auto position-relative text-effect-shadow-dance "></div>
 
       <div className="answers clearfix position-absolute">
-        {data.answers.map((ans, i) => (
-          <div key={i} className="answer btn btn-primary margin-0-auto" onClick={() => { addSlide(); unlockNext(); setTimeout(goToNext, 100);}}>{ans}</div>
-        ))}
+        {data.answers.map((ans, i) => {
+          const { fontSize, ref: innerTextRef } = useFitText({ minFontSize: 100, maxFontSize: 200, });
+
+          return (
+            <div key={i} ref={innerTextRef} style={{ fontSize }} className={`answer button style-2 margin-0-auto ${ans.className}`} onClick={() => { addSlide(); unlockNext(); setTimeout(goToNext, 100); }}>
+                {ans.text}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

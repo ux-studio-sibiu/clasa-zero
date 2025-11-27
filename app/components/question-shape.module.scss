@@ -16,18 +16,27 @@
       -webkit-mask-size: contain;
       mask-size: contain;
       // background: #000 !important;
+      
+
+      filter: drop-shadow(0 0 0 black)     /* fills mask shape */
+          drop-shadow(0 0 4px black);  /* outline */
 
       &.size-1{
         width:300px;
         height:300px;
         top: calc(50% - 150px);
         left: calc(50% - 150px);
+
+        
       }
       &.size-2{
         width:500px;
         height:500px;
         top: calc(50% - 250px);
         left: calc(50% - 250px);
+
+        @media (max-width: 600px) { width: 500px; height: 500px; top: calc(50% - 250px); left: calc(50% - 250px); }
+        @media (max-width: 400px) { width: 300px; height: 300px; top: calc(50% - 250px); left: calc(50% - 150px); }
       }
       &.size-3{
         width:700px;
@@ -35,20 +44,16 @@
         top: calc(50% - 350px);
         left: calc(50% - 350px);
         opacity:0.9;
+        @media (max-width: 700px) { width: 600px; height: 600px; top: calc(50% - 300px); left: calc(50% - 300px); }
+        @media (max-width: 600px) { width: 500px; height: 500px; top: calc(50% - 250px); left: calc(50% - 250px); }
+        @media (max-width: 400px) { width: 300px; height: 300px; top: calc(50% - 250px); left: calc(50% - 150px); }
       }
 
     }
 
-    .answers{
-      bottom:30px;
-      width:340px;
-      margin-left: calc(50% - 170px);
-      text-transform: uppercase;
-      .answer{
-        float:left;
-        margin: 10px;
-      }
-
+    .outline {
+      filter: drop-shadow(0 0 0 white)     /* internal fill */
+              drop-shadow(0 0 6px #000);    /* outline */
     }
   }
 }

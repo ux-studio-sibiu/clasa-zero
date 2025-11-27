@@ -30,7 +30,7 @@ export const useSwiperStore = create<SwiperStoreState>((set, get) => ({
     set((state) => ({ slides: [...state.slides, newSlide],}))
   },
 
-  generateSlide: () => {return Math.random() < 0.5 ? <Question_Shape /> : <Question_Shape />;},
+  generateSlide: () => {return Math.random() < 0.5 ? <Question_Add /> : <Question_Shape />;},
 
   lockNext: () => {
     const swiper = get().swiper;

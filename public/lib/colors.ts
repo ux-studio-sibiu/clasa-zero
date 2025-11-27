@@ -1,43 +1,50 @@
 
-
-
-
-export const DARK_COLORS = {
-  red:    ["#7F1D1D", "#991B1B", "#B91C1C", "#DC2626", "#EF4444"],
-  orange: ["#7C2D12", "#9A3412", "#C2410C", "#EA580C", "#F97316"],
-  yellow: ["#713F12", "#854D0E", "#A16207", "#CA8A04", "#EAB308"],
-  green:  ["#14532D", "#166534", "#15803D", "#16A34A", "#22C55E"],
-  blue:   ["#1E3A8A", "#1E40AF", "#1D4ED8", "#2563EB", "#3B82F6"],
-  indigo: ["#312E81", "#3730A3", "#4338CA", "#4F46E5", "#6366F1"],
-  violet: ["#4C1D95", "#5B21B6", "#6D28D9", "#7C3AED", "#8B5CF6"],
-  pink:   ["#831843", "#9D174D", "#BE185D", "#DB2777", "#EC4899"]
+export const colors = {
+  red:    { darkShades: ["#D90429", "#EF233C"], lightShades: ["#FF595E", "#FFB3C6"], stringM: "roșu", stringF: "roșie" },
+  // orange: { darkShades: ["#FF6700", "#FF8800"], lightShades: ["#FFB347", "#FFD580"], stringM: "portocaliu", stringF: "portocalie" },
+  // yellow: { darkShades: ["#FFD600", "#FFEA00"], lightShades: ["#FFF700", "#FFFACD"], stringM: "galben", stringF: "galbenă" },
+  green:  { darkShades: ["#00B894", "#00FF72"], lightShades: ["#55EFCB", "#A3FFB3"], stringM: "verde", stringF: "verde" },
+  // blue:   { darkShades: ["#0057B8", "#0074D9"], lightShades: ["#4FC3F7", "#A7C7E7"], stringM: "albastru", stringF: "albastră" },
+  pink:   { darkShades: ["#FF1493", "#E75480"], lightShades: ["#FF69B4", "#FFB6C1"], stringM: "roz", stringF: "roz" },
+  violet: { darkShades: ["#8F00FF", "#9400D3"], lightShades: ["#CBA6FF", "#E0BBE4"], stringM: "mov", stringF: "mov" },
+  white:  { darkShades: ["#E5E5E5", "#CCCCCC"], lightShades: ["#FFFFFF", "#F8F8FF"], stringM: "alb", stringF: "albă" },
+  gray:   { darkShades: ["#4B4B4B", "#6E6E6E"], lightShades: ["#B0B0B0", "#D3D3D3"], stringM: "gri", stringF: "gri" },
+  black:  { darkShades: ["#000000", "#222222"], lightShades: ["#444444", "#555555"], stringM: "negru", stringF: "neagră" }
 } as const;
 
-export const LIGHT_COLORS = {
-  red:    ["#FCA5A5", "#FECACA", "#FEE2E2", "#FEEAEA", "#FFF5F5"],
-  orange: ["#FDBA74", "#FED7AA", "#FFE4C7", "#FFF0DC", "#FFF7ED"],
-  yellow: ["#FDE68A", "#FEF08A", "#FEF9C3", "#FFFBCC", "#FFFDEA"],
-  green:  ["#86EFAC", "#BBF7D0", "#D9FBEA", "#E7FDF3", "#F3FFF9"],
-  blue:   ["#93C5FD", "#BFDBFE", "#DBEAFE", "#E0F2FE", "#F0F9FF"],
-  indigo: ["#A5B4FC", "#C7D2FE", "#E0E7FF", "#EBF0FF", "#F5F7FF"],
-  violet: ["#C4B5FD", "#DDD6FE", "#EDE9FE", "#F5F3FF", "#FBF9FF"],
-  pink:   ["#F9A8D4", "#FBCFE8", "#FCE7F3", "#FDF2F8", "#FFF6FB"]
+export function randomColor(colorKeys?: (keyof typeof colors)[]) {
+  const keys = colorKeys ?? (Object.keys(colors) as (keyof typeof colors)[]);
+  const randomColorKey = keys[Math.floor(Math.random() * keys.length)];
+  return { key: randomColorKey, value: colors[randomColorKey] };
+}
+
+const randomColorObject = randomColor();
+const randomColorObjectFromParam = randomColor(["red"]);
+
+export const shapes = {
+  caprioara: { string: "căprioară", file: "caprioara.png", gender: "f" },
+  iepure:    { string: "iepure", file: "iepure.png", gender: "m" },
+  leu:       { string: "leu", file: "leu.png", gender: "m" },
+  cal:       { string: "cal", file: "cal.png", gender: "m" },
+  urs:       { string: "urs", file: "urs.png", gender: "m" },
+  vaca:      { string: "vacă", file: "vaca.png", gender: "f" },
 } as const;
 
-export function randomShade(
-  colorSet: typeof DARK_COLORS | typeof LIGHT_COLORS,
-  color: keyof typeof colorSet
-) {
-  const shades = colorSet[color];
-  return shades[Math.floor(Math.random() * shades.length)];
+export function randomShape(shapeKeys?: (keyof typeof shapes)[]) {
+  const keys = shapeKeys ?? (Object.keys(shapes) as (keyof typeof shapes)[]);
+  const randomShapeKey = keys[Math.floor(Math.random() * keys.length)];
+  return { key: randomShapeKey, value: shapes[randomShapeKey] };
 }
 
-export function randomColor(colorSet: typeof DARK_COLORS | typeof LIGHT_COLORS) {
-  const colorKeys = Object.keys(colorSet) as (keyof typeof colorSet)[];
-  const randomColorKey = colorKeys[Math.floor(Math.random() * colorKeys.length)];
-  return randomShade(colorSet, randomColorKey);
+export function randomShapeName(notShape?: (keyof typeof shapes)[]) {
+  const keys = (Object.keys(shapes) as (keyof typeof shapes)[]).filter(key => !notShape?.includes(key));
+  const randomShapeKey = keys[Math.floor(Math.random() * keys.length)] as keyof typeof shapes;
+  return shapes[randomShapeKey].string;
 }
 
-const randomColorDark = randomColor(DARK_COLORS);
-const randomDarkBlue = randomShade(DARK_COLORS, "blue");
-const randomLightPink = randomShade(LIGHT_COLORS, "pink");
+export function randomColorName(gender: "m" | "f", notColorKeys: (keyof typeof colors)[]) {
+  const keys = (Object.keys(colors) as (keyof typeof colors)[]).filter(key => !notColorKeys.includes(key));
+  const randomColorKey = keys[Math.floor(Math.random() * keys.length)];
+  const colorObj = colors[randomColorKey];
+  return gender === "f" ? colorObj.stringF : colorObj.stringM;
+}

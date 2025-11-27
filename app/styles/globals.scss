@@ -5,8 +5,8 @@
 
 @use '_utils' as *;
 @use '_buttons' as *;
-
 @use '_utils-text-effects' as *;
+@use 'components/_answers' as *;
 
 html{
   height:100%;

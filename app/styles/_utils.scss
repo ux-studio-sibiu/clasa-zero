@@ -168,4 +168,8 @@
   @media (max-width: 480px) {display:inline-block !important;}
 }
 
+.hide-on-0-520{
+  @media (max-width: 520px) {display:none;}
+}
+
 

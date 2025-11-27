@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./question-add.module.scss";
 import { useSwiperStore } from "../(pages)/game/swiper-store";
-import Question_Sanity from "./question-sanity";
 
 function generateRandomQuestion() {
   const randomBk = Math.floor(Math.random() * 53) + 1;
@@ -12,20 +11,22 @@ function generateRandomQuestion() {
   const b = Math.floor(Math.random() * 10) + 1;
   const correct = a + b;
 
-  const wrongs = [
-    correct + Math.floor(Math.random() * 3) + 1,
-    correct - (Math.floor(Math.random() * 3) + 1),
-    correct + Math.floor(Math.random() * 5) + 4,
-  ];
+  const answers = [
+    { text: correct, className: "correct-answer" },
+    { text: correct + Math.floor(Math.random() * 3) + 1, className: "wrong-answer" },
+    { text: correct - (Math.floor(Math.random() * 3) + 1),className: "wrong-answer" },
+    { text: correct + Math.floor(Math.random() * 5) + 4,className: "wrong-answer hide-on-0-520" },
+  ].sort(() => Math.random() - 0.5);
 
-  const answers = [wrongs[0], correct, wrongs[1], wrongs[2]].sort( () => Math.random() - 0.5);
-
-  return { background: `/images/backgrounds/bk${randomBk}.jpg`, a, b, answers, correctAnswer: correct };
+  return { 
+    background: `/images/backgrounds/bk${randomBk}.jpg`, 
+    answers,
+    a,
+    b
+};
 }
 
-
 export default function Question_Add() {
-  
   const [data] = useState(generateRandomQuestion);
 
   const { addSlide, lockNext, unlockNext, goToNext } = useSwiperStore();
@@ -37,9 +38,13 @@ export default function Question_Add() {
       <div className="question margin-0-auto position-relative text-effect-shadow-dance ">{data.a} + {data.b}</div>
 
       <div className="answers clearfix position-absolute">
-        {data.answers.map((ans, i) => (
-          <div key={i} className="answer btn btn-primary margin-0-auto" onClick={() => { addSlide(); unlockNext(); setTimeout(goToNext, 100);}}>{ans}</div>
-        ))}
+        {data.answers.map((ans, i) => {
+          return (
+            <div key={i} className={`answer button style-2 margin-0-auto ${ans.className}`} onClick={() => { addSlide(); unlockNext(); setTimeout(goToNext, 100); }}>
+                {ans.text}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
