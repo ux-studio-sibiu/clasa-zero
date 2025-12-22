@@ -1,6 +1,7 @@
 import Script from "next/script";
 import "./styles/globals.scss";
 import localFont from 'next/font/local';
+import ScrollBridge from "./components/client-components/scroll-bridge";
 
 const poppins = localFont({
   src: [
@@ -21,6 +22,7 @@ export default async function RootLayout({children}: {children: React.ReactNode}
     <head><link rel="icon" href="/favicon.ico" /></head>
 
       <body className={`${poppins.variable} ${safiro.variable} clearfix`}>
+        <ScrollBridge />
           {children}
       </body>
     </html>
