@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./question-add.module.scss";
-import { useSwiperStore } from "../(pages)/game/swiper-store";
+import { useSwiperStore } from "./zustand-stores/swiper-store";
+import { useGameStore } from "./zustand-stores/game-store";
+import Answer from "./answer";
 
 function generateRandomQuestion() {
   const randomBk = Math.floor(Math.random() * 53) + 1;
@@ -19,7 +21,7 @@ function generateRandomQuestion() {
   ].sort(() => Math.random() - 0.5);
 
   return { 
-    background: `/images/backgrounds/bk${randomBk}.jpg`, 
+    background: `/images/backgrounds/bk${randomBk}.jpg`,
     answers,
     a,
     b
@@ -28,24 +30,62 @@ function generateRandomQuestion() {
 
 export default function Question_Add() {
   const [data] = useState(generateRandomQuestion);
+  const [cssClass_answered, set_cssClass_answered] = useState("not-answered")
 
-  const { addSlide, lockNext, unlockNext, goToNext } = useSwiperStore();
+  const [questionStatus, set_questionStatus] = useState("not-answered") // "not-answered", "answered-correct", "answered-wrong"
+  const { addSlide, addEndSlide, lockNext, unlockNext, goToNext } = useSwiperStore();
+  const { answeredCount, gameLength } = useGameStore();
+
+  useEffect(() => {
+          if (cssClass_answered !== "not-answered") {
+            useGameStore.setState((state) => ({ answeredCount: (state.answeredCount || 0) + 1, }));
+          }
+        }, [cssClass_answered]);
+
+          
+  function continueGame() {
+    addSlide();
+    unlockNext();
+    setTimeout(goToNext, 100);
+  }
+
+   function endGame() {
+    addEndSlide();
+    unlockNext();
+    setTimeout(goToNext, 100);
+  }
+
 
   return (
-    <div className={styles["namespace-container"]}>
+    <div className={`${styles["namespace-container"]} question-container ${cssClass_answered}`}>
       <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" />
-
+      <div style={{color: '#fff', fontSize: '30px'}}> {answeredCount} </div>
       <div className="question margin-0-auto position-relative text-effect-shadow-dance ">{data.a} + {data.b}</div>
 
       <div className="answers clearfix position-absolute">
         {data.answers.map((ans, i) => {
-          return (
-            <div key={i} className={`answer button style-2 margin-0-auto ${ans.className}`} onClick={() => { addSlide(); unlockNext(); setTimeout(goToNext, 100); }}>
-                {ans.text}
-            </div>
-          );
+
+          const answerType = ans.className.includes("correct-answer") ? "answered-correct" : "answered-wrong";
+
+            return <Answer key={i} text={ans.text.toString()} className={ans.className} 
+              onClick={() => {
+                set_cssClass_answered(answerType);
+                if(answeredCount < gameLength && gameLength > 0) {
+                   
+                  continueGame();
+                } else { 
+                  endGame();
+                }
+              
+              }} />;
+          
         })}
+      
       </div>
     </div>
   );
 }
+function getEndSlide() {
+  throw new Error("Function not implemented.");
+}
+

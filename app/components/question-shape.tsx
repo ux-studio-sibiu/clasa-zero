@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./question-shape.module.scss";
-import { useSwiperStore } from "../(pages)/game/swiper-store";
-import { useDataStore } from "./data-store";
+import { useSwiperStore } from "./zustand-stores/swiper-store";
+import { useDataStore } from "./zustand-stores/data-store";
 import { randomColor, randomShape, randomColorName, randomShapeName } from "@/public/lib/colors";
 import { RandomizeArray} from "@/public/lib/utils";
-import useFitText from "use-fit-text";
+import Answer from "./answer";
 
 function generateData() {
   
@@ -61,7 +61,7 @@ export default function Question_Shape() {
   const [data] = useState(generateData);
 
   return (
-    <div className={styles["namespace-container"]}>
+    <div className={styles["namespace-container"] + ` question-container`}>
       <Image src={data.backgroundUrl} fill sizes="100vw" className="object-cover" alt="background" />
 
       <div
@@ -77,15 +77,10 @@ export default function Question_Shape() {
       <div className="question margin-0-auto position-relative text-effect-shadow-dance "></div>
 
       <div className="answers clearfix position-absolute">
-        {data.answers.map((ans, i) => {
-          const { fontSize, ref: innerTextRef } = useFitText({ minFontSize: 100, maxFontSize: 200, });
-
-          return (
-            <div key={i} ref={innerTextRef} style={{ fontSize }} className={`answer button style-2 margin-0-auto ${ans.className}`} onClick={() => { addSlide(); unlockNext(); setTimeout(goToNext, 100); }}>
-                {ans.text}
-            </div>
-          );
-        })}
+        {data.answers.map((ans, i) => 
+          <Answer key={i} text={ans.text} className={ans.className} 
+          onClick={() => { addSlide(); unlockNext(); setTimeout(goToNext, 100); }} />)
+        }
       </div>
     </div>
   );

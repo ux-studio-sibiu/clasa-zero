@@ -1,10 +1,9 @@
-// game/swiper-store.tsx
-
 import { create } from "zustand";
 import type { Swiper as SwiperType } from "swiper";
 import Question_Add from "@/app/components/question-add";
 import Question_Sanity from "@/app/components/question-sanity";
 import Question_Shape from "@/app/components/question-shape";
+import GameEndSlide from "../game-end";
 
 interface SwiperStoreState {
   swiper: SwiperType | null;
@@ -12,6 +11,7 @@ interface SwiperStoreState {
   setSwiper: (s: SwiperType) => void;
   addSlide: (newSlide?: JSX.Element | null) => void;
   generateSlide: () => JSX.Element;
+  addEndSlide: () => void;
   lockNext: () => void;
   unlockNext: () => void;
   goToNext: () => void;
@@ -25,12 +25,18 @@ export const useSwiperStore = create<SwiperStoreState>((set, get) => ({
   setSwiper: (swiper) => set({ swiper }),
 
   addSlide: (newSlide = null) => {
-    // If no slide is provided, generate one randomly
     newSlide = newSlide ?? get().generateSlide();
-    set((state) => ({ slides: [...state.slides, newSlide],}))
+    set((state) => ({ slides: [...state.slides, newSlide],}));
   },
 
-  generateSlide: () => {return Math.random() < 0.5 ? <Question_Add /> : <Question_Shape />;},
+  addEndSlide: () => {
+    var endSlide = <GameEndSlide />;
+    set((state) => ({ slides: [...state.slides, endSlide],}));
+  },
+
+  //generateSlide: () => {return Math.random() < 0.5 ? <Question_Add /> : <Question_Shape />;},
+  //generateSlide: () => {return <Question_Shape />},
+  generateSlide: () => {return <Question_Add />},
 
   lockNext: () => {
     const swiper = get().swiper;
@@ -61,6 +67,6 @@ export const useSwiperStore = create<SwiperStoreState>((set, get) => ({
     const swiper = get().swiper;
     if (!swiper) return;
     swiper.slidePrev();
-  },
+  },  
 
 }));

@@ -11,15 +11,13 @@ import styles from "./page.module.scss";
 
 import { Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import type { Swiper as SwiperType } from "swiper";
-import Question_Add from "../../components/question-add";
-import { useSwiperStore } from "./swiper-store";
-import Question_Sanity from '@/app/components/question-sanity';
-import { useDataStore } from '@/app/components/data-store';
+import GameMenu from '@/app/components/client-components/game-menu';
+import { useSwiperStore } from "../../components/zustand-stores/swiper-store";
+import { useDataStore } from "../../components/zustand-stores/data-store";
+import GameMenuContent from '@/app/components/client-components/game-menu-content';
 // ------------------------------------------------------------------------
 
 export default function Game() {
-  const swiperRef = useRef<SwiperType | null>(null);
   const { slides, addSlide, setSwiper, lockNext } = useSwiperStore();
  
   useEffect(() => { if (slides.length === 0) {
@@ -32,6 +30,8 @@ export default function Game() {
  
   return (
     <main className={`${styles["namespace-container"]}`}>
+      <GameMenu> <GameMenuContent/></GameMenu>
+        
       <Swiper className="swiper-questions " 
         modules={[Pagination, Navigation]} 
         pagination={{ clickable: true }} 

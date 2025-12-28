@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./question-sanity.module.scss";
-import { useSwiperStore } from "../(pages)/game/swiper-store";
+import { useSwiperStore } from "./zustand-stores/swiper-store";
+import { useDataStore } from "./zustand-stores/data-store";
+
 import type { QuestionType } from "@/types"
-import Question_Add from "./question-add";
-import { useDataStore } from "./data-store";
 
 function generateRandomQuestion() {
   const randomBk = Math.floor(Math.random() * 53) + 1;

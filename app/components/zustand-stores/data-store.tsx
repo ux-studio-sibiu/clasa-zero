@@ -1,5 +1,3 @@
-// components/data-store.tsx
-
 import { create } from "zustand";
 import { QuestionType } from "@/types";
 import { getQuestionList } from "@/sanity/sanity.query";
@@ -26,4 +24,3 @@ export const useDataStore = create<DataStoreState>((set, get) => ({
 
  
 }));
-
