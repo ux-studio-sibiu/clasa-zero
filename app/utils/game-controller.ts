@@ -28,11 +28,13 @@ export function resgisterAnswer(isAnswerCorrect?: boolean) {
   if (!isAnswerCorrect) {
     useGameStore.setState({ lives: lives - 1 });
     lives = useGameStore.getState().lives; // Read the updated value of lives
+    if (lives == 0) { endGame(); return; }
+    return
   }
 
   // end game: no more lives
   if (lives == 0) { endGame(); return; }
-
+  
   // end game: reached last question
   if (questionsCount >= gameLength && gameLength != 0) { endGame(); return; }
 
