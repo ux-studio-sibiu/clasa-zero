@@ -15,11 +15,14 @@ import GameMenu from '@/app/components/client-components/game-menu';
 import { useSwiperStore } from "../../components/zustand-stores/swiper-store";
 import { useDataStore } from "../../components/zustand-stores/data-store";
 import GameMenuContent from '@/app/components/client-components/game-menu-content';
+import GameHud from '@/app/components/client-components/game-hud';
+import { useGameStore } from '@/app/components/zustand-stores/game-store';
 // ------------------------------------------------------------------------
 
 export default function Game() {
   const { slides, addSlide, setSwiper, lockNext } = useSwiperStore();
- 
+  const { gameOver } = useGameStore();
+
   useEffect(() => { if (slides.length === 0) {
     (async () => {
       await useDataStore.getState().getQuestionsFromSanity(); 
@@ -31,6 +34,7 @@ export default function Game() {
   return (
     <main className={`${styles["namespace-container"]}`}>
       <GameMenu> <GameMenuContent/></GameMenu>
+      <GameHud />
         
       <Swiper className="swiper-questions " 
         modules={[Pagination, Navigation]} 

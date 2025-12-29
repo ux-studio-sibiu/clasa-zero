@@ -32,9 +32,8 @@ export default function Question_Add() {
   const [data] = useState(generateRandomQuestion);
   const [cssClass_answered, set_cssClass_answered] = useState("not-answered")
 
-  const [questionStatus, set_questionStatus] = useState("not-answered") // "not-answered", "answered-correct", "answered-wrong"
   const { addSlide, addEndSlide, lockNext, unlockNext, goToNext } = useSwiperStore();
-  const { answeredCount, gameLength } = useGameStore();
+  const { questionsCount, answeredCount, gameLength, gameOver } = useGameStore();
 
   useEffect(() => {
           if (cssClass_answered !== "not-answered") {
@@ -50,9 +49,11 @@ export default function Question_Add() {
   }
 
    function endGame() {
+    useGameStore.setState( { gameOver: true });
     addEndSlide();
     unlockNext();
     setTimeout(goToNext, 100);
+    
   }
 
 
@@ -65,27 +66,23 @@ export default function Question_Add() {
       <div className="answers clearfix position-absolute">
         {data.answers.map((ans, i) => {
 
-          const answerType = ans.className.includes("correct-answer") ? "answered-correct" : "answered-wrong";
-
             return <Answer key={i} text={ans.text.toString()} className={ans.className} 
-              onClick={() => {
-                set_cssClass_answered(answerType);
-                if(answeredCount < gameLength && gameLength > 0) {
-                   
-                  continueGame();
-                } else { 
-                  endGame();
-                }
-              
-              }} />;
+            onClick={() => {
+
+              if(questionsCount < gameLength && gameLength > 0) {      
+                continueGame();
+              } else { 
+                endGame();
+              }
+
+            }}
+                  
+            />;
           
         })}
       
       </div>
     </div>
   );
-}
-function getEndSlide() {
-  throw new Error("Function not implemented.");
 }
 

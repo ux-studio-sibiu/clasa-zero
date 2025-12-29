@@ -4,6 +4,10 @@
   width:100%;
   height:100%;
   overflow: hidden;
+
+  &[data-attribute-from-current-slide='on-game-over-slide'] :global(.game-hud){
+    display:none;
+  }
   
   
   :global{
@@ -16,6 +20,7 @@
 
       .swiper-button-next,
         .swiper-button-prev{
+            display: none;
             width:100px;
             height:100px;
             color:#fff;

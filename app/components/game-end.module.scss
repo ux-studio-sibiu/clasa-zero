@@ -6,7 +6,24 @@
 
   :global {
 
-    
+    .animated-gif{
+      display: block;
+      position:relative;
+      width:240px;
+      height:240px;
+      margin: 0 auto;
+      top: calc(50vh - 120px);
+    }
+
+    .actions{
+      position:absolute;
+      bottom:30px;
+      width: 100%;
+
+      .button{
+        max-width:200px;
+      }
+    }
 
   }
 }

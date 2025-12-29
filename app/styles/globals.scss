@@ -4,9 +4,11 @@
 @use '_modern-normalize' as *;
 
 @use '_utils' as *;
+
 @use '_buttons' as *;
 @use '_icons' as *;
 @use '_utils-text-effects' as *;
+@use '_utils-hover-active-focus-states' as *;
 @use 'components/_answers' as *;
 
 html{
@@ -42,4 +44,8 @@ body.still-loading{
 
 .hide-while-still-loading{
   transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }

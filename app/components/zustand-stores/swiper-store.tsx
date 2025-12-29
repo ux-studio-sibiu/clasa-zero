@@ -4,10 +4,14 @@ import Question_Add from "@/app/components/question-add";
 import Question_Sanity from "@/app/components/question-sanity";
 import Question_Shape from "@/app/components/question-shape";
 import GameEndSlide from "../game-end";
+import { useGameStore } from "./game-store";
 
 interface SwiperStoreState {
   swiper: SwiperType | null;
   slides: any[];
+  currentSlideIndex?: number;
+  onGameEndSlide: boolean;
+
   setSwiper: (s: SwiperType) => void;
   addSlide: (newSlide?: JSX.Element | null) => void;
   generateSlide: () => JSX.Element;
@@ -19,14 +23,41 @@ interface SwiperStoreState {
 }
 
 export const useSwiperStore = create<SwiperStoreState>((set, get) => ({
+
   swiper: null,
   slides: [],
+  currentSlideIndex:1,
+  onGameEndSlide: false,
 
-  setSwiper: (swiper) => set({ swiper }),
+  setSwiper: (swiper) => {
+    set({ swiper });
+    swiper.on('slideChange', () => { 
+      set({ currentSlideIndex: swiper.activeIndex + 1 });
+
+      // Check the data-end-game-slide attribute on the active slide
+      const activeSlide = swiper.slides[swiper.activeIndex];
+      
+      const cssAttributeOnMain = activeSlide?.querySelector("[data-add-this-attribute-on-main]")?.getAttribute("data-add-this-attribute-on-main");
+      const mainElement = document.querySelector("main");
+      
+      mainElement?.removeAttribute("data-attribute-from-current-slide");
+      if (mainElement && cssAttributeOnMain) {mainElement.setAttribute("data-attribute-from-current-slide", cssAttributeOnMain);}
+      // Update the gameOver state in useGameStore
+      // useGameStore.setState({ gameOver: isEndGameSlide });
+    });
+  },
 
   addSlide: (newSlide = null) => {
     newSlide = newSlide ?? get().generateSlide();
-    set((state) => ({ slides: [...state.slides, newSlide],}));
+    set((state) => {
+      // adds new slide to array
+      const updatedSlides = [...state.slides, newSlide];
+      
+      // Update slides and questionsCount in gameStore
+      useGameStore.setState({ questionsCount: updatedSlides.length });
+      
+      return { slides: updatedSlides };
+    });
   },
 
   addEndSlide: () => {
