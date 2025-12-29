@@ -37,7 +37,7 @@ export default function Game() {
       <GameHud />
         
       <Swiper className="swiper-questions " 
-        modules={[Pagination, Navigation]} 
+        modules={[Pagination]} 
         pagination={{ clickable: true }} 
         navigation={true} 
         slidesPerView={1} 

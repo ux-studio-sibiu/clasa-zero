@@ -42,8 +42,7 @@ export const useSwiperStore = create<SwiperStoreState>((set, get) => ({
       
       mainElement?.removeAttribute("data-attribute-from-current-slide");
       if (mainElement && cssAttributeOnMain) {mainElement.setAttribute("data-attribute-from-current-slide", cssAttributeOnMain);}
-      // Update the gameOver state in useGameStore
-      // useGameStore.setState({ gameOver: isEndGameSlide });
+
     });
   },
 
@@ -65,9 +64,9 @@ export const useSwiperStore = create<SwiperStoreState>((set, get) => ({
     set((state) => ({ slides: [...state.slides, endSlide],}));
   },
 
-  //generateSlide: () => {return Math.random() < 0.5 ? <Question_Add /> : <Question_Shape />;},
+  generateSlide: () => {return Math.random() < 0.5 ? <Question_Add /> : <Question_Shape />;},
   //generateSlide: () => {return <Question_Shape />},
-  generateSlide: () => {return <Question_Add />},
+  //generateSlide: () => {return <Question_Add />},
 
   lockNext: () => {
     const swiper = get().swiper;

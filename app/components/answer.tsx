@@ -1,26 +1,6 @@
 import React, { useState } from "react";
 import useFitText from "use-fit-text";
-// import { useSwiperStore } from "./zustand-stores/swiper-store";
-// import { useGameStore } from "./zustand-stores/game-store";
-
-
-  // const { addSlide, addEndSlide, unlockNext, goToNext } = useSwiperStore();
-  // const { questionsCount, answeredCount, gameLength, gameOver } = useGameStore();
-
-  // function continueGame() {
-  //   addSlide();
-  //   unlockNext();
-  //   setTimeout(goToNext, 100);
-  // }
-
-  //  function endGame() {
-  //   useGameStore.setState( { gameOver: true });
-  //   addEndSlide();
-  //   unlockNext();
-  //   setTimeout(goToNext, 100);
-    
-  // }
-
+import { resgisterAnswer } from "../utils/game-controller";
 
 export default function Answer({ text, className, isDisabled = false, onClick = () => {} }: { text: string; className: string; isDisabled?: boolean; onClick?: () => void }) {
   
@@ -36,12 +16,7 @@ export default function Answer({ text, className, isDisabled = false, onClick = 
       onClick={(e) => {
         onClick(); 
         setDisabled(true);
-
-        // if(questionsCount < gameLength && gameLength > 0) {      
-        //   continueGame();
-        // } else { 
-        //   endGame();
-        // }
+        resgisterAnswer(isCorrectAnswer);
 
       }}
       ref={innerTextRef} 

@@ -3,11 +3,10 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./question-shape.module.scss";
-import { useSwiperStore } from "./zustand-stores/swiper-store";
 import { useDataStore } from "./zustand-stores/data-store";
 import { randomColor, randomShape, randomColorName, randomShapeName } from "@/public/lib/colors";
-import { RandomizeArray} from "@/public/lib/utils";
 import Answer from "./answer";
+import { resgisterAnswer } from "../utils/game-controller";
 
 function generateData() {
   
@@ -54,10 +53,6 @@ function generateData() {
 
 export default function Question_Shape() {
 
-  const { addSlide, unlockNext, goToNext } = useSwiperStore();
-  const {  shapesList } = useDataStore();
-  
-
   const [data] = useState(generateData);
 
   return (
@@ -68,19 +63,16 @@ export default function Question_Shape() {
         className={`shape ${data.shapeCssClass}`}
         style={{
           WebkitMaskImage: `url(${data.shape})`, maskImage: `url(${data.shape})`,
-          // background: `url(${data.backgroundUrl2}) center/cover no-repeat`,
           background: data.randomColor,
-
         }}
       />
 
       <div className="question margin-0-auto position-relative text-effect-shadow-dance "></div>
 
       <div className="answers clearfix position-absolute">
-        {data.answers.map((ans, i) => 
-          <Answer key={i} text={ans.text} className={ans.className} 
-          onClick={() => { addSlide(); unlockNext(); setTimeout(goToNext, 100); }} />)
-        }
+        {data.answers.map((ans, i) => (
+          <Answer key={i} text={ans.text.toString()} className={ans.className} />
+        ))}
       </div>
     </div>
   );

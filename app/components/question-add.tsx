@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./question-add.module.scss";
-import { useSwiperStore } from "./zustand-stores/swiper-store";
 import { useGameStore } from "./zustand-stores/game-store";
 import Answer from "./answer";
+
 
 function generateRandomQuestion() {
   const randomBk = Math.floor(Math.random() * 53) + 1;
@@ -32,8 +32,6 @@ export default function Question_Add() {
   const [data] = useState(generateRandomQuestion);
   const [cssClass_answered, set_cssClass_answered] = useState("not-answered")
 
-  const { addSlide, addEndSlide, lockNext, unlockNext, goToNext } = useSwiperStore();
-  const { questionsCount, answeredCount, gameLength, gameOver } = useGameStore();
 
   useEffect(() => {
           if (cssClass_answered !== "not-answered") {
@@ -41,44 +39,14 @@ export default function Question_Add() {
           }
         }, [cssClass_answered]);
 
-          
-  function continueGame() {
-    addSlide();
-    unlockNext();
-    setTimeout(goToNext, 100);
-  }
-
-   function endGame() {
-    useGameStore.setState( { gameOver: true });
-    addEndSlide();
-    unlockNext();
-    setTimeout(goToNext, 100);
-    
-  }
-
-
   return (
     <div className={`${styles["namespace-container"]} question-container ${cssClass_answered}`}>
       <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" />
-      <div style={{color: '#fff', fontSize: '30px'}}> {answeredCount} </div>
       <div className="question margin-0-auto position-relative text-effect-shadow-dance ">{data.a} + {data.b}</div>
 
       <div className="answers clearfix position-absolute">
         {data.answers.map((ans, i) => {
-
-            return <Answer key={i} text={ans.text.toString()} className={ans.className} 
-            onClick={() => {
-
-              if(questionsCount < gameLength && gameLength > 0) {      
-                continueGame();
-              } else { 
-                endGame();
-              }
-
-            }}
-                  
-            />;
-          
+            return <Answer key={i} text={ans.text.toString()} className={ans.className}  />;
         })}
       
       </div>
