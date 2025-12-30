@@ -73,12 +73,12 @@ export default function Question_Shape() {
           style={{ WebkitMaskImage: `url(${data.shape})`, maskImage: `url(${data.shape})`, backgroundImage: `url(${data.texture})`,}}
         /> */}
 
-        {/* <div
+        <div
           className={`shape shape-shadow-1`} data-src={data.shape}
           style={{ WebkitMaskImage: `url(${data.shape})`, maskImage: `url(${data.shape})`, background: "#000",}}
         />
 
-        <div
+        {/* <div
           className={`shape shape-shadow-2`} data-src={data.shape}
           style={{ WebkitMaskImage: `url(${data.shape})`, maskImage: `url(${data.shape})`, background: "#ffffffff",}}
         /> */}
