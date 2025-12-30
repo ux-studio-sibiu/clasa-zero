@@ -19,7 +19,7 @@
       }
 
       .swiper-slide:not(.swiper-slide-prev):not(.swiper-slide-next):not(.swiper-slide-active) .question-container{
-          display:none;
+          *{display:none;}
       }
 
       .swiper-button-next,
