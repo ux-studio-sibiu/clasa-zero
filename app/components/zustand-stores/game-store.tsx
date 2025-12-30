@@ -9,7 +9,7 @@ interface GameStoreState {
 }
 
 export const useGameStore = create<GameStoreState>(() => ({
-  gameLength: 5, // 0 = infinite
+  gameLength: 0, // 0 = infinite
   lives: 3,
   questionsCount: 1,
   answeredCount: 0,

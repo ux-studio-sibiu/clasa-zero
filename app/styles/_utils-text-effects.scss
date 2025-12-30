@@ -5,6 +5,13 @@
     // animation: shadow-dance 2s infinite;
 }
 
+.text-effect-shadow-dance-1 {
+    font-size: 4rem;
+    color: #fff;
+    text-shadow: 3px 3px 0 #000000, 6px 6px 0 #5a5a5a;
+    // animation: shadow-dance 2s infinite;
+}
+
 @keyframes shadow-dance {
     0%, 100% { text-shadow: 5px 5px 0 #ff005e, 10px 10px 0 #00d4ff; }
     50% { text-shadow: -5px -5px 0 #00d4ff, -10px -10px 0 #ff005e;}

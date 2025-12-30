@@ -21,7 +21,7 @@ function generateData() {
   const weightedIndices = weights.flatMap((weight, idx) => Array(weight).fill(idx + 1));
 
   const randomBk = weightedIndices[Math.floor(Math.random() * weightedIndices.length)];
-  const randomBk2 = Math.floor(Math.random() * 53) + 1;
+  const randomTexture = Math.floor(Math.random() * 3) + 1;
 
   const shapes = useDataStore.getState().shapesList;
   const randomShapeUrl = shapes[Math.floor(Math.random() * shapes.length)];
@@ -39,14 +39,15 @@ function generateData() {
     { text: correctShapeName + " " + randomColorName(shape.value.gender, [color.key]), className: "wrong-answer " },
     { text: randomShapeName([shape.key]) + " " + correctColorName, className: "wrong-answer" },
     { text: randomShapeName([shape.key]) + " " + randomColorName(shape.value.gender, [color.key]), className: "wrong-answer hide-on-0-520" },
-  ];  
+  ].sort(() => Math.random() - 0.5);  
 
   return {
      backgroundUrl: `/images/backgrounds/bk${randomBk}.jpg`,
-     backgroundUrl2: `/images/backgrounds/bk${randomBk2}.jpg`, 
+    //  backgroundUrl2: `/images/backgrounds/bk${randomBk2}.jpg`, 
      randomColor: darkShade,
      shape: `/images/shapes/${shape.value.file}`,
-     shapeCssClass: `size-${Math.floor(Math.random() * 3) + 1}`,
+     texture: `/images/textures/texture-${randomTexture}.jpg`,
+     shapeCssClass: `size-${Math.floor(Math.random() * 1) + 1}`,
      answers : answers,
   };
 }
@@ -59,13 +60,29 @@ export default function Question_Shape() {
     <div className={styles["namespace-container"] + ` question-container`}>
       <Image src={data.backgroundUrl} fill sizes="100vw" className="object-cover" alt="background" />
 
-      <div
-        className={`shape ${data.shapeCssClass}`}
-        style={{
-          WebkitMaskImage: `url(${data.shape})`, maskImage: `url(${data.shape})`,
-          background: data.randomColor,
-        }}
-      />
+      <div className={`shape-container ${data.shapeCssClass}` } >
+        <div
+          className={`shape `}
+          data-src={data.shape}
+          style={{ WebkitMaskImage: `url(${data.shape})`, maskImage: `url(${data.shape})`, background: data.randomColor,}}
+        />
+
+        <div
+          className={`shape shape-texture`}
+          data-src={data.shape}
+          style={{ WebkitMaskImage: `url(${data.shape})`, maskImage: `url(${data.shape})`, backgroundImage: `url(${data.texture})`,}}
+        />
+
+        <div
+          className={`shape shape-shadow-1`} data-src={data.shape}
+          style={{ WebkitMaskImage: `url(${data.shape})`, maskImage: `url(${data.shape})`, background: "#000",}}
+        />
+
+        <div
+          className={`shape shape-shadow-2`} data-src={data.shape}
+          style={{ WebkitMaskImage: `url(${data.shape})`, maskImage: `url(${data.shape})`, background: "#ffffffff",}}
+        />
+      </div>
 
       <div className="question margin-0-auto position-relative text-effect-shadow-dance "></div>
 

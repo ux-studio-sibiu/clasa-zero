@@ -5,6 +5,7 @@ import Question_Sanity from "@/app/components/question-sanity";
 import Question_Shape from "@/app/components/question-shape";
 import GameEndSlide from "../game-end";
 import { useGameStore } from "./game-store";
+import Question_Series from "../question-series";
 
 interface SwiperStoreState {
   swiper: SwiperType | null;
@@ -61,11 +62,31 @@ export const useSwiperStore = create<SwiperStoreState>((set, get) => ({
 
   addEndSlide: () => {
     var endSlide = <GameEndSlide />;
-    set((state) => ({ slides: [...state.slides, endSlide],}));
-  },
+    set((state) => ({ slides: [...state.slides, endSlide] }));
+    },
 
-  generateSlide: () => {return Math.random() < 0.5 ? <Question_Add /> : <Question_Shape />;},
-  //generateSlide: () => {return <Question_Shape />},
+    generateSlide: () => {
+      const slideType = [
+      { component: <Question_Add />, weight: 45 },
+      { component: <Question_Shape />, weight: 50 },
+      { component: <Question_Series />, weight: 15 },
+      ];
+
+      const totalWeight = slideType.reduce((sum, slide) => sum + slide.weight, 0);
+      const randomWeight = Math.random() * totalWeight;
+
+      let cumulativeWeight = 0;
+      for (const slide of slideType) {
+      cumulativeWeight += slide.weight;
+      if (randomWeight <= cumulativeWeight) {
+        return slide.component;
+      }
+      }
+
+      return slideType[0].component; // Fallback in case of an error
+    },
+  // generateSlide: () => {return <Question_Shape />},
+  // generateSlide: () => {return <Question_Series/>},
   //generateSlide: () => {return <Question_Add />},
 
   lockNext: () => {
