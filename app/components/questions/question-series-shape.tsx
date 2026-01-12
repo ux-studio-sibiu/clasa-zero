@@ -12,7 +12,11 @@ const bk_preffer = ["bk19","bk27","bk34",]
 const bk_avoid = ["bk14","bk23", "bk37" ];
 
 const combos = [["bk27", "palete-big-machine", "style-1",],
-                ["bk25", "palete-happy-aging", "style-1",]];
+                ["bk25", "palete-happy-aging", "style-1",],
+                ["bk11", "palete-grays", "style-1",],
+                ["bk7", " palete-happy-aging", "style-1",],
+                ["bk0", "palete-grays", "style-1",],
+              ];
 
 let palletes = ["palete-grays","palete-blue-teal", "palete-grab-nyt", "palete-big-machine","palete-spring-benefit","palete-happy-aging"]
 
