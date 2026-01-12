@@ -1,34 +1,37 @@
-.answers{
+// common styling
+.answers {
+  text-transform: uppercase;
+  .answer{
+    .answer-icon{
+            width:40px;
+            height:40px;
+            position:absolute;
+            right:10px;
+            top:7px;
+            display:none;
+            &.answer-icon-correct{ background-color:green;}
+            &.answer-icon-wrong{ background-color:red;}
+          }
+  }
+}
+
+
+.answers.style-1{
       bottom:30px;
       width:640px;
       margin-left: calc(50% - 320px);
-      text-transform: uppercase;
-
+      
       .answer{
         float:left;
         margin: 10px;
-
-        .answer-icon{
-          width:40px;
-          height:40px;
-          position:absolute;
-          right:10px;
-          top:7px;
-          display:none;
-          &.answer-icon-correct{ background-color:green;}
-          &.answer-icon-wrong{ background-color:red;}
-        }
-
-        
       }
 
       @media (max-width: 700px) {
         width: 520px;
         margin-left: calc(50% - 260px);
         bottom: 10px;
-        .answer { margin: 5px;}
-
-        .button{
+        .answer { 
+          margin: 5px;
           height:44px;
           width:240px;
           padding:4px 7px;
@@ -39,7 +42,7 @@
       @media (max-width: 520px) {
         width: 100%;
         margin-left:0;
-        .button{clear: both; float:none; margin: 10px auto !important;}
+        .answer{clear: both; float:none; margin: 10px auto !important;}
 
       }
 
@@ -48,10 +51,31 @@
     }
 
 
+    .answers.style-2{
+      bottom:30px;
+      width: 530px;
+      margin-left: calc(50% - 265px);
+
+      .answer{
+        width: 112px;
+        height: 112px;
+        float:left;
+        margin: 10px;
+      
+      }
+
+      @media (max-width: 550px) { transform: scale(0.8); }
+
+      @media (max-width: 440px) { transform: scale(0.7);}
+
+    }
+
+
 .question-container{
   .answers .answer .answer-icon{ display:none;}
-  &.answered .answers .answer{ 
-    &.wrong-answer{ .answer-icon-wrong{display:block;}}
+  // &.answered .answers .answer{ 
+  .answers .answer{ 
+    // &.wrong-answer{ .answer-icon-wrong{display:block;}}
     &.correct-answer{ .answer-icon-correct{display:block;}}
   }
 

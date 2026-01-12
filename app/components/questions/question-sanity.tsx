@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./question-sanity.module.scss";
-import { useSwiperStore } from "./zustand-stores/swiper-store";
-import { useDataStore } from "./zustand-stores/data-store";
+import { useSwiperStore } from "../zustand-stores/swiper-store";
+import { useDataStore } from "../zustand-stores/data-store";
 
 import type { QuestionType } from "@/types"
 
@@ -41,7 +41,7 @@ export default function Question_Sanity() {
 
       <div className="question margin-0-auto position-relative text-effect-shadow-dance ">{question.question}</div>
 
-      <div className="answers clearfix position-absolute">
+      <div className="answers style-1 clearfix position-absolute">
         {question.answers.map((ans, i) => (
           <div key={i} className="answer btn btn-primary margin-0-auto" onClick={() => { addSlide(); unlockNext(); setTimeout(goToNext, 100);}}>{ans}</div>
         ))}

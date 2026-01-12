@@ -1,22 +1,30 @@
 
-//game-utils.ts
+//game-controller.ts
 
 import { useSwiperStore } from "../components/zustand-stores/swiper-store";
 import { useGameStore } from "../components/zustand-stores/game-store";
 
 
+export function startGame() {
+  const { addSlide, addPreloadSlide} = useSwiperStore.getState();
+  addSlide(); 
+  addSlide(); 
+  addPreloadSlide();
+}
+
 export function continueGame() {
-  const { addSlide, unlockNext, goToNext } = useSwiperStore.getState();
+  const { addSlide, addPreloadSlide, unlockNext, goToNext } = useSwiperStore.getState();
   addSlide();
-  unlockNext();
-  setTimeout(goToNext, 100);
+  addPreloadSlide();
+  // unlockNext();
+  setTimeout(() => {goToNext();}, 100);
 }
 
 export function endGame() {
   const { addEndSlide, unlockNext, goToNext } = useSwiperStore.getState();
   useGameStore.setState({ gameOver: true });
   addEndSlide();
-  unlockNext();
+  // unlockNext();
   setTimeout(goToNext, 100);
 }
 
@@ -40,3 +48,7 @@ export function resgisterAnswer(isAnswerCorrect?: boolean) {
 
   continueGame();
 }
+function addPreloadSlide() {
+  throw new Error("Function not implemented.");
+}
+

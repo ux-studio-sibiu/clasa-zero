@@ -1,19 +1,23 @@
 import { create } from "zustand";
 import type { Swiper as SwiperType } from "swiper";
-import Question_Add from "@/app/components/question-add";
-import Question_Sanity from "@/app/components/question-sanity";
-import Question_Shape from "@/app/components/question-shape";
+import Question_Add from "@/app/components/questions/question-add";
+import Question_Sanity from "@/app/components/questions/question-sanity";
+import Question_Shape from "@/app/components/questions/question-shape";
 import GameEndSlide from "../game-end";
 import { useGameStore } from "./game-store";
-import Question_Series from "../question-series";
+import Question_Series from "../questions/question-series";
+import Question_Series_Shape from "../questions/question-series-shape";
+import Question_Pairs from "../questions/question-pairs";
 
 interface SwiperStoreState {
   swiper: SwiperType | null;
   slides: any[];
   currentSlideIndex?: number;
   onGameEndSlide: boolean;
+  preloadSlide: JSX.Element | null;
 
   setSwiper: (s: SwiperType) => void;
+  addPreloadSlide: (slide?: JSX.Element | null) => void;
   addSlide: (newSlide?: JSX.Element | null) => void;
   generateSlide: () => JSX.Element;
   addEndSlide: () => void;
@@ -29,6 +33,7 @@ export const useSwiperStore = create<SwiperStoreState>((set, get) => ({
   slides: [],
   currentSlideIndex:1,
   onGameEndSlide: false,
+  preloadSlide: null,
 
   setSwiper: (swiper) => {
     set({ swiper });
@@ -47,8 +52,14 @@ export const useSwiperStore = create<SwiperStoreState>((set, get) => ({
     });
   },
 
+  addPreloadSlide: (slide = null) => { set({ preloadSlide: get().generateSlide() });},
+
   addSlide: (newSlide = null) => {
-    newSlide = newSlide ?? get().generateSlide();
+
+    // use preload slide if available
+    let preloadedSlide = get().preloadSlide;
+    newSlide = newSlide ?? preloadedSlide ?? get().generateSlide();
+
     set((state) => {
       // adds new slide to array
       const updatedSlides = [...state.slides, newSlide];
@@ -63,39 +74,32 @@ export const useSwiperStore = create<SwiperStoreState>((set, get) => ({
   addEndSlide: () => {
     var endSlide = <GameEndSlide />;
     set((state) => ({ slides: [...state.slides, endSlide] }));
-    },
+  },
 
-    generateSlide: () => {
-      const slideType = [
-      { component: <Question_Add />, weight: 45 },
-      { component: <Question_Shape />, weight: 50 },
-      { component: <Question_Series />, weight: 15 },
-      ];
+  generateSlide: () => {
+    const slideType = [
+    { component: <Question_Add />, weight: 45 },
+    { component: <Question_Shape />, weight: 50 },
+    { component: <Question_Series />, weight: 15 },
+    { component: <Question_Series_Shape />, weight: 30 },
+    { component: <Question_Pairs />, weight: 20 },
+    ];
 
-      const totalWeight = slideType.reduce((sum, slide) => sum + slide.weight, 0);
-      const randomWeight = Math.random() * totalWeight;
+    const totalWeight = slideType.reduce((sum, slide) => sum + slide.weight, 0);
+    const randomWeight = Math.random() * totalWeight;
 
-      let cumulativeWeight = 0;
-      for (const slide of slideType) {
-      cumulativeWeight += slide.weight;
-      if (randomWeight <= cumulativeWeight) {
-        return slide.component;
-      }
-      }
+    let cumulativeWeight = 0;
+    for (const slide of slideType) {
+    cumulativeWeight += slide.weight;
+    if (randomWeight <= cumulativeWeight) { return slide.component; }
+    }
 
-      return slideType[0].component; // Fallback in case of an error
-    },
-  // generateSlide: () => {return <Question_Shape />},
-  // generateSlide: () => {return <Question_Series/>},
-  //generateSlide: () => {return <Question_Add />},
+    return slideType[0].component; // Fallback in case of an error
+  },
 
-  lockNext: () => {
+  lockNext: () => { 
     const swiper = get().swiper;
     if (!swiper) return;
-
-    swiper.allowSlideNext = false;
-    swiper.allowTouchMove = false;
-
     swiper.el.querySelector(".swiper-button-next")?.classList.add("pointer-events-none");
   },
 
@@ -104,7 +108,7 @@ export const useSwiperStore = create<SwiperStoreState>((set, get) => ({
     if (!swiper) return;
 
     swiper.allowSlideNext = true;
-    swiper.allowTouchMove = true;
+    // swiper.allowTouchMove = true;
 
     swiper.el.querySelector(".swiper-button-next")?.classList.remove("pointer-events-none");
   },

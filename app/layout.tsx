@@ -12,8 +12,6 @@ const poppins = localFont({
   display: 'swap',
 });
 
-const safiro = localFont({ src: [{ path: './_fonts/safiro-medium.otf', weight: '400', style: 'normal' },],variable: '--font-lora',display: 'swap',});
-
 export default async function RootLayout({children}: {children: React.ReactNode}) {
 
   return (
@@ -21,7 +19,7 @@ export default async function RootLayout({children}: {children: React.ReactNode}
 
     <head><link rel="icon" href="/favicon.ico" /></head>
 
-      <body className={`${poppins.variable} ${safiro.variable} clearfix`}>
+      <body className={`${poppins.variable} clearfix`}>
         <ScrollBridge />
           {children}
       </body>

@@ -108,6 +108,8 @@
   overflow: hidden;
 }
 
+.text-unselectable {user-select: none;}
+
 @mixin hide-long-text($lines) {
   display: -webkit-box;
   -webkit-line-clamp: $lines;

@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./question-series.module.scss";
-import { useGameStore } from "./zustand-stores/game-store";
-import Answer from "./answer";
+import { useGameStore } from "../zustand-stores/game-store";
+import Answer from "../answer";
 
 const series = [
   { sequence: [1, 1, 1, 1, 1, 1], maxSeriesLength: 3, maxStartNumber: 3 },
@@ -53,7 +53,7 @@ export default function Question_Series() {
       <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" />
       <div className="question margin-0-auto position-relative text-effect-shadow-dance-1 ">{data.seriesText}</div>
 
-      <div className="answers clearfix position-absolute">
+      <div className="answers style-1 clearfix position-absolute">
         {data.answers.map((ans, i) => {
             return <Answer key={i} text={ans.text.toString()} className={ans.className}  />;
         })}

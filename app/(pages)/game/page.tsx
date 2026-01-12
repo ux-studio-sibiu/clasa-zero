@@ -17,17 +17,20 @@ import { useDataStore } from "../../components/zustand-stores/data-store";
 import GameMenuContent from '@/app/components/client-components/game-menu-content';
 import GameHud from '@/app/components/client-components/game-hud';
 import { useGameStore } from '@/app/components/zustand-stores/game-store';
+import { startGame } from '@/app/utils/game-controller';
 // ------------------------------------------------------------------------
 
 export default function Game() {
-  const { slides, addSlide, setSwiper, lockNext } = useSwiperStore();
-  const { gameOver } = useGameStore();
+  const { slides, setSwiper } = useSwiperStore();
+  const preloadSlide = useSwiperStore((state) => state.preloadSlide);
+  const { gameOver,  } = useGameStore();
 
   useEffect(() => { if (slides.length === 0) {
     (async () => {
       await useDataStore.getState().getQuestionsFromSanity(); 
-      await useDataStore.getState().getShapes(); 
-      addSlide();
+      await useDataStore.getState().getShapes();
+      await useDataStore.getState().getBackgrounds();
+      startGame();
     })(); // iife
   }}, [slides]);
  
@@ -39,17 +42,22 @@ export default function Game() {
       <Swiper className="swiper-questions " 
         modules={[Pagination]} 
         pagination={{ clickable: true }} 
-        navigation={true} 
+        // navigation={true} 
         slidesPerView={1} 
-        onSwiper={(swiper) => { setSwiper(swiper); lockNext();}}
+        onSwiper={(swiper) => { setSwiper(swiper);}}
         >
 
-        {slides.map((slide, index) => (
+        {slides.slice(0, -1).map((slide, index) => (
             <SwiperSlide key={index} className="h-100">
               {slide}
-            </SwiperSlide>))}
+            </SwiperSlide>
+        ))}
 
       </Swiper>
+
+      <SwiperSlide  className="h-100 preloaded-slide" >
+              {slides[slides.length - 1]}
+      </SwiperSlide>
     </main>
   );
 }

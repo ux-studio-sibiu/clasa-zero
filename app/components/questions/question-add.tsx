@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./question-add.module.scss";
-import { useGameStore } from "./zustand-stores/game-store";
-import Answer from "./answer";
+import { useGameStore } from "../zustand-stores/game-store";
+import Answer from "../answer";
 
 
 function generateRandomQuestion() {
@@ -44,7 +44,7 @@ export default function Question_Add() {
       <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" />
       <div className="question margin-0-auto position-relative text-effect-shadow-dance ">{data.a} + {data.b}</div>
 
-      <div className="answers clearfix position-absolute">
+      <div className="answers style-1 clearfix position-absolute">
         {data.answers.map((ans, i) => {
             return <Answer key={i} text={ans.text.toString()} className={ans.className}  />;
         })}

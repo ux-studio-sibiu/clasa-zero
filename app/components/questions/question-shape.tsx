@@ -3,10 +3,9 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./question-shape.module.scss";
-import { useDataStore } from "./zustand-stores/data-store";
+import { useDataStore } from "../zustand-stores/data-store";
 import { randomColor, randomShape, randomColorName, randomShapeName } from "@/public/lib/colors";
-import Answer from "./answer";
-import { resgisterAnswer } from "../utils/game-controller";
+import Answer from "../answer";
 
 function generateData() {
   
@@ -66,27 +65,15 @@ export default function Question_Shape() {
           data-src={data.shape}
           style={{ WebkitMaskImage: `url(${data.shape})`, maskImage: `url(${data.shape})`, background: data.randomColor,}}
         />
-
-        {/* <div
-          className={`shape shape-texture`}
-          data-src={data.shape}
-          style={{ WebkitMaskImage: `url(${data.shape})`, maskImage: `url(${data.shape})`, backgroundImage: `url(${data.texture})`,}}
-        /> */}
-
         <div
           className={`shape shape-shadow-1`} data-src={data.shape}
           style={{ WebkitMaskImage: `url(${data.shape})`, maskImage: `url(${data.shape})`, background: "#000",}}
         />
-
-        {/* <div
-          className={`shape shape-shadow-2`} data-src={data.shape}
-          style={{ WebkitMaskImage: `url(${data.shape})`, maskImage: `url(${data.shape})`, background: "#ffffffff",}}
-        /> */}
       </div>
 
       <div className="question margin-0-auto position-relative text-effect-shadow-dance "></div>
 
-      <div className="answers clearfix position-absolute">
+      <div className="answers style-1 clearfix position-absolute">
         {data.answers.map((ans, i) => (
           <Answer key={i} text={ans.text.toString()} className={ans.className} />
         ))}

@@ -18,9 +18,6 @@ export function randomColor(colorKeys?: (keyof typeof colors)[]) {
   return { key: randomColorKey, value: colors[randomColorKey] };
 }
 
-const randomColorObject = randomColor();
-const randomColorObjectFromParam = randomColor(["red"]);
-
 export const shapes = {
   caprioara: { string: "căprioară", file: "caprioara.png", gender: "f" },
   iepure:    { string: "iepure", file: "iepure.png", gender: "m" },
@@ -29,6 +26,25 @@ export const shapes = {
   urs:       { string: "urs", file: "urs.png", gender: "m" },
   vaca:      { string: "vacă", file: "vaca.png", gender: "f" },
 } as const;
+
+export const shapes_svg = [
+  "svg-icon-elephant",
+  "svg-icon-circle",
+  "svg-icon-heart",
+  "svg-icon-triangle",
+  "svg-icon-square-small",
+  "svg-icon-square-2",
+  "svg-icon-petal-4", 
+  "svg-icon-pentagon",
+  "svg-icon-hexagon",
+  "svg-icon-flower-4",
+  "svg-icon-star-8",
+  "svg-icon-star-16",
+  // "svg-icon-plus-rounded",
+  "svg-icon-x-rounded",
+  "svg-icon-blob-1"
+];
+
 
 export function randomShape(shapeKeys?: (keyof typeof shapes)[]) {
   const keys = shapeKeys ?? (Object.keys(shapes) as (keyof typeof shapes)[]);

@@ -7,6 +7,7 @@
 
 @use '_buttons' as *;
 @use '_icons' as *;
+@use '_colors' as *;
 @use '_utils-text-effects' as *;
 @use '_utils-hover-active-focus-states' as *;
 @use 'components/_answers' as *;
@@ -26,10 +27,6 @@ body {
   position:relative;
 }
 
-
-.font-safiro {
-  font-family: var(--font-lora);
-}
 
 .font-default {
   font-family: Arial, sans-serif;
