@@ -40,6 +40,14 @@
   display:block;
 }
 
+///// shape-utils
+.border-radius-10{ border-radius: 10px !important; }
+.border-radius-20{ border-radius: 20px !important; }
+.border-radius-30{ border-radius: 30px !important; }
+.border-radius-40{ border-radius: 40px !important; }
+.border-radius-50{ border-radius: 50px !important; }
+
+
 ///// size utils
 
 .h-100{
@@ -82,6 +90,21 @@
 }
 
 //////// text utils
+
+.text-outline-1{
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: black;
+}
+
+.text-outline-2{
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: black;
+}
+.text-outline-3{
+  -webkit-text-stroke-width: 3px;
+  -webkit-text-stroke-color: black;
+}
+
 .font-bold{
   font-weight: bold;
 }

@@ -45,7 +45,7 @@ export default function Question_Pairs() {
           
             {data.sockArray.map((sockName, index) => {
 
-              const cssClass_flip = index % 2 === 1 ? "flip" : "";
+              const cssClass_flip = index % 2 === 1 ? "flip-x" : "";
               return(
               <div key={index} className="shape-container">
                 <div  className={`shape shape-${index + 1} sock-sprite ${sockName} ${cssClass_flip}` } ></div>
@@ -54,6 +54,8 @@ export default function Question_Pairs() {
             })}
 
         </div>
+
+        <div className="question-text">CARE E FĂRĂ PERECHE ?</div>
       </div>
 
 

@@ -8,6 +8,8 @@ import { useGameStore } from "./game-store";
 import Question_Series from "../questions/question-series";
 import Question_Series_Shape from "../questions/question-series-shape";
 import Question_Pairs from "../questions/question-pairs";
+import Question_Scale_1 from "../questions/question-scale-1";
+import Question_CountColor from "../questions/question-count-color";
 
 interface SwiperStoreState {
   swiper: SwiperType | null;
@@ -78,11 +80,13 @@ export const useSwiperStore = create<SwiperStoreState>((set, get) => ({
 
   generateSlide: () => {
     const slideType = [
-    { component: <Question_Add />, weight: 45 },
-    { component: <Question_Shape />, weight: 50 },
+    { component: <Question_Add />, weight: 25 },
+    { component: <Question_Shape />, weight: 15 },
     { component: <Question_Series />, weight: 15 },
     { component: <Question_Series_Shape />, weight: 30 },
-    { component: <Question_Pairs />, weight: 20 },
+    { component: <Question_Pairs />, weight: 2000 },
+    { component: <Question_Scale_1 />, weight: 20 },
+    { component: <Question_CountColor />, weight: 20 },
     ];
 
     const totalWeight = slideType.reduce((sum, slide) => sum + slide.weight, 0);

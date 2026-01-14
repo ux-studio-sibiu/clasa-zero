@@ -13,8 +13,6 @@
       background-size: $image-size * 6px $image-size * 4px;
       width: $image-size * 1px;
       height: $image-size * 1px;
-
-      &.flip{transform: scaleX(-1);}
       
       &.sock-1 { background-position: 0 0; }
       &.sock-2 { background-position: (-$image-size * 1px) 0; }
@@ -52,6 +50,17 @@
       color:#fff;
       top: calc(40% - 200px);
       text-align:center;
+
+      .question-text{
+        display: inline-block;
+        padding:4px 10px;
+        font-size:40px;
+        font-weight: bold;
+        background-color: #fff;
+        color:#000;
+
+        @media (max-width: 500px) { position:relative; top:-30px; transform: scale(0.8);}
+      }
 
       .container{
         position:relative;
