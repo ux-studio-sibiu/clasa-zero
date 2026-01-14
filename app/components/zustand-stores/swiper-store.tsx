@@ -82,7 +82,7 @@ export const useSwiperStore = create<SwiperStoreState>((set, get) => ({
     const slideType = [
     { component: <Question_Add />, weight: 15 },
     { component: <Question_Shape />, weight: 15 },
-    { component: <Question_Series />, weight: 15 },
+    { component: <Question_Series />, weight: 1500 },
     { component: <Question_Series_Shape />, weight: 30 },
     { component: <Question_Pairs />, weight: 20 },
     { component: <Question_Scale_1 />, weight: 20 },

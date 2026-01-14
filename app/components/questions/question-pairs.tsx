@@ -55,7 +55,7 @@ export default function Question_Pairs() {
 
         </div>
 
-        <div className="question-text">CARE E FĂRĂ PERECHE ?</div>
+        <div className="question-text">FĂRĂ PERECHE ?</div>
       </div>
 
 

@@ -6,6 +6,7 @@ import styles from "./question-add.module.scss";
 import { useGameStore } from "../zustand-stores/game-store";
 import Answer from "../answer";
 
+let palletes = ["palete-grays","palete-blue-teal", "palete-grab-nyt", "palete-big-machine","palete-spring-benefit","palete-happy-aging"]
 
 function generateRandomQuestion() {
   const randomBk = Math.floor(Math.random() * 53) + 1;
@@ -13,15 +14,19 @@ function generateRandomQuestion() {
   const b = Math.floor(Math.random() * 10) + 1;
   const correct = a + b;
 
+  let palleteUsed = palletes[Math.floor(Math.random() * palletes.length)];
+  let colors = Array.from({ length: 5 }, (_, index) => `${palleteUsed}-${(index + 1) * 100}`).sort(() => Math.random() - 0.5);
+
   const answers = [
     { text: correct, className: "correct-answer" },
     { text: correct + Math.floor(Math.random() * 3) + 1, className: "wrong-answer" },
     { text: correct - (Math.floor(Math.random() * 3) + 1),className: "wrong-answer" },
-    { text: correct + Math.floor(Math.random() * 5) + 4,className: "wrong-answer hide-on-0-520" },
+    { text: correct + Math.floor(Math.random() * 5) + 4,className: "wrong-answer" },
   ].sort(() => Math.random() - 0.5);
 
   return { 
     background: `/images/backgrounds/bk${randomBk}.jpg`,
+    colors,
     answers,
     a,
     b
@@ -32,21 +37,22 @@ export default function Question_Add() {
   const [data] = useState(generateRandomQuestion);
   const [cssClass_answered, set_cssClass_answered] = useState("not-answered")
 
-
-  useEffect(() => {
-          if (cssClass_answered !== "not-answered") {
-            useGameStore.setState((state) => ({ answeredCount: (state.answeredCount || 0) + 1, }));
-          }
-        }, [cssClass_answered]);
-
   return (
     <div className={`${styles["namespace-container"]} question-container ${cssClass_answered}`}>
       <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" />
-      <div className="question margin-0-auto position-relative text-effect-shadow-dance ">{data.a} + {data.b}</div>
+      <div className="question margin-0-auto position-relative text-shadow-5 text-outline-3">
+        <>
+          <span>{data.a}</span> 
+          <span>+</span> 
+          <span>{data.b}</span>
+        </>
+      </div>
 
-      <div className="answers style-1 clearfix position-absolute">
+      <div className="answers style-2 clearfix position-absolute">
         {data.answers.map((ans, i) => {
-            return <Answer key={i} text={ans.text.toString()} className={ans.className}  />;
+            return <Answer key={i} className={`border-radius-40 ${ans.className}`} >
+              <span className="">{ans.text}</span>
+            </Answer>;
         })}
       
       </div>

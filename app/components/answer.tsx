@@ -4,7 +4,7 @@ import { resgisterAnswer } from "../utils/game-controller";
 
 export default function Answer({ text, className, isDisabled = false, onClick = () => {}, children }: { text?: string; className: string; isDisabled?: boolean; onClick?: () => void; children?: React.ReactNode }) {
   
-  const { fontSize, ref: innerTextRef } = useFitText({ minFontSize: 100, maxFontSize: 200, });
+  const { fontSize, ref: innerTextRef } = text !== "" ? useFitText({ minFontSize: 100, maxFontSize: 200 }) : { fontSize: undefined, ref: undefined };
 
   const [disabled, setDisabled] = useState(isDisabled);
   const isCorrectAnswer = className.toLowerCase().includes("correct-answer");
@@ -12,7 +12,7 @@ export default function Answer({ text, className, isDisabled = false, onClick = 
   var cssClass_disabled :string = disabled ? "disabled " : "";
 
   return (
-  <div className={`answer button style-2x margin-0-auto ${className} ${cssClass_disabled}`} 
+  <div className={`answer button margin-0-auto ${className} ${cssClass_disabled}`} 
     onClick={(e) => {
     onClick(); 
     setDisabled(true);
@@ -20,7 +20,8 @@ export default function Answer({ text, className, isDisabled = false, onClick = 
 
     }}
     ref={innerTextRef} 
-    style={{ fontSize }}>
+    style={text ? { fontSize } : undefined} // only applyes useFitText() if there is text
+    >
     {text}
     {children}
 
