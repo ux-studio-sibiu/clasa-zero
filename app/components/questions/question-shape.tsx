@@ -42,7 +42,6 @@ function generateData() {
 
   return {
      backgroundUrl: `/images/backgrounds/bk${randomBk}.jpg`,
-    //  backgroundUrl2: `/images/backgrounds/bk${randomBk2}.jpg`, 
      randomColor: darkShade,
      shape: `/images/shapes/${shape.value.file}`,
      texture: `/images/textures/texture-${randomTexture}.jpg`,

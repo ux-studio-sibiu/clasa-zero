@@ -31,10 +31,23 @@
           left:0;
           width:100%;
           line-height: 180px;
+          z-index:2;
+          -webkit-text-stroke-width: 1px;
+          -webkit-text-stroke-color: rgb(0, 0, 0);
+
         }
 
-        &.color-1 .background-svg{
+        .background-svg{
+          position:absolute;
+          z-index:1;
           background:#2bfff7;
+        }
+        .background-svg-shadow{
+          position:absolute;
+          z-index:0;
+          background:#000000;
+          top:3px;
+          left:-3px;
         }
       }
 
@@ -42,8 +55,9 @@
         height:40px;
         width:40px;
         position: absolute;
-        right: 10px;
-        top: 120px;
+        right: 70px;
+        top: 0px;
+        z-index: 3;
 
         .heart-svg{ background:rgb(231, 31, 131);}
 

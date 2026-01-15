@@ -2,6 +2,7 @@
 .answers {
   text-transform: uppercase;
   .answer{
+    overflow: hidden;
     .answer-icon{
             width:40px;
             height:40px;
@@ -71,13 +72,51 @@
 
     }
 
+    .answers.style-3{
+      bottom:30px;
+      width: 100%;
+      display: flex;
+      justify-content: center; /* center the whole group */
+      gap: 16px;
+
+      .answer{
+        width: 240px;
+        float:left;
+        margin: 0px;
+      }
+
+      @media (max-width: 800px) { 
+        .answer{
+          width:180px;
+          height:50px;
+          line-height: 30px;
+          padding: 7px;
+        }
+      }
+
+      @media (max-width: 600px) { 
+        flex-direction: column; 
+        align-content: center; 
+        flex-wrap: wrap;
+        bottom:0;
+        .answer{
+          width:240px;
+          height:40px;
+          line-height: 20px;
+          padding: 7px;
+        }
+      }
+
+    }
+
+
 
 .question-container{
   .answers .answer .answer-icon{ display:none;}
   // &.answered .answers .answer{ 
   .answers .answer{ 
     // &.wrong-answer{ .answer-icon-wrong{display:block;}}
-    // &.correct-answer{ .answer-icon-correct{display:block;}}
+    //  &.correct-answer{ .answer-icon-correct{display:block;}}
   }
 
 }

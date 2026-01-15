@@ -16,11 +16,12 @@ export default function GameHud (){
             <div>Current slide: {useSwiperStore().currentSlideIndex}</div> */}
             <div className="question-number color-1" data-question-number={useSwiperStore().currentSlideIndex}>
               <div className="svg-icon svg-icon-splash background-svg"></div>
+              <div className="svg-icon svg-icon-splash background-svg-shadow"></div>
             </div>
 
-            <div className="lives color-1" data-lives-count={useGameStore().lives}>
+            {/* <div className="lives color-1" data-lives-count={useGameStore().lives}>
               <div className="svg-icon svg-icon-heart heart-svg"></div>
-            </div>
+            </div> */}
 
           </div>
         </div> 

@@ -45,6 +45,19 @@ export const shapes_svg = [
   "svg-icon-blob-1"
 ];
 
+export const allPalletes = [
+  "palete-blue-teal", 
+  "palete-grab-nyt",
+  "palete-spring-benefit",
+  "palete-happy-aging",
+  "palete-big-machine",
+  "palete-grays",
+  "palete-makeup",
+  "palete-limited-paintings",
+  "palete-floral",
+  "palete-luxury-car",
+];
+
 
 export function randomShape(shapeKeys?: (keyof typeof shapes)[]) {
   const keys = shapeKeys ?? (Object.keys(shapes) as (keyof typeof shapes)[]);

@@ -1,0 +1,44 @@
+.namespace-container {
+  float:left;
+  width:100%;
+  height:100%;
+  position:relative;
+
+  :global {
+
+    .question{
+      font-size:70px;
+      color:#fff;
+      top: calc(40% - 200px);
+      text-transform: uppercase;
+      font-weight: bold;
+      text-align:center;
+      word-spacing: 20px;
+
+      span{
+        width:100%;
+        float:left;
+        clear:both;
+        padding: 0 25px;
+
+        &.f{transform: rotate(-5deg);}
+        &.d{ margin-top:60px; transform: rotate(5deg);}
+        &.q{ margin-top:60px; word-spacing: 5px; }
+      }
+
+
+
+       @media (max-width: 600px) { font-size:60px; word-spacing: 10px; span.f{margin-top:30px} span.d,span.q{margin-top:40px;}} 
+       @media (max-width: 500px) { font-size:50px; word-spacing: 10px; span.d,span.q{margin-top:30px;}} 
+
+    }
+
+    .answers{
+
+      .answer{
+            &:active{ top:3px;}
+      }
+    }
+
+  }
+}

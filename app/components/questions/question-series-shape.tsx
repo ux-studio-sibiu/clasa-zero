@@ -32,10 +32,8 @@ const seriesSize = 18;
 
 function generateRandomQuestion() {
 
-  const { backgrounds } = useDataStore.getState();
-  let relevantBackgrounds = backgrounds.filter(bk => !bk_avoid.includes(bk));
-  relevantBackgrounds = relevantBackgrounds.concat(bk_preffer).concat(bk_preffer).concat(bk_preffer);
-  const randomBk = relevantBackgrounds[Math.floor(Math.random() * relevantBackgrounds.length)];
+  const { getRandomBackground } = useDataStore.getState();
+  const randomBk = getRandomBackground(bk_preffer, bk_avoid);
  
   const randomSeries = series[Math.floor(Math.random() * series.length)];
   const shapes = selectUniqueElementsFromArray(shapes_svg, randomSeries.sequence.length);

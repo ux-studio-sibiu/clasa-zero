@@ -9,6 +9,7 @@ import { buildArrayFromSequence, selectUniqueElementsFromArray } from "@/public/
 const bk_preffer = ["bk-28","bk-28",]
 const bk_avoid = ["bk-37",]
 
+const images = ["sprite-socks", "sprite-mittens"];
 
 function generateRandomQuestion() {
   const randomBk = Math.floor(Math.random() * 53) + 1;
@@ -28,6 +29,7 @@ function generateRandomQuestion() {
 
   return { 
     background: `/images/backgrounds/bk${randomBk}.jpg`,
+    imageSprite: images[Math.floor(Math.random() * images.length)],
     sockArray,
     answers,
 };
@@ -48,7 +50,7 @@ export default function Question_Pairs() {
               const cssClass_flip = index % 2 === 1 ? "flip-x" : "";
               return(
               <div key={index} className="shape-container">
-                <div  className={`shape shape-${index + 1} sock-sprite ${sockName} ${cssClass_flip}` } ></div>
+                <div  className={`shape shape-${index + 1} sprite ${data.imageSprite} ${sockName} ${cssClass_flip}` } ></div>
               </div>
               );
             })}
@@ -61,7 +63,7 @@ export default function Question_Pairs() {
 
       <div className="answers style-2 clearfix position-absolute">
         {data.answers.map((ans, i) => {
-            return <Answer key={i} className={ans.className}> <div className={`sock-sprite ${ans.cssClass} margin-0-auto`}></div> </Answer>;
+            return <Answer key={i} className={ans.className}> <div className={`sprite ${data.imageSprite} ${ans.cssClass} margin-0-auto`}></div> </Answer>;
         })}
       
       </div>

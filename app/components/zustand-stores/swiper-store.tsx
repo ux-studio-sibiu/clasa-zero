@@ -10,6 +10,7 @@ import Question_Series_Shape from "../questions/question-series-shape";
 import Question_Pairs from "../questions/question-pairs";
 import Question_Scale_1 from "../questions/question-scale-1";
 import Question_CountColor from "../questions/question-count-color";
+import Question_Weekdays from "../questions/question-weekdays";
 
 interface SwiperStoreState {
   swiper: SwiperType | null;
@@ -87,6 +88,7 @@ export const useSwiperStore = create<SwiperStoreState>((set, get) => ({
     { component: <Question_Pairs />, weight: 20 },
     { component: <Question_Scale_1 />, weight: 20 },
     { component: <Question_CountColor />, weight: 20 },
+    { component: <Question_Weekdays />, weight: 20 },
     ];
 
     const totalWeight = slideType.reduce((sum, slide) => sum + slide.weight, 0);
