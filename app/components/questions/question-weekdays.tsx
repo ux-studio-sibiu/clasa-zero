@@ -5,6 +5,8 @@ import styles from "./question-weekdays.module.scss";
 import Answer from "../answer";
 import { useDataStore } from "../zustand-stores/data-store";
 import { allPalletes } from "@/public/lib/colors";
+// import Brush from "../svg/brush.svg";
+import BrushSquare from "../svg/BrushSquare.svg";
 
 
 
@@ -27,8 +29,8 @@ const questions = [
   {f :"Ieri a fost", q : "Ce este azi?", diff : 1},
   // {f :"Ieri a fost", q : "Ce a fost alaltăieri?", diff : -1},
 
-  {f :"Poimâine va fi", q : "Ce a fost ieri?", diff : -1},
-  {f :"Poimâine va fi", q : "Ce este azi?", diff : -1},
+  // {f :"Poimâine va fi", q : "Ce a fost ieri?", diff : -3},
+  // {f :"Poimâine va fi", q : "Ce este azi?", diff : -1},
   
 ];
 
@@ -71,7 +73,6 @@ export default function Question_Weekdays() {
         <span className={`d text-outline-2 text-shadow-3 ${data.colors[2]}`}>{data.question.d}</span><br/>
         <span className={`q text-outline-2 text-shadow-3 ${data.colors[3]}`}>{data.question.q}</span>
       </div>
-
 
       <div className="answers style-3 clearfix position-absolute">
         {data.answers.map((ans, i) => {

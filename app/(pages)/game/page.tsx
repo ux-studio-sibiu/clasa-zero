@@ -41,7 +41,8 @@ export default function Game() {
         
       <Swiper className="swiper-questions " 
         modules={[Pagination]} 
-        pagination={{ clickable: true }} 
+        pagination={false} 
+        // pagination={{ clickable: true }} 
         // navigation={true} 
         slidesPerView={1} 
         onSwiper={(swiper) => { setSwiper(swiper);}}

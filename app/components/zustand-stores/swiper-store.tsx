@@ -85,10 +85,10 @@ export const useSwiperStore = create<SwiperStoreState>((set, get) => ({
     { component: <Question_Shape />, weight: 15 },
     { component: <Question_Series />, weight: 15 },
     { component: <Question_Series_Shape />, weight: 30 },
-    { component: <Question_Pairs />, weight: 20 },
+    { component: <Question_Pairs />, weight: 10 },
     { component: <Question_Scale_1 />, weight: 20 },
     { component: <Question_CountColor />, weight: 20 },
-    { component: <Question_Weekdays />, weight: 20 },
+    { component: <Question_Weekdays />, weight: 10 },
     ];
 
     const totalWeight = slideType.reduce((sum, slide) => sum + slide.weight, 0);

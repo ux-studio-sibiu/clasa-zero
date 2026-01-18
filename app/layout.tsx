@@ -12,6 +12,14 @@ const poppins = localFont({
   display: 'swap',
 });
 
+const melon = localFont({
+  src: [
+    { path: './_fonts/Melon-Pop.otf', weight: '400', style: 'normal' },
+  ],
+  variable: '--font-melon',
+  display: 'swap',
+});
+
 export default async function RootLayout({children}: {children: React.ReactNode}) {
 
   return (
@@ -19,7 +27,7 @@ export default async function RootLayout({children}: {children: React.ReactNode}
 
     <head><link rel="icon" href="/favicon.ico" /></head>
 
-      <body className={`${poppins.variable} clearfix`}>
+      <body className={`${poppins.variable} ${melon.variable} clearfix`}>
         <ScrollBridge />
           {children}
       </body>

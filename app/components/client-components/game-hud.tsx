@@ -1,12 +1,13 @@
 'use client'
 
+import { useGameTimer } from "@/app/utils/useGameTimer";
 import { useGameStore } from "../zustand-stores/game-store";
 import { useSwiperStore } from "../zustand-stores/swiper-store";
 import styles from "./game-hud.module.scss";
 
 export default function GameHud (){
 
-
+  const remainingTime = useGameTimer(true);
 
   return (
 
@@ -22,6 +23,8 @@ export default function GameHud (){
             {/* <div className="lives color-1" data-lives-count={useGameStore().lives}>
               <div className="svg-icon svg-icon-heart heart-svg"></div>
             </div> */}
+
+            {remainingTime !== 0 && <div className="timer">{remainingTime}</div>}
 
           </div>
         </div> 

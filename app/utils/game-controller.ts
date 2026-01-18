@@ -7,9 +7,11 @@ import { useGameStore } from "../components/zustand-stores/game-store";
 
 export function startGame() {
   const { addSlide, addPreloadSlide} = useSwiperStore.getState();
+  const { startTimer, settings: { timer }} = useGameStore.getState();
   addSlide(); 
   addSlide(); 
   addPreloadSlide();
+  if(timer != 0) {startTimer();}
 }
 
 export function continueGame() {

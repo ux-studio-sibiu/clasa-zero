@@ -11,6 +11,30 @@
       font-size:30px;
       color:#fff;
     }
+
+
+    .on-off-button{
+      position:relative;
+      width:90px;
+      height:90px;
+      border: 3px solid #fff;
+      padding: 20px;
+      padding-top: 0px;
+      border-radius:10px;
+      cursor:pointer;
+      box-shadow: -3px 5px #000;
+
+      .text{
+        position:absolute;
+        width:100%;
+        left: 0;
+        bottom: -3px;
+        text-align: center;
+        font-weight:bold;
+        font-size: 24px;
+      }
+
+    }
     
   }
 }
