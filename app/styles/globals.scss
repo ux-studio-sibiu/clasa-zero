@@ -28,14 +28,14 @@ body {
   position:relative;
 }
 
-.font-melon{
-   font-family: var(--font-melon);
-}
 
-
-.font-default {
-  font-family: Arial, sans-serif;
-}
+.font-melon{ font-family: var(--font-melon); }
+.font-coiny { font-family: var(--font-coiny);}
+.font-francois { font-family: var(--font-francois-one);}
+.font-poetsen { font-family: var(--font-poetsen-one);}
+.font-sansita { font-family: var(--font-sansita);}
+.font-troika { font-family: var(--font-troika);}
+.font-default { font-family: Arial, sans-serif;}
 
 
 body.still-loading{
