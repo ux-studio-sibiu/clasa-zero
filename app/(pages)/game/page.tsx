@@ -23,7 +23,9 @@ import { startGame } from '@/app/utils/game-controller';
 export default function Game() {
   const { slides, setSwiper } = useSwiperStore();
   const preloadSlide = useSwiperStore((state) => state.preloadSlide);
-  const { gameOver,  } = useGameStore();
+  const { settings:{showCorrectAnswer} } = useGameStore();
+
+  const cssClass_showCorrect = showCorrectAnswer ? ' show-correct-answer' : '';
 
   useEffect(() => { if (slides.length === 0) {
     (async () => {
@@ -35,7 +37,7 @@ export default function Game() {
   }}, [slides]);
  
   return (
-    <main className={`${styles["namespace-container"]}`}>
+    <main className={`${styles["namespace-container"]} ${cssClass_showCorrect}`}>
       <GameMenu> <GameMenuContent/></GameMenu>
       <GameHud />
         

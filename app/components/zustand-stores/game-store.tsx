@@ -11,10 +11,32 @@ interface GameStoreState {
 
   settings: {
     timer: number;
+    showCorrectAnswer: boolean,
+
+    questionWeight_Add: number,
+    questionWeight_CountColor: number,
+    questionWeight_Pairs: number,
+    questionWeight_Question_Sanity: number,
+    questionWeight_Question_Scale_1: number,
+    questionWeight_Question_Series_Shape: number,
+    questionWeight_Question_Series: number,
+    questionWeight_Question_Shape: number,
+    questionWeight_Question_Weekdays: number,
     
   }, 
   settingsPossibleValues:{
     timer: number[];
+    showCorrectAnswer: boolean[],
+
+    questionWeight_Add: number[],
+    questionWeight_CountColor: number[],
+    questionWeight_Pairs: number[],
+    questionWeight_Question_Sanity: number[],
+    questionWeight_Question_Scale_1: number[],
+    questionWeight_Question_Series_Shape: number[],
+    questionWeight_Question_Series: number[],
+    questionWeight_Question_Shape: number[],
+    questionWeight_Question_Weekdays: number[],
 
   }
 
@@ -34,14 +56,36 @@ export const useGameStore = create<GameStoreState>()(
 
       settings: {
         timer: 0,
+        showCorrectAnswer: false,
+
+        questionWeight_Add: 1,
+        questionWeight_CountColor: 1,
+        questionWeight_Pairs: 1,
+        questionWeight_Question_Sanity: 1,
+        questionWeight_Question_Scale_1: 1,
+        questionWeight_Question_Series_Shape: 1,
+        questionWeight_Question_Series: 1,
+        questionWeight_Question_Shape: 1,
+        questionWeight_Question_Weekdays: 1,
       },
       settingsPossibleValues: {
         timer: [0, 5, 30, 60, 120, 180], // seconds
+        showCorrectAnswer: [false, true],
+
+        questionWeight_Add: [1,0],
+        questionWeight_CountColor: [1,0],
+        questionWeight_Pairs: [1,0],
+        questionWeight_Question_Sanity: [1,0],
+        questionWeight_Question_Scale_1: [1,0],
+        questionWeight_Question_Series_Shape: [1,0],
+        questionWeight_Question_Series: [1,0],
+        questionWeight_Question_Shape: [1,0],
+        questionWeight_Question_Weekdays: [1,0],
       },
 
       changeSetting: (key) =>
         set((state) => {
-          const values = state.settingsPossibleValues[key];
+          const values = state.settingsPossibleValues[key] as (number | boolean)[];
           const currentValue = state.settings[key];
           if (!Array.isArray(values)) return {};
           const currentIdx = values.indexOf(currentValue);
@@ -60,6 +104,17 @@ export const useGameStore = create<GameStoreState>()(
       partialize: (state) => ({
         settings: {
           timer: state.settings.timer,
+          showCorrectAnswer: state.settings.showCorrectAnswer,
+
+           questionWeight_Add: state.settings.questionWeight_Add,
+           questionWeight_CountColor: state.settings.questionWeight_CountColor,
+           questionWeight_Pairs: state.settings.questionWeight_Pairs,
+           questionWeight_Question_Sanity: state.settings.questionWeight_Question_Sanity,
+           questionWeight_Question_Scale_1: state.settings.questionWeight_Question_Scale_1,
+           questionWeight_Question_Series_Shape: state.settings.questionWeight_Question_Series_Shape,
+           questionWeight_Question_Series: state.settings.questionWeight_Question_Series,
+           questionWeight_Question_Shape: state.settings.questionWeight_Question_Shape,
+           questionWeight_Question_Weekdays: state.settings.questionWeight_Question_Weekdays,
         }
       }),
     }

@@ -111,12 +111,12 @@
 
 
 
-.question-container{
-  .answers .answer .answer-icon{ display:none;}
-  // &.answered .answers .answer{ 
-  .answers .answer{ 
-    // &.wrong-answer{ .answer-icon-wrong{display:block;}}
-    //  &.correct-answer{ .answer-icon-correct{display:block;}}
-  }
+// .question-container{
+//   .answers .answer .answer-icon{ display:none;}
+//   // &.answered .answers .answer{ 
+// }
+
+main.show-correct-answer{
+  .answers .answer.correct-answer{ .answer-icon-correct{display:block;}}
 
 }
