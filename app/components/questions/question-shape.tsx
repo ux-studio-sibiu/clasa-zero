@@ -74,7 +74,7 @@ export default function Question_Shape() {
 
       <div className="answers style-1 clearfix position-absolute">
         {data.answers.map((ans, i) => (
-          <Answer key={i} text={ans.text.toString()} className={ans.className} />
+          <Answer key={i} text={ans.text.toString()} className={`${ans.className} font-coiny`} />
         ))}
       </div>
     </div>
