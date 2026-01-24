@@ -22,6 +22,7 @@ interface GameStoreState {
     questionWeight_Question_Series: number,
     questionWeight_Question_Shape: number,
     questionWeight_Question_Weekdays: number,
+    questionWeight_Question_MissingOnes: number,
     
   }, 
   settingsPossibleValues:{
@@ -37,6 +38,7 @@ interface GameStoreState {
     questionWeight_Question_Series: number[],
     questionWeight_Question_Shape: number[],
     questionWeight_Question_Weekdays: number[],
+    questionWeight_Question_MissingOnes: number[],
 
   }
 
@@ -67,6 +69,7 @@ export const useGameStore = create<GameStoreState>()(
         questionWeight_Question_Series: 1,
         questionWeight_Question_Shape: 1,
         questionWeight_Question_Weekdays: 1,
+        questionWeight_Question_MissingOnes: 1,
       },
       settingsPossibleValues: {
         timer: [0, 5, 30, 60, 120, 180], // seconds
@@ -81,6 +84,7 @@ export const useGameStore = create<GameStoreState>()(
         questionWeight_Question_Series: [1,0],
         questionWeight_Question_Shape: [1,0],
         questionWeight_Question_Weekdays: [1,0],
+        questionWeight_Question_MissingOnes: [1,0],
       },
 
       changeSetting: (key) =>
@@ -115,6 +119,7 @@ export const useGameStore = create<GameStoreState>()(
            questionWeight_Question_Series: state.settings.questionWeight_Question_Series,
            questionWeight_Question_Shape: state.settings.questionWeight_Question_Shape,
            questionWeight_Question_Weekdays: state.settings.questionWeight_Question_Weekdays,
+           questionWeight_Question_MissingOnes: state.settings.questionWeight_Question_MissingOnes,
         }
       }),
     }

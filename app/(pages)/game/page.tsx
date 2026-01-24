@@ -7,7 +7,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import styles from "./page.module.scss";
+import "./page.scss";
 
 import { Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -37,7 +37,7 @@ export default function Game() {
   }}, [slides]);
  
   return (
-    <main className={`${styles["namespace-container"]} ${cssClass_showCorrect}`}>
+    <main className={`nsc--game-page ${cssClass_showCorrect}`}>
       <GameMenu> <GameMenuContent/></GameMenu>
       <GameHud />
         

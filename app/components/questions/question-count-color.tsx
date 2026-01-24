@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import styles from "./question-count-color.module.scss";
+import "./question-count-color.scss";
 import Answer from "../answer";
-import { buildArrayFromSequence, selectUniqueElementsFromArray } from "@/public/lib/utils";
 
 const variants = [{
                     imageName: "balloons-1",
@@ -66,7 +65,7 @@ export default function Question_CountColor() {
   const [data] = useState(generateRandomQuestion);
 
   return (
-    <div className={`${styles["namespace-container"]} question-container`} style={{ backgroundColor: data.question.backgroundFillColor }}>
+    <div className={`nsc--question-count-color question-container`} style={{ backgroundColor: data.question.backgroundFillColor }}>
       
       <div className="question margin-0-auto position-relative ">
         <Image src={`/images/questions/count-color/${data.question.imageName}.jpg`} fill sizes="100vw" className="object-contain" alt="background" />

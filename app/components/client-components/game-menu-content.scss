@@ -1,17 +1,15 @@
-.namespace-container{
+.nsc--game-menu-content{
        max-width : 400px;
        width:100%;
        margin: 0 auto;
        padding: 40px 0px;
 
-  :global{
     .question-count{
       width:100%;
       text-align: center;
       font-size:30px;
       color:#fff;
     }
-
 
     .on-off-button{
       position:relative;
@@ -39,5 +37,4 @@
 
     }
     
-  }
 }

@@ -1,11 +1,8 @@
-.namespace-container {
+.nsc--question-shape {
   float:left;
   width:100%;
   height:100%;
   position:relative;
-
-  :global {
-
 
     .shape-container{
       position:relative;
@@ -89,5 +86,5 @@
       filter: drop-shadow(0 0 0 white)     /* internal fill */
               drop-shadow(0 0 6px #000);    /* outline */
     }
-  }
+  
 }

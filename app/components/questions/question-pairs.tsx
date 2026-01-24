@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import styles from "./question-pairs.module.scss";
+import "./question-pairs.scss";
 import Answer from "../answer";
-import { buildArrayFromSequence, selectUniqueElementsFromArray } from "@/public/lib/utils";
+import { selectUniqueElementsFromArray } from "@/public/lib/utils";
+import { useDataStore } from "../zustand-stores/data-store";
 
 const bk_preffer = ["bk-28","bk-28",]
 const bk_avoid = ["bk-37",]
@@ -12,7 +13,8 @@ const bk_avoid = ["bk-37",]
 const images = ["sprite-socks", "sprite-mittens"];
 
 function generateRandomQuestion() {
-  const randomBk = Math.floor(Math.random() * 53) + 1;
+  const { getRandomBackground } = useDataStore.getState();
+    const randomBk = getRandomBackground([],[]);
 
   const oneSockArray = selectUniqueElementsFromArray(Array.from({ length: 24 }, (_, i) => "sock-" + (i + 1)), 5); // select 5 unique socks from 1 to 24
   let sockArray = [...oneSockArray, ...oneSockArray]; // this aray has 2 socks of each
@@ -28,7 +30,7 @@ function generateRandomQuestion() {
   ].sort(() => Math.random() - 0.5);
 
   return { 
-    background: `/images/backgrounds/bk${randomBk}.jpg`,
+    background: `/images/backgrounds/${randomBk}.jpg`,
     imageSprite: images[Math.floor(Math.random() * images.length)],
     sockArray,
     answers,
@@ -39,7 +41,7 @@ export default function Question_Pairs() {
   const [data] = useState(generateRandomQuestion);
 
   return (
-    <div className={`${styles["namespace-container"]} question-container`}>
+    <div className={`nsc--question-pairs question-container`}>
       <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" />
       <div className="question margin-0-auto position-relative ">
 

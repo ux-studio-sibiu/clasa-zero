@@ -2,11 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import styles from "./question-scale-1.module.scss";
+import "./question-scale-1.scss";
 import Answer from "../answer";
-import { buildArrayFromSequence, selectUniqueElementsFromArray } from "@/public/lib/utils";
 
-const bk_preffer = ["bk1"];
+const bk_preffer = ["bk1, a10, a4, a12"];
 const bk_avoid = [];
 
 let palletes = ["palete-blue-teal", "palete-grab-nyt","palete-spring-benefit","palete-happy-aging"]
@@ -54,7 +53,7 @@ export default function Question_Scale_1() {
   const [data] = useState(generateRandomQuestion);
 
   return (
-    <div className={`${styles["namespace-container"]} question-container`}>
+    <div className={`nsc--question-scale-1 question-container`}>
       <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" />
       <div className="question margin-0-auto position-relative ">
 

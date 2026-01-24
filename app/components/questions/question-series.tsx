@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import styles from "./question-series.module.scss";
-import { useGameStore } from "../zustand-stores/game-store";
+import "./question-series.scss";
 import Answer from "../answer";
+import { useDataStore } from "../zustand-stores/data-store";
 
 const series = [
   { sequence: [1, 1, 1, 1, 1, 1], maxSeriesLength: 3, maxStartNumber: 7 },
@@ -18,7 +18,9 @@ const series = [
 
 
 function generateRandomQuestion() {
-  const randomBk = Math.floor(Math.random() * 53) + 1;
+  
+  const { getRandomBackground } = useDataStore.getState();
+    const randomBk = getRandomBackground([],[]);
 
   const randomSeries = series[Math.floor(Math.random() * series.length)];
   const randomStartNumber = randomSeries.maxStartNumber ? (Math.floor(Math.random() * randomSeries.maxStartNumber) + 1) : 0; // 0-3
@@ -38,7 +40,7 @@ function generateRandomQuestion() {
   ].sort(() => Math.random() - 0.5);
 
   return { 
-    background: `/images/backgrounds/bk${randomBk}.jpg`,
+    background: `/images/backgrounds/${randomBk}.jpg`,
     answers,
     seriesText
 };
@@ -48,7 +50,7 @@ export default function Question_Series() {
   const [data] = useState(generateRandomQuestion);
 
   return (
-    <div className={`${styles["namespace-container"]} question-container`}>
+    <div className={`nsc--question-series question-container`}>
       <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" />
       <div className="question margin-0-auto position-relative text-shadow-1 text-outline-3 ">{data.seriesText}</div>
 

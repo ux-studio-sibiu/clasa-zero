@@ -1,8 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import styles from "./game-end.module.scss";
-import { useSwiperStore } from "./zustand-stores/swiper-store";
+import "./game-end.scss";
 import { useGameStore } from "./zustand-stores/game-store";
 import { useState } from "react";
 
@@ -21,7 +20,7 @@ export default function GameEndSlide() {
   const [data] = useState(generateRandomGif);
 
   return (
-    <div className={`${styles["namespace-container"]} `} data-add-this-attribute-on-main="on-game-over-slide">
+    <div className={`nsc--game-end`} data-add-this-attribute-on-main="on-game-over-slide">
       <div className="animated-gif"><Image src={data.randomGif} fill sizes="100vw" className="object-cover" alt="background" /></div>
       
       <div className="actions">

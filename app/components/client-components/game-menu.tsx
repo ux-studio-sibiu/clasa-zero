@@ -1,6 +1,6 @@
 'use client'
 import { useRef, useEffect, useState, ReactNode, PropsWithChildren } from "react"
-import styles from "./game-menu.module.scss";
+import "./game-menu.scss";
 
 export default function GameMenu ({ children }: PropsWithChildren){
 
@@ -12,7 +12,7 @@ export default function GameMenu ({ children }: PropsWithChildren){
   return (
 
       <>
-        <div className={`game-menu ${styles["namespace-container"]}`} >
+        <div className={`nsc--game-menu`} >
           <div className={`game-menu-button ${cssClass_menuIsActive} `} 
                 onClick={e => { e.preventDefault(); setNavOpen(navOpen => !navOpen); } } >
                 <i>Menu</i>

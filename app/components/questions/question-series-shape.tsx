@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import styles from "./question-series-shape.module.scss";
+import "./question-series-shape.scss";
 import Answer from "../answer";
 import { buildArrayFromSequence, selectUniqueElementsFromArray } from "@/public/lib/utils";
 import { useDataStore } from "../zustand-stores/data-store";
@@ -70,7 +70,7 @@ export default function Question_Series_Shape() {
   const [data] = useState(generateRandomQuestion);
 
   return (
-    <div className={`${styles["namespace-container"]} question-container`}>
+    <div className={`nsc--question-series-shape question-container`}>
       <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" />
       <div className="question margin-0-auto position-relative ">
 

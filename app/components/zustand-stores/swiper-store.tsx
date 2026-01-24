@@ -11,6 +11,7 @@ import Question_Pairs from "../questions/question-pairs";
 import Question_Scale_1 from "../questions/question-scale-1";
 import Question_CountColor from "../questions/question-count-color";
 import Question_Weekdays from "../questions/question-weekdays";
+import Question_MissingOnes from "../questions/question-missing-ones";
 
 interface SwiperStoreState {
   swiper: SwiperType | null;
@@ -90,6 +91,7 @@ export const useSwiperStore = create<SwiperStoreState>((set, get) => ({
     { component: <Question_Scale_1 />, weight: 20 * settings.questionWeight_Question_Scale_1 },
     { component: <Question_CountColor />, weight: 20 * settings.questionWeight_CountColor },
     { component: <Question_Weekdays />, weight: 10 * settings.questionWeight_Question_Weekdays },
+    { component: <Question_MissingOnes />, weight: 30 * settings.questionWeight_Question_MissingOnes },
     ];
 
     const totalWeight = slideType.reduce((sum, slide) => sum + slide.weight, 0);

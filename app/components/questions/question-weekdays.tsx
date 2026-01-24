@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import styles from "./question-weekdays.module.scss";
+import "./question-weekdays.scss";
 import Answer from "../answer";
 import { useDataStore } from "../zustand-stores/data-store";
 import { allPalletes } from "@/public/lib/colors";
@@ -67,7 +67,7 @@ export default function Question_Weekdays() {
   const [data] = useState(generateRandomQuestion);
 
   return (
-    <div className={`${styles["namespace-container"]} question-container ${data.colors[4]}`}>
+    <div className={`nsc--question-weekdays question-container ${data.colors[4]}`}>
       <div className="question margin-0-auto position-relative ">
         <span className={`f text-outline-2 text-shadow-3 font-coiny ${data.colors[1]}`}>{data.question.f}</span><br/>
         <span className={`d text-outline-2 text-shadow-3 font-poetsen ${data.colors[2]}`}>{data.question.d}</span><br/>

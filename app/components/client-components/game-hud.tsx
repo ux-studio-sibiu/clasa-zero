@@ -3,7 +3,7 @@
 import { useGameTimer } from "@/app/utils/useGameTimer";
 import { useGameStore } from "../zustand-stores/game-store";
 import { useSwiperStore } from "../zustand-stores/swiper-store";
-import styles from "./game-hud.module.scss";
+import "./game-hud.scss";
 
 export default function GameHud (){
 
@@ -11,7 +11,7 @@ export default function GameHud (){
 
   return (
 
-        <div className={`${styles["namespace-container"]}`} >
+        <div className={`nsc--game-hud`} >
           <div className="game-hud">
             {/* <div>Questions: {useGameStore().questionsCount}</div>
             <div>Current slide: {useSwiperStore().currentSlideIndex}</div> */}

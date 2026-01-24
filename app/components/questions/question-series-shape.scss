@@ -1,10 +1,8 @@
-.namespace-container {
+.nsc--question-series-shape {
   float:left;
   width:100%;
   height:100%;
   position:relative;
-
-  :global {
 
     .question{
       font-size:70px;
@@ -78,5 +76,5 @@
     @media (min-width: 1200px) { .container{ transform:scale(1.2);} }
     @media (min-width: 1800px) { .container{ transform:scale(1.6);} }
 
-  }
+
 }

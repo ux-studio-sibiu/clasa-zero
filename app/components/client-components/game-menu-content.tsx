@@ -1,6 +1,6 @@
 'use client'
 import { PropsWithChildren } from "react"
-import styles from "./game-menu-content.module.scss";
+import "./game-menu-content.scss";
 import { useGameStore } from './../zustand-stores/game-store';
 
 export default function GameMenuContent ({ children }: PropsWithChildren){
@@ -13,7 +13,7 @@ export default function GameMenuContent ({ children }: PropsWithChildren){
   return (
 
       <>
-        <div className={`${styles["namespace-container"]} `}>
+        <div className={`nsc--game-menu-content`} >
 
             <button className="on-off-button" onClick={() => useGameStore.getState().changeSetting('timer')} >
               <span className="svg-icon svg-icon-timer"></span>
@@ -73,6 +73,14 @@ export default function GameMenuContent ({ children }: PropsWithChildren){
             <button className="on-off-button" onClick={() => useGameStore.getState().changeSetting('questionWeight_Question_Weekdays')} >
               <span className="">Weekdays</span>
               <span className="text">{settings.questionWeight_Question_Weekdays}</span>
+            </button>
+
+
+
+
+            <button className="on-off-button clear-both" onClick={() => useGameStore.getState().changeSetting('questionWeight_Question_MissingOnes')} >
+              <span className="">Missing</span>
+              <span className="text">{settings.questionWeight_Question_MissingOnes}</span>
             </button>
             
             

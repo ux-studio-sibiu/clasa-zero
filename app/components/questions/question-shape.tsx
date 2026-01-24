@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import styles from "./question-shape.module.scss";
+import  "./question-shape.scss";
 import { useDataStore } from "../zustand-stores/data-store";
 import { randomColor, randomShape, randomColorName, randomShapeName } from "@/public/lib/colors";
 import Answer from "../answer";
@@ -19,7 +19,9 @@ function generateData() {
   // Create a weighted array of background indices
   const weightedIndices = weights.flatMap((weight, idx) => Array(weight).fill(idx + 1));
 
-  const randomBk = weightedIndices[Math.floor(Math.random() * weightedIndices.length)];
+  const { getRandomBackground } = useDataStore.getState();
+  const randomBk = getRandomBackground([],[]);
+    
   const randomTexture = Math.floor(Math.random() * 3) + 1;
 
   const shapes = useDataStore.getState().shapesList;
@@ -41,7 +43,7 @@ function generateData() {
   ].sort(() => Math.random() - 0.5);  
 
   return {
-     backgroundUrl: `/images/backgrounds/bk${randomBk}.jpg`,
+     backgroundUrl: `/images/backgrounds/${randomBk}.jpg`,
      randomColor: darkShade,
      shape: `/images/shapes/${shape.value.file}`,
      texture: `/images/textures/texture-${randomTexture}.jpg`,
@@ -55,7 +57,7 @@ export default function Question_Shape() {
   const [data] = useState(generateData);
 
   return (
-    <div className={styles["namespace-container"] + ` question-container`}>
+    <div className={`nsc--question-shape question-container`}>
       <Image src={data.backgroundUrl} fill sizes="100vw" className="object-cover" alt="background" />
 
       <div className={`shape-container ${data.shapeCssClass}` } >

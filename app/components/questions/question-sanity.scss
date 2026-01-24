@@ -1,18 +1,15 @@
-.namespace-container {
+.nsc--question-sanity {
   float:left;
   width:100%;
   height:100%;
   position:relative;
 
-  :global {
-
     .question{
       font-size:100px;
-      font-weight: bold;
       color:#fff;
       top:40%;
       text-align:center;
-
+      // width:400px;
     .question-text{
 
       display:inline-block;
@@ -23,5 +20,15 @@
 
     }
 
-  }
+    .answers{
+      bottom:30px;
+      width:340px;
+      margin-left: calc(50% - 170px);
+      .answer{
+        float:left;
+        margin: 10px;
+      }
+
+    }
+  
 }

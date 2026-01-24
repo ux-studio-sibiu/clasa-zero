@@ -72,12 +72,14 @@
     height: 100%;
 }
 
-.rotate-180{
-  transform: rotate(180deg)
-}
-.rotate-90{
-  transform: rotate(90deg)
-}
+.rotate-180{ transform: rotate(180deg)}
+.rotate-90{ transform: rotate(90deg)}
+
+.scale-90{ transform: scale(0.9) }
+.scale-80{ transform: scale(0.8) }
+.scale-70{ transform: scale(0.7) }
+.scale-60{ transform: scale(0.6) }
+.scale-50{ transform: scale(0.5) }
 
 /////// flex utils
 
@@ -127,6 +129,14 @@
 
 .font-size-45{
   font-size: 45px !important;
+}
+
+.font-size-50{
+  font-size: 50px !important;
+}
+
+.font-size-60{
+  font-size: 60px !important;
 }
 
 .hide-long-text {

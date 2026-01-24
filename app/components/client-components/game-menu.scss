@@ -1,4 +1,4 @@
-.namespace-container{
+.nsc--game-menu{
         position:absolute;
         z-index: 99;
         top:10px;
@@ -6,7 +6,6 @@
         padding: 18px 12px;
         background: rgb(0 0 0 / 34%);
 
-  :global{
 
     .game-menu-button {
         display: block;
@@ -88,5 +87,5 @@
       }  
 
       
-  }
+  
 }

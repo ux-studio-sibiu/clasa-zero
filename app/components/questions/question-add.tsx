@@ -2,14 +2,18 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import styles from "./question-add.module.scss";
+import "./question-add.scss";
 import { useGameStore } from "../zustand-stores/game-store";
 import Answer from "../answer";
+import { useDataStore } from "../zustand-stores/data-store";
 
 let palletes = ["palete-grays","palete-blue-teal", "palete-grab-nyt", "palete-big-machine","palete-spring-benefit","palete-happy-aging"]
 
 function generateRandomQuestion() {
-  const randomBk = Math.floor(Math.random() * 53) + 1;
+  
+  const { getRandomBackground } = useDataStore.getState();
+    const randomBk = getRandomBackground([],[]);
+
   const a = Math.floor(Math.random() * 10) + 1;
   const b = Math.floor(Math.random() * 10) + 1;
   const correct = a + b;
@@ -25,7 +29,7 @@ function generateRandomQuestion() {
   ].sort(() => Math.random() - 0.5);
 
   return { 
-    background: `/images/backgrounds/bk${randomBk}.jpg`,
+    background: `/images/backgrounds/${randomBk}.jpg`,
     colors,
     answers,
     a,
@@ -38,7 +42,7 @@ export default function Question_Add() {
   const [cssClass_answered, set_cssClass_answered] = useState("not-answered")
 
   return (
-    <div className={`${styles["namespace-container"]} question-container ${cssClass_answered}`}>
+    <div className={`nsc--question-add question-container ${cssClass_answered}`}>
       <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" />
       <div className="question margin-0-auto position-relative text-shadow-5 text-outline-3">
         <>

@@ -1,10 +1,8 @@
-.namespace-container{
+.nsc--game-hud{
         position:absolute;
         z-index: 2;
         background: rgb(0 0 0 / 34%);
         width:100%;
-
-  :global{
 
     .game-hud{
       max-width:400px;
@@ -75,6 +73,4 @@
       }
     }
 
-      
-  }
 }
