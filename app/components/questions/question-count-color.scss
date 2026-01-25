@@ -5,11 +5,13 @@
   position:relative;
 
     .question{
+      margin-top: 20px;
       height:90%;
-      max-height:900px;
+      max-height:80vh;
       width:100%;
       text-align:center;
 
+      @media (max-width: 600px) { margin-top: 0px; }
 
       .container{
         position:relative;
