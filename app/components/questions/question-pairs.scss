@@ -12,7 +12,13 @@
       height: $image-size * 1px;
 
       &.sprite-socks{ background-image: url("/images/questions/socks.jpg"); }
+      &.sprite-socks-2{ background-image: url("/images/questions/socks-2.jpg"); }
+      &.sprite-socks-3{ background-image: url("/images/questions/socks-3.jpg"); }
+      &.sprite-socks-4{ background-image: url("/images/questions/socks-4.jpg"); }
+
+
       &.sprite-mittens{ background-image: url("/images/questions/mittens.jpg"); }
+      &.sprite-mittens-2{ background-image: url("/images/questions/mittens-2.jpg"); }
       
       &.sock-1 { background-position: 0 0; }
       &.sock-2 { background-position: (-$image-size * 1px) 0; }

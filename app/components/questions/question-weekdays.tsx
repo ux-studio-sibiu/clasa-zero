@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import "./question-weekdays.scss";
 import Answer from "../answer";
 import { useDataStore } from "../zustand-stores/data-store";
@@ -10,7 +11,7 @@ import BrushSquare from "../svg/BrushSquare.svg";
 
 
 
-const bk_preffer = ["bk2"];
+const bk_preffer = ["a12"];
 const bk_avoid = ["bk10"];
 
 let palletes = allPalletes;
@@ -37,7 +38,7 @@ const questions = [
 
 function generateRandomQuestion() {
   const { getRandomBackground } = useDataStore.getState();
-  const randomBk = getRandomBackground(bk_preffer, bk_avoid);
+  const randomBk = bk_preffer[Math.floor(Math.random() * bk_preffer.length)];
 
   let palleteUsed = palletes[Math.floor(Math.random() * palletes.length)];
   let colors = Array.from({ length: 5 }, (_, index) => `${palleteUsed}-${(index + 1) * 100}`).sort(() => Math.random() - 0.5);
@@ -68,6 +69,7 @@ export default function Question_Weekdays() {
 
   return (
     <div className={`nsc--question-weekdays question-container ${data.colors[4]}`}>
+      <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" />
       <div className="question margin-0-auto position-relative ">
         <span className={`f text-outline-2 text-shadow-3 font-coiny ${data.colors[1]}`}>{data.question.f}</span><br/>
         <span className={`d text-outline-2 text-shadow-3 font-poetsen ${data.colors[2]}`}>{data.question.d}</span><br/>

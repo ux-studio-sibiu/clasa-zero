@@ -10,7 +10,7 @@ import { useDataStore } from "../zustand-stores/data-store";
 const bk_preffer = ["bk-28","bk-28",]
 const bk_avoid = ["bk-37",]
 
-const images = ["sprite-socks", "sprite-mittens"];
+const images = ["sprite-socks","sprite-socks-2","sprite-socks-3","sprite-socks-4", "sprite-mittens", "sprite-mittens-2"];
 
 function generateRandomQuestion() {
   const { getRandomBackground } = useDataStore.getState();

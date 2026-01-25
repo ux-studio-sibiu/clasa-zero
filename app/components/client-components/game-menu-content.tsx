@@ -82,6 +82,11 @@ export default function GameMenuContent ({ children }: PropsWithChildren){
               <span className="">Missing</span>
               <span className="text">{settings.questionWeight_Question_MissingOnes}</span>
             </button>
+
+            <button className="on-off-button" onClick={() => useGameStore.getState().changeSetting('questionWeight_Question_Hands')} >
+              <span className="">Hands</span>
+              <span className="text">{settings.questionWeight_Question_Hands}</span>
+            </button>
             
             
 

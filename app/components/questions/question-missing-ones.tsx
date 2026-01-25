@@ -5,7 +5,7 @@ import Image from "next/image";
 import "./question-missing-ones.scss";
 import Answer from "../answer";
 
-const bk_preffer = ["c1[blue]", "c2[purple]","c3[blue]","c4[yellow]","c5[red]","c6[white]"];
+const bk_preffer = ["c1[blue]", "c2[purple]","c3[blue]","c4[yellow]","c5[red]"];
 const symbols = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 function generateRandomQuestion() {

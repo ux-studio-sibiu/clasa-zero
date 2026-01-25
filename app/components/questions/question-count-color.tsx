@@ -53,6 +53,7 @@ const variants = [{
                   {
                     imageName: "cars-1",
                     backgroundFillColor: "#03353f",
+                    backgroundImage: "a12",
                     answers: [
                       { color: "#cc3c1a", count: 3 },{ color: "#418820", count: 3 },
                       { color: "#005890", count: 4 },{ color: "#5c448e", count: 3 },
@@ -62,6 +63,7 @@ const variants = [{
                   {
                     imageName: "cars-2",
                     backgroundFillColor: "#3d3d3d",
+                    backgroundImage: "a12",
                     answers: [
                       { color: "#d31519", count: 5 },{ color: "#e9b10e", count: 2 },
                       { color: "#175292", count: 4 },{ color: "#8462ad", count: 2 },
@@ -83,6 +85,7 @@ function generateRandomQuestion() {
   ].sort(() => Math.random() - 0.5);
 
   return { 
+    background: randomVariant.backgroundImage ? `/images/backgrounds/${randomVariant.backgroundImage}.jpg` : null,
     question: randomVariant,
     answers,
 };
@@ -93,7 +96,7 @@ export default function Question_CountColor() {
   const cssClass_flipImage = Math.random() < 0.5 ? ' flip-x' : '';
   return (
     <div className={`nsc--question-count-color question-container`} style={{ backgroundColor: data.question.backgroundFillColor }}>
-      
+      {data.background && <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" />}
       <div className="question margin-0-auto position-relative ">
         <Image src={`/images/questions/count-color/${data.question.imageName}.jpg`} fill sizes="100vw" className={`object-contain${cssClass_flipImage}`} alt="background" />
       </div>

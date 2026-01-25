@@ -5,14 +5,13 @@ import Image from "next/image";
 import "./question-scale-1.scss";
 import Answer from "../answer";
 
-const bk_preffer = ["bk1, a10, a4, a12"];
-const bk_avoid = [];
+const bk_preffer = ["bk1", "a10", "a4", "a12"];
 
 let palletes = ["palete-blue-teal", "palete-grab-nyt","palete-spring-benefit","palete-happy-aging"]
 
 function generateRandomQuestion() {
   const randomBk = bk_preffer[Math.floor(Math.random() * bk_preffer.length)];
-
+  console.log(randomBk)
   let palleteUsed = palletes[Math.floor(Math.random() * palletes.length)];
   let colors = Array.from({ length: 5 }, (_, index) => `${palleteUsed}-${(index + 1) * 100}`).sort(() => Math.random() - 0.5);
   
@@ -37,8 +36,8 @@ const question = [
 
 
   const answers = [
-    { iconClass: `svg-icon-ok`, className: scaleIsCorrect ? "correct-answer" : "wrong-answer" },
-    { iconClass: `svg-icon-cancel`, className: !scaleIsCorrect ? "correct-answer" : "wrong-answer"  },
+    { iconClass: `svg-icon-check`, className: scaleIsCorrect ? "correct-answer" : "wrong-answer" },
+    { iconClass: `svg-icon-x`, className: !scaleIsCorrect ? "correct-answer" : "wrong-answer"  },
 
   ].sort(() => Math.random() - 0.5);
 
