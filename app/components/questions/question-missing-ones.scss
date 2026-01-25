@@ -79,6 +79,11 @@
 
     }
 
+
+}
+
+.swiper:not(.swiper-is-moving) .nsc--question-missing-ones{
+
     .question.text-color-white .neon-text{ text-shadow: 0 0 7px #fff, 0 0 42px rgb(207, 255, 239);}
     .question.text-color-yellow .neon-text{ text-shadow: 0 0 7px #fff, 0 0 42px #ff990a;;}
     .question.text-color-orange .neon-text{ text-shadow: 0 0 7px #fff, 0 0 42px #ff990a;}
@@ -86,8 +91,3 @@
     .question.text-color-blue .neon-text{ text-shadow: 0 0 7px #fff, 0 0 42px rgb(19, 173, 255);}
     .question.text-color-purple .neon-text{ text-shadow: 0 0 7px #fff, 0 0 42px rgb(247, 0, 255);}
 }
-
-// .neon-text {
-//   color: #fff;
-//   text-shadow: 0 0 7px #fff, 0 0 42px #0fa,
-// }

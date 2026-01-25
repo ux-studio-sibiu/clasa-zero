@@ -7,15 +7,18 @@ export default function Answer({ text, className, isDisabled = false, onClick = 
   const { fontSize, ref: innerTextRef } = text !== "" ? useFitText({ minFontSize: 100, maxFontSize: 200 }) : { fontSize: undefined, ref: undefined };
 
   const [disabled, setDisabled] = useState(isDisabled);
+  const [pressed, setPressed] = useState(false);
   const isCorrectAnswer = className.toLowerCase().includes("correct-answer");
 
   var cssClass_disabled :string = disabled ? "disabled " : "";
+  var cssClass_pressed :string = disabled ? "pressed " : "";
 
   return (
-  <div className={`answer button margin-0-auto ${className} ${cssClass_disabled}`} 
+  <div className={`answer button margin-0-auto ${className} ${cssClass_disabled} ${cssClass_pressed}`} 
     onClick={(e) => {
     onClick(); 
     setDisabled(true);
+    setPressed(true);
     resgisterAnswer(isCorrectAnswer);
 
     }}

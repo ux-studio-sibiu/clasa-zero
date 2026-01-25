@@ -36,18 +36,23 @@ export default function Game() {
     })(); // iife
   }}, [slides]);
  
+  const [isMoving, setMoving] = useState(false);
+  const cssClass_isMoving = isMoving ? 'swiper-is-moving' : '';
+
   return (
     <main className={`nsc--game-page ${cssClass_showCorrect}`}>
       <GameMenu> <GameMenuContent/></GameMenu>
       <GameHud />
         
-      <Swiper className="swiper-questions " 
+      <Swiper className={`swiper-questions ${cssClass_isMoving}`}
         modules={[Pagination]} 
         pagination={false} 
         // pagination={{ clickable: true }} 
         // navigation={true} 
         slidesPerView={1} 
         onSwiper={(swiper) => { setSwiper(swiper);}}
+        onSlideChangeTransitionStart={() => setMoving(true)}
+        onSlideChangeTransitionEnd={() => setMoving(false)}
         >
 
         {slides.slice(0, -1).map((slide, index) => (

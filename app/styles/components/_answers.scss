@@ -14,6 +14,15 @@
             &.answer-icon-wrong{ background-color:red;}
           }
   }
+
+  .answer.pressed.correct-answer{
+    background-color:#00893e; 
+    background-color:#32630f;
+  }
+  .answer.pressed.wrong-answer{
+    background-color:#941b1b; 
+    background-color:#a00a08;
+  }
 }
 
 
