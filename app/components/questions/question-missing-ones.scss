@@ -5,7 +5,7 @@
   position:relative;
 
   
-    img{filter: blur(2px);}
+    // img{filter: blur(2px);}
     .question{
       font-size:80px;
       color:#fff;
@@ -82,7 +82,7 @@
 
 }
 
-.swiper:not(.swiper-is-moving) .nsc--question-missing-ones{
+.swiper .nsc--question-missing-ones{
 
     .question.text-color-white .neon-text{ text-shadow: 0 0 7px #fff, 0 0 42px rgb(207, 255, 239);}
     .question.text-color-yellow .neon-text{ text-shadow: 0 0 7px #fff, 0 0 42px #ff990a;;}
