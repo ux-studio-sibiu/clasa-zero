@@ -41,7 +41,7 @@ export default function Question_Sanity() {
 
   return (
     <div className={`nsc--question-sanity question-container`}>
-      <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" />
+      <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" priority/>
 
       <div className="question margin-0-auto position-relative text-effect-shadow-dance ">{question.question}</div>
 

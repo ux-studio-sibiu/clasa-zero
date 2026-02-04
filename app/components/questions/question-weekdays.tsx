@@ -69,7 +69,7 @@ export default function Question_Weekdays() {
 
   return (
     <div className={`nsc--question-weekdays question-container ${data.colors[4]}`}>
-      <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" />
+      <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" priority/>
       <div className="question margin-0-auto position-relative ">
         <span className={`f text-outline-2 text-shadow-3 font-coiny ${data.colors[1]}`}>{data.question.f}</span><br/>
         <span className={`d text-outline-2 text-shadow-3 font-poetsen ${data.colors[2]}`}>{data.question.d}</span><br/>

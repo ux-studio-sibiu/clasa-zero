@@ -71,7 +71,7 @@ export default function Question_Series_Shape() {
 
   return (
     <div className={`nsc--question-series-shape question-container`}>
-      <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" />
+      <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" priority/>
       <div className="question margin-0-auto position-relative ">
 
         <div className={`container series-size-${seriesSize} style-1`}>

@@ -96,9 +96,9 @@ export default function Question_CountColor() {
   const cssClass_flipImage = Math.random() < 0.5 ? ' flip-x' : '';
   return (
     <div className={`nsc--question-count-color question-container`} style={{ backgroundColor: data.question.backgroundFillColor }}>
-      {data.background && <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" />}
+      {data.background && <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" priority/>}
       <div className="question margin-0-auto position-relative ">
-        <Image src={`/images/questions/count-color/${data.question.imageName}.jpg`} fill sizes="100vw" className={`object-contain${cssClass_flipImage}`} alt="background" />
+        <Image src={`/images/questions/count-color/${data.question.imageName}.jpg`} fill sizes="100vw" className={`object-contain${cssClass_flipImage}`} alt="background" priority/>
       </div>
 
       <div className="answers style-2 clearfix position-absolute">

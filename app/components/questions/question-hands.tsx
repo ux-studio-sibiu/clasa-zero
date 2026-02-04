@@ -30,7 +30,7 @@ export default function Question_Hands() {
 
   return (
     <div className={`nsc--question-hands question-container`}>
-      <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" />
+      <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" priority/>
       <div className="question margin-0-auto position-relative ">      
         <div  className={`sprite sprite-hands hand-${data.spriteIndex} margin-0-auto` } ></div>  
       </div>

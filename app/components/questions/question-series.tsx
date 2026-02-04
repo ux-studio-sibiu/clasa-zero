@@ -51,7 +51,7 @@ export default function Question_Series() {
 
   return (
     <div className={`nsc--question-series question-container`}>
-      <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" />
+      <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" priority/>
       <div className="question margin-0-auto position-relative text-shadow-1 text-outline-3 ">{data.seriesText}</div>
 
       <div className="answers style-2 clearfix position-absolute">

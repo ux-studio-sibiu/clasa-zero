@@ -43,7 +43,7 @@ export default function Question_Add() {
 
   return (
     <div className={`nsc--question-add question-container ${cssClass_answered}`}>
-      <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" />
+      <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" priority/>
       <div className="question margin-0-auto position-relative text-shadow-5 text-outline-3">
         <>
           <span>{data.a}</span> 

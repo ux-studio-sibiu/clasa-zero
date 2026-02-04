@@ -58,7 +58,7 @@ export default function Question_Shape() {
 
   return (
     <div className={`nsc--question-shape question-container`}>
-      <Image src={data.backgroundUrl} fill sizes="100vw" className="object-cover" alt="background" />
+      <Image src={data.backgroundUrl} fill sizes="100vw" className="object-cover" alt="background" priority/>
 
       <div className={`shape-container ${data.shapeCssClass}` } >
         <div

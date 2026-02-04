@@ -53,7 +53,7 @@ export default function Question_Scale_1() {
 
   return (
     <div className={`nsc--question-scale-1 question-container`}>
-      <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" />
+      <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" priority/>
       <div className="question margin-0-auto position-relative ">
 
         <div className={`container`}>
