@@ -18,13 +18,13 @@ interface SwiperStoreState {
   swiper: SwiperType | null;
   slides: any[];
   currentSlideIndex?: number;
+
   onGameEndSlide: boolean;
   preloadSlide: JSX.Element | null;
 
   setSwiper: (s: SwiperType) => void;
-  addPreloadSlide: (slide?: JSX.Element | null) => void;
   addSlide: (newSlide?: JSX.Element | null) => void;
-  generateSlide: () => JSX.Element;
+  generaterandomSlide: () => JSX.Element;
   addEndSlide: () => void;
   lockNext: () => void;
   unlockNext: () => void;
@@ -36,7 +36,7 @@ export const useSwiperStore = create<SwiperStoreState>((set, get) => ({
 
   swiper: null,
   slides: [],
-  currentSlideIndex:1,
+  currentSlideIndex: 1,
   onGameEndSlide: false,
   preloadSlide: null,
 
@@ -57,13 +57,11 @@ export const useSwiperStore = create<SwiperStoreState>((set, get) => ({
     });
   },
 
-  addPreloadSlide: (slide = null) => { set({ preloadSlide: get().generateSlide() });},
-
   addSlide: (newSlide = null) => {
 
     // use preload slide if available
     let preloadedSlide = get().preloadSlide;
-    newSlide = newSlide ?? preloadedSlide ?? get().generateSlide();
+    newSlide = newSlide ?? preloadedSlide ?? get().generaterandomSlide();
 
     set((state) => {
       // adds new slide to array
@@ -81,7 +79,7 @@ export const useSwiperStore = create<SwiperStoreState>((set, get) => ({
     set((state) => ({ slides: [...state.slides, endSlide] }));
   },
 
-  generateSlide: () => {
+  generaterandomSlide: () => {
     const settings = useGameStore.getState().settings;
     const slideType = [
     { component: <Question_Add />, weight: 15 * settings.questionWeight_Add },

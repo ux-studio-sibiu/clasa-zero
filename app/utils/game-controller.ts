@@ -6,19 +6,16 @@ import { useGameStore } from "../components/zustand-stores/game-store";
 
 
 export function startGame() {
-  const { addSlide, addPreloadSlide} = useSwiperStore.getState();
+  const { addSlide} = useSwiperStore.getState();
   const { startTimer, settings: { timer }} = useGameStore.getState();
   addSlide(); 
   addSlide(); 
-  addPreloadSlide();
   if(timer != 0) {startTimer();}
 }
 
 export function continueGame() {
-  const { addSlide, addPreloadSlide, unlockNext, goToNext } = useSwiperStore.getState();
+  const { addSlide, unlockNext, goToNext } = useSwiperStore.getState();
   addSlide();
-  addPreloadSlide();
-  // unlockNext();
   setTimeout(() => {goToNext();}, 100);
 }
 
@@ -26,7 +23,6 @@ export function endGame() {
   const { addEndSlide, unlockNext, goToNext } = useSwiperStore.getState();
   useGameStore.setState({ gameOver: true });
   addEndSlide();
-  // unlockNext();
   setTimeout(goToNext, 100);
 }
 
@@ -49,8 +45,5 @@ export function resgisterAnswer(isAnswerCorrect?: boolean) {
   if (questionsCount >= gameLength && gameLength != 0) { endGame(); return; }
 
   continueGame();
-}
-function addPreloadSlide() {
-  throw new Error("Function not implemented.");
 }
 

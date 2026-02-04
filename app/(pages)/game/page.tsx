@@ -21,23 +21,28 @@ import { startGame } from '@/app/utils/game-controller';
 // ------------------------------------------------------------------------
 
 export default function Game() {
-  const { slides, setSwiper } = useSwiperStore();
-  const preloadSlide = useSwiperStore((state) => state.preloadSlide);
+  const { slides, currentSlideIndex, setSwiper } = useSwiperStore();
   const { settings:{showCorrectAnswer} } = useGameStore();
+  const [isLastUnlocked, setIsLastUnlocked] = useState(true);
+  const [isMoving, setMoving] = useState(false);
 
-  const cssClass_showCorrect = showCorrectAnswer ? ' show-correct-answer' : '';
+  // lock last slide - which is used only for preloading
+  useEffect(() => { setIsLastUnlocked((currentSlideIndex ?? 0) < slides.length - 1); }, [currentSlideIndex, slides]);
 
+  // start of the game
   useEffect(() => { if (slides.length === 0) {
     (async () => {
       await useDataStore.getState().getQuestionsFromSanity(); 
       await useDataStore.getState().getShapes();
       await useDataStore.getState().getBackgrounds();
       startGame();
+
     })(); // iife
   }}, [slides]);
  
-  const [isMoving, setMoving] = useState(false);
+  
   const cssClass_isMoving = isMoving ? 'swiper-is-moving' : '';
+  const cssClass_showCorrect = showCorrectAnswer ? ' show-correct-answer' : '';
 
   return (
     <main className={`nsc--game-page ${cssClass_showCorrect}`}>
@@ -47,15 +52,29 @@ export default function Game() {
       <Swiper className={`swiper-questions ${cssClass_isMoving}`}
         modules={[Pagination]} 
         pagination={false} 
-        // pagination={{ clickable: true }} 
-        // navigation={true} 
         slidesPerView={1} 
         onSwiper={(swiper) => { setSwiper(swiper);}}
         onSlideChangeTransitionStart={() => setMoving(true)}
         onSlideChangeTransitionEnd={() => setMoving(false)}
+
+
+        resistance={true}
+        resistanceRatio={0.85} // keeps elastic feel
+        allowSlideNext={isLastUnlocked}
+        allowSlidePrev={true}
+        preventInteractionOnTransition={true}
+        watchOverflow={false}
+
+        // onReachEnd={(swiper) => {
+        //   // Safety: prevent programmatic advance
+        //   if (!isLastUnlocked) {
+        //     swiper.slideTo(swiper.slides.length - 2)
+        //   }
+        // }}
+
         >
 
-        {slides.slice(0, -1).map((slide, index) => (
+        {slides.map((slide, index) => (
             <SwiperSlide key={index} className="h-100">
               {slide}
             </SwiperSlide>
@@ -63,9 +82,6 @@ export default function Game() {
 
       </Swiper>
 
-      <SwiperSlide  className="h-100 preloaded-slide" >
-              {slides[slides.length - 1]}
-      </SwiperSlide>
     </main>
   );
 }
