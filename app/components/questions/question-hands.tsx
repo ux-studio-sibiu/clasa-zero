@@ -13,14 +13,17 @@ function generateRandomQuestion() {
   const { getRandomBackground } = useDataStore.getState();
   const randomBk = getRandomBackground([],[]);
 
+  const hand = Math.floor(Math.random() * 2) === 0 ? "hand-left" : "hand-right";
+
   const answers = [
-    { text: "Stânga", className: "correct-answer" },
-    { text: "Dreapta", className: "wrong-answer" },
+    { text: "Stânga", className: hand === "hand-left" ? "correct-answer" : "wrong-answer" },
+    { text: "Dreapta", className: hand === "hand-right" ? "correct-answer" : "wrong-answer" },
   ].sort(() => Math.random() - 0.5);
 
   return { 
     background: `/images/backgrounds/${randomBk}.jpg`,
     spriteIndex: Math.floor(Math.random() * 12) + 1,
+    handCssClass: hand,
     answers,
 };
 }
@@ -32,7 +35,7 @@ export default function Question_Hands() {
     <div className={`nsc--question-hands question-container`}>
       <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" priority/>
       <div className="question margin-0-auto position-relative ">      
-        <div  className={`sprite sprite-hands hand-${data.spriteIndex} margin-0-auto` } ></div>  
+        <div  className={`sprite sprite-hands ${data.handCssClass} hand-${data.spriteIndex} margin-0-auto` } ></div>  
       </div>
 
 

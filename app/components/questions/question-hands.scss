@@ -39,6 +39,8 @@
       &.hand-11 { background-position: (-$image-size * 4px) (-$image-size * 1px); }
       &.hand-12 { background-position: (-$image-size * 5px) (-$image-size * 1px); }
 
+      &.hand-right{transform: scaleX(-1);}
+
     }
 
 
