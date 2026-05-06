@@ -80,7 +80,7 @@
   @media (max-width: 440px) { transform: scale(0.7);}
   @media (max-width: 380px) { transform: scale(0.65);}
 
-  @media (max-height: 800px) { transform: scale(0.65); bottom:0;}
+  @media (max-height: 600px) { transform: scale(0.65); bottom:0;}
 
 }
 
@@ -122,7 +122,7 @@
 }
 
 .answers.scale-type-1{
-  @media (max-height: 800px) { 
+  @media (max-height: 600px) { 
     transform: scale(0.7);
     transform-origin: center bottom;
   }
