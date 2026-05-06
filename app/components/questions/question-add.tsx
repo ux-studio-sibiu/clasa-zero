@@ -52,7 +52,7 @@ export default function Question_Add() {
         </>
       </div>
 
-      <div className="answers style-2 clearfix position-absolute">
+      <div className="answers style-2  clearfix position-absolute">
         {data.answers.map((ans, i) => {
             return <Answer key={i} className={`border-radius-40 ${ans.className}`} >
               <span className="">{ans.text}</span>

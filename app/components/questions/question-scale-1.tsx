@@ -60,13 +60,13 @@ export default function Question_Scale_1() {
           
             <div className={`scale-sprite ${data.question[0].scale_cssClass}`}>
               <div className="left-side shape-count-2">
-                <div className="shape-container"><div className={`shape svg-icon svg-icon-square text-outline-3 ${data.question[0].left[0].cssClass}`}> {data.question[0].left[0].n}</div></div>
-                <div className="shape-container"><div className={`shape svg-icon svg-icon-circle text-outline-3 ${data.question[0].left[1].cssClass}`}> {data.question[0].left[1].n}</div></div>
+                <div className="shape-container"><div className={`shape text-outline-3 ${data.question[0].left[0].cssClass}`}> {data.question[0].left[0].n}</div></div>
+                <div className="shape-container"><div className={`shape text-outline-3 ${data.question[0].left[1].cssClass}`}> {data.question[0].left[1].n}</div></div>
               </div>
 
               <div className="right-side shape-count-1">
                 <div className="shape-container">
-                  <div className={`shape svg-icon svg-icon-pentagon text-outline-3 ${data.question[0].right.cssClass}`}>{data.question[0].right.n}</div>
+                  <div className={`shape text-outline-3 ${data.question[0].right.cssClass}`}>{data.question[0].right.n}</div>
                 </div>
               </div>
 

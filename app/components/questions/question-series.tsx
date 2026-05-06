@@ -7,7 +7,7 @@ import Answer from "../answer";
 import { useDataStore } from "../zustand-stores/data-store";
 
 const series = [
-  { sequence: [1, 1, 1, 1, 1, 1], maxSeriesLength: 3, maxStartNumber: 7 },
+  // { sequence: [1, 1, 1, 1, 1, 1], maxSeriesLength: 3, maxStartNumber: 7 },
   { sequence: [1, 2, 3, 4, 5, 6], maxSeriesLength: 3, maxStartNumber: 3 },
   { sequence: [8, 7, 6, 5, 4, 3], maxSeriesLength: 3, maxStartNumber: 0 },
   { sequence: [0, 2, 4, 6, 8, 10], maxSeriesLength: 3, maxStartNumber: 3 },

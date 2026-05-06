@@ -63,7 +63,7 @@ export default function Question_Pairs() {
       </div>
 
 
-      <div className="answers style-2 clearfix position-absolute">
+      <div className="answers style-2 scale-type-1 clearfix position-absolute">
         {data.answers.map((ans, i) => {
             return <Answer key={i} className={ans.className}> <div className={`sprite ${data.imageSprite} ${ans.cssClass} margin-0-auto`}></div> </Answer>;
         })}

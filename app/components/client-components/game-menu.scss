@@ -5,12 +5,17 @@
         left:10px;
         padding: 18px 12px;
         background: rgb(0 0 0 / 34%);
+        cursor:pointer;
+
+        &:hover{
+          background: rgb(0 0 0 / 60%);
+        }
 
 
     .game-menu-button {
         display: block;
         position: relative;
-        cursor:pointer;
+        
         width: 36px;
         height: 24px;
         top: 0px;

@@ -18,6 +18,7 @@
   .answer.pressed.correct-answer{
     background-color:#00893e; 
     background-color:#32630f;
+    background-color:#6bcd25;
   }
   .answer.pressed.wrong-answer{
     background-color:#941b1b; 
@@ -58,65 +59,74 @@
 
       
 
+}
+
+
+.answers.style-2{
+  bottom:30px;
+  width: 530px;
+  margin-left: calc(50% - 265px);
+
+  .answer{
+    width: 112px;
+    height: 112px;
+    float:left;
+    margin: 10px;
+    line-height:86px;
+    font-size:70px;
+  }
+
+  @media (max-width: 550px) { transform: scale(0.8); bottom:0;}
+  @media (max-width: 440px) { transform: scale(0.7);}
+  @media (max-width: 380px) { transform: scale(0.65);}
+
+  @media (max-height: 800px) { transform: scale(0.65); bottom:0;}
+
+}
+
+.answers.style-3{
+  bottom:30px;
+  width: 100%;
+  display: flex;
+  justify-content: center; /* center the whole group */
+  gap: 16px;
+
+  .answer{
+    width: 240px;
+    float:left;
+    margin: 0px;
+  }
+
+  @media (max-width: 800px) { 
+    .answer{
+      width:180px;
+      height:50px;
+      line-height: 30px;
+      padding: 7px;
     }
+  }
 
-
-    .answers.style-2{
-      bottom:30px;
-      width: 530px;
-      margin-left: calc(50% - 265px);
-
-      .answer{
-        width: 112px;
-        height: 112px;
-        float:left;
-        margin: 10px;
-        line-height:86px;
-        font-size:70px;
-      }
-
-      @media (max-width: 550px) { transform: scale(0.8); bottom:0;}
-      @media (max-width: 440px) { transform: scale(0.7);}
-      @media (max-width: 380px) { transform: scale(0.65);}
-
+  @media (max-width: 600px) { 
+    flex-direction: column; 
+    align-content: center; 
+    flex-wrap: wrap;
+    bottom:0;
+    .answer{
+      width:240px;
+      height:40px;
+      line-height: 20px;
+      padding: 7px;
     }
+  }
 
-    .answers.style-3{
-      bottom:30px;
-      width: 100%;
-      display: flex;
-      justify-content: center; /* center the whole group */
-      gap: 16px;
+}
 
-      .answer{
-        width: 240px;
-        float:left;
-        margin: 0px;
-      }
-
-      @media (max-width: 800px) { 
-        .answer{
-          width:180px;
-          height:50px;
-          line-height: 30px;
-          padding: 7px;
-        }
-      }
-
-      @media (max-width: 600px) { 
-        flex-direction: column; 
-        align-content: center; 
-        flex-wrap: wrap;
-        bottom:0;
-        .answer{
-          width:240px;
-          height:40px;
-          line-height: 20px;
-          padding: 7px;
-        }
-      }
-
-    }
+.answers.scale-type-1{
+  @media (max-height: 800px) { 
+    transform: scale(0.7);
+    transform-origin: center bottom;
+  }
+}
 
 
 

@@ -9,7 +9,7 @@ import { useDataStore } from "../zustand-stores/data-store";
 import { shapes_svg } from "@/public/lib/colors";
 
 const bk_preffer = ["bk19","bk27","bk34",]
-const bk_avoid = ["bk14","bk23", "bk37" ];
+const bk_avoid = ["bk14","bk23", "bk37", "c1[blue]", "c2[purple]", "c3[blue]", "c4[yellow]", "c5[red]",];
 
 const combos = [["bk27", "palete-big-machine", "style-1",],
                 ["bk25", "palete-happy-aging", "style-1",],
@@ -18,7 +18,7 @@ const combos = [["bk27", "palete-big-machine", "style-1",],
                 ["bk0", "palete-grays", "style-1",],
               ];
 
-let palletes = ["palete-grays","palete-blue-teal", "palete-grab-nyt", "palete-big-machine","palete-spring-benefit","palete-happy-aging"]
+let palletes = ["palete-grays", "palete-grab-nyt", "palete-big-machine","palete-spring-benefit","palete-happy-aging"]
 
 const series = [
   { sequence: [1, 2] },
@@ -47,7 +47,7 @@ function generateRandomQuestion() {
   const shapeArray = buildArrayFromSequence(shapes, seriesSize);
   const colorArray = buildArrayFromSequence(colors, seriesSize);
 
-  const answerIndex = Math.floor(Math.random() * seriesSize);
+  const answerIndex = Math.floor(Math.random() * (seriesSize - 2));
 
   const answers = [
     { cssClass: shapeArray[answerIndex] + " " + colorArray[answerIndex], className: "correct-answer" },
