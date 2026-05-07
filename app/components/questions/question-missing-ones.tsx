@@ -5,7 +5,7 @@ import Image from "next/image";
 import "./question-missing-ones.scss";
 import Answer from "../answer";
 
-const bk_preffer = ["c1[blue]", "c2[purple]","c3[blue]","c4[yellow]","c5[red]"];
+const bk_preffer = ["bk0", "bk35", "bk28"];
 const symbols = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 function generateRandomQuestion() {
@@ -14,7 +14,8 @@ function generateRandomQuestion() {
   const match = randomBk.match(/\[(.*?)\]/);
   const textColor = match ? "text-color-" + match[1] : "";
 
-  const missingObjectsCount = Math.random() < 0.85 ? 1 : 2;
+  let missingObjectsCount = Math.random() < 0.85 ? 1 : 2;
+  missingObjectsCount = 1;
   const allObjects = symbols.sort(() => Math.random() - 0.5)
   const missingObjects = allObjects.slice(0, missingObjectsCount);
   const nonMissingObjects = allObjects.slice(missingObjectsCount);;
@@ -62,7 +63,7 @@ export default function Question_MissingOnes() {
             })}
 
           </div>
-          <div className="question-text neon-text">Care lipsește?</div>
+          <div className="question-text neon-text">Missing?</div>
       </div>
 
       <div className="answers style-2 clearfix position-absolute">

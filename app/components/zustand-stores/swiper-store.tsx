@@ -89,7 +89,7 @@ export const useSwiperStore = create<SwiperStoreState>((set, get) => ({
     { component: <Question_Pairs />, weight: 10 * settings.questionWeight_Pairs },
     { component: <Question_Scale_1 />, weight: 20 * settings.questionWeight_Question_Scale_1 },
     { component: <Question_CountColor />, weight: 20 * settings.questionWeight_CountColor },
-    { component: <Question_Weekdays />, weight: 10 * settings.questionWeight_Question_Weekdays },
+    { component: <Question_Weekdays />, weight: 1 * settings.questionWeight_Question_Weekdays },
     { component: <Question_MissingOnes />, weight: 8 * settings.questionWeight_Question_MissingOnes },
     { component: <Question_Hands />, weight: 5 * settings.questionWeight_Question_Hands },
     ];

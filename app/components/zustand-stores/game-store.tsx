@@ -1,6 +1,22 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+export const CURATED_SETTINGS = {
+  timer: 0,
+  showCorrectAnswer: true,
+  questionWeight_Add: 1,
+  questionWeight_CountColor: 1,
+  questionWeight_Pairs: 1,
+  questionWeight_Question_Sanity: 1,
+  questionWeight_Question_Scale_1: 1,
+  questionWeight_Question_Series_Shape: 1,
+  questionWeight_Question_Series: 1,
+  questionWeight_Question_Shape: 1,
+  questionWeight_Question_Weekdays: 0,
+  questionWeight_Question_MissingOnes: 0,
+  questionWeight_Question_Hands: 1,
+} as const;
+
 interface GameStoreState {
   gameLength: number;
   lives: number;
@@ -45,6 +61,7 @@ interface GameStoreState {
   }
 
   changeSetting: <K extends keyof GameStoreState["settings"]>(key: K) => void;
+  applyCurated: () => void;
   startTimer: () => void;
 }
 
@@ -100,6 +117,10 @@ export const useGameStore = create<GameStoreState>()(
           const nextIdx = (currentIdx + 1) % values.length;
             return { settings: { ...state.settings, [key]: values[nextIdx] } };
         }),
+
+      applyCurated: () => {
+        set({ settings: { ...get().settings, ...CURATED_SETTINGS } });
+      },
 
       startTimer: () => {
         const timer = get().settings.timer;

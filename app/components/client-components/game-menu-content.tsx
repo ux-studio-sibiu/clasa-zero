@@ -49,7 +49,7 @@ export default function GameMenuContent ({ children }: PropsWithChildren){
             </button>
 
               <button className="on-off-button" onClick={() => useGameStore.getState().changeSetting('questionWeight_Question_Scale_1')} >
-              <span className="">Scale 1</span>
+              <span className="">Scales</span>
               <span className="text">{settings.questionWeight_Question_Scale_1}</span>
             </button>
 

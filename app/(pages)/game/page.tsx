@@ -7,6 +7,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import "./page.scss";
 
 import { Navigation, Pagination } from "swiper/modules";
@@ -23,8 +24,16 @@ import { startGame } from '@/app/utils/game-controller';
 export default function Game() {
   const { slides, currentSlideIndex, setSwiper } = useSwiperStore();
   const { settings:{showCorrectAnswer} } = useGameStore();
+  const searchParams = useSearchParams();
   const [isLastUnlocked, setIsLastUnlocked] = useState(true);
   const [isMoving, setMoving] = useState(false);
+
+  // apply curated settings if URL has ?curated
+  useEffect(() => {
+    if (searchParams.has('curated')) {
+      useGameStore.getState().applyCurated();
+    }
+  }, [searchParams]);
 
   // lock last slide - which is used only for preloading
   useEffect(() => { setIsLastUnlocked((currentSlideIndex ?? 0) < slides.length - 1); }, [currentSlideIndex, slides]);
