@@ -48,7 +48,7 @@ export default async function RootLayout({children}: {children: React.ReactNode}
   return (
     <html lang="ro">
 
-    <head><link rel="icon" href="/favicon.ico" /></head>
+    <head><link rel="icon" type="image/jpeg" href="/favicon.jpg" /></head>
 
       <body className={`${poppins.variable} ${melon.variable} ${coiny.variable} ${francoisOne.variable} ${poetsenOne.variable} ${sansita.variable} ${troika.variable} clearfix`}>
         <ScrollBridge />

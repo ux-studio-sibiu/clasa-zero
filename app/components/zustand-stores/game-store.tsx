@@ -19,7 +19,7 @@ export const CURATED_SETTINGS = {
 
 export const DEFAULT_SETTINGS = {
   timer: 0,
-  showCorrectAnswer: true,
+  showCorrectAnswer: false,
   questionWeight_Add: 1,
   questionWeight_CountColor: 1,
   questionWeight_Pairs: 1,
