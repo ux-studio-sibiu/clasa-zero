@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import PuzzleBackground from "../pattern-background/puzzle-background";
 import "./question-missing-ones.scss";
 import Answer from "../answer";
 
@@ -46,7 +46,7 @@ export default function Question_MissingOnes() {
   const cssClass_buttonTextSize = data.missingObjects.length > 1 ? "font-size-50" : "";
   return (
     <div className={`nsc--question-missing-ones question-container`}>
-      <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" priority/>
+      <PuzzleBackground type="missing-ones" />
 
       <div className={`question margin-0-auto position-relative ${cssClass_textColor}`}>
         <div className="container">

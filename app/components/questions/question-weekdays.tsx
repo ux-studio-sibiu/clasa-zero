@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import PuzzleBackground from "../pattern-background/puzzle-background";
 import "./question-weekdays.scss";
 import Answer from "../answer";
 import { useDataStore } from "../zustand-stores/data-store";
@@ -68,12 +68,12 @@ export default function Question_Weekdays() {
   const [data] = useState(generateRandomQuestion);
 
   return (
-    <div className={`nsc--question-weekdays question-container ${data.colors[4]}`}>
-      <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" priority/>
+    <div className={`nsc--question-weekdays question-container`}>
+      <PuzzleBackground type="weekdays" />
       <div className="question margin-0-auto position-relative ">
-        <span className={`f text-outline-2 text-shadow-3 font-coiny ${data.colors[1]}`}>{data.question.f}</span><br/>
-        <span className={`d text-outline-2 text-shadow-3 font-poetsen ${data.colors[2]}`}>{data.question.d}</span><br/>
-        <span className={`q text-outline-2 text-shadow-3 font-troika ${data.colors[3]}`}>{data.question.q}</span>
+        <span className="f text-outline-2 text-shadow-3 font-coiny">{data.question.f}</span><br/>
+        <span className="d text-outline-2 text-shadow-3 font-poetsen">{data.question.d}</span><br/>
+        <span className="q text-outline-2 text-shadow-3 font-troika">{data.question.q}</span>
       </div>
 
       <div className="answers style-3 clearfix position-absolute">

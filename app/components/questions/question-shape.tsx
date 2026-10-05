@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import PuzzleBackground from "../pattern-background/puzzle-background";
 import  "./question-shape.scss";
 import { useDataStore } from "../zustand-stores/data-store";
 import { randomColor, randomShape, randomColorName, randomShapeName } from "@/public/lib/colors";
@@ -58,7 +58,7 @@ export default function Question_Shape() {
 
   return (
     <div className={`nsc--question-shape question-container`}>
-      <Image src={data.backgroundUrl} fill sizes="100vw" className="object-cover" alt="background" priority/>
+      <PuzzleBackground type="shape" />
 
       <div className={`shape-container ${data.shapeCssClass}` } >
         <div

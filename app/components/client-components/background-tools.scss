@@ -1,0 +1,939 @@
+// ?background-tools dev panel - the texture kit from the randomize-studio intro page, ported:
+// the studio's panel.css / controls.css / svg-background.css plus the kit's own overrides
+// (boxed sub-layers, the eye leading a layer, the Background header's opacity and colour), plus
+// what templates need: a fixed / random toggle on each row, and the Templates section.
+// Black ink on white paper, one grey, no accent colour. Tokens are local to the panel.
+
+.nsc-background-tools {
+  --panel: 356px;
+  --panel-gap: 20px;
+  --bg: #ffffff;
+  --ink: #000000;
+  --muted: #6b6b6b;
+  --faint: #d4d4d4;
+  --wash: #f4f4f2;
+  --icon-refresh: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cg%3E%3Cpath d='M10.2 3.28c3.53 0 6.43 2.61 6.92 6h2.08l-3.5 4-3.5-4h2.32c-.45-1.97-2.21-3.45-4.32-3.45-1.45 0-2.73.71-3.54 1.78L4.95 5.66C6.23 4.2 8.11 3.28 10.2 3.28zm-.4 13.44c-3.52 0-6.43-2.61-6.92-6H.8l3.5-4c1.17 1.33 2.33 2.67 3.5 4H5.48c.45 1.97 2.21 3.45 4.32 3.45 1.45 0 2.73-.71 3.54-1.78l1.71 1.95c-1.28 1.46-3.15 2.38-5.25 2.38z'/%3E%3C/g%3E%3C/svg%3E");
+  --icon-eraser: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill-rule='evenodd' d='M11.6 2.4a1.4 1.4 0 0 1 2 0l4 4a1.4 1.4 0 0 1 0 2L10 16h7v2H6.2L2.4 14.2a1.4 1.4 0 0 1 0-2zM6.9 9.7l-3 3 3.3 3.3h1.4l2.6-2.6z'/%3E%3C/svg%3E");
+  --icon-filter: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M2 3h16l-6.2 7.4V16l-3.6 2v-7.6z'/%3E%3C/svg%3E");
+  --icon-save: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill-rule='evenodd' d='M2 2h12.6L18 5.4V18H2zM5 2.8h8.2v4.6H5zM10.6 3.6h1.6v3h-1.6zM5 10.6h10v6.4H5z'/%3E%3C/svg%3E");
+  --icon-pin: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M6.5 2h7v1.6L12.4 4.8V9l3.1 3.2v1.6h-4.6V19H9.1v-5.2H4.5v-1.6L7.6 9V4.8L6.5 3.6z'/%3E%3C/svg%3E");
+  --ui-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --ui-sans: "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --lbl: 76px;
+  --ctl: 22px;
+  // Dashicons (GPL-2.0-or-later) and the studio die, copied from texture-kit.js TOKENS.
+  --icon-randomize: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 118.91 122.88'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M6.41,23.43l49.53,20.15c1.57,0.64,4.17,1.04,5.74,0.4l52.42-21.41c1.57-0.64-0.02-3.49-1.62-4.05L59.62,0 c-0.4-0.14-10.33,3.48-11.72,3.97L4.79,19.38C3.12,19.97,4.26,22.55,6.41,23.43L6.41,23.43z M116.87,94.34l-51.73,28.06 c-1.49,0.81-3.56,0.69-3.56-1.01l-0.01-66.03c0-1.7,0.14-3.36,1.7-4.03l51.92-22.12c1.56-0.66,3.73-0.07,3.72,1.62l-0.34,59.48 C118.56,92,118.36,93.53,116.87,94.34L116.87,94.34z M104.99,71.09c3.52,1.5,4.55,6.77,2.28,11.78c-2.26,5-6.96,7.84-10.48,6.34 c-3.52-1.5-4.55-6.77-2.28-11.78C96.78,72.43,101.47,69.59,104.99,71.09L104.99,71.09z M86.22,57.28c3.65,1.55,4.7,7.01,2.36,12.19 c-2.34,5.18-7.2,8.12-10.85,6.57c-3.65-1.55-4.7-7.01-2.36-12.19C77.71,58.66,82.57,55.72,86.22,57.28L86.22,57.28z M1.81,93.89 l51.26,27.75c1.49,0.81,3.56,0.69,3.56-1.01l0.01-65.42c0-1.7-0.14-3.36-1.7-4.03L3.72,29.22C2.16,28.55,0,29.15,0,30.85 l0.11,59.02C0.11,91.56,0.32,93.08,1.81,93.89L1.81,93.89z M6.91,75.74c3.21-2.04,7.99,0.29,10.66,5.2s2.24,10.56-0.97,12.6 c-3.21,2.04-7.99-0.29-10.66-5.2C3.27,83.42,3.7,77.78,6.91,75.74L6.91,75.74z M22.06,64.37c3.4-2.06,8.45,0.29,11.28,5.26 c2.83,4.97,2.38,10.67-1.02,12.73c-3.4,2.06-8.45-0.29-11.28-5.26C18.2,72.14,18.66,66.44,22.06,64.37L22.06,64.37z M38.12,52.37 c3.42-2.07,8.51,0.29,11.36,5.26c2.85,4.97,2.39,10.68-1.03,12.74c-3.42,2.07-8.51-0.29-11.36-5.26 C34.24,60.14,34.7,54.44,38.12,52.37L38.12,52.37z M59.16,15.48c6.04,0,10.93,2.34,10.93,5.22c0,2.88-4.89,5.22-10.93,5.22 c-6.03,0-10.93-2.34-10.93-5.22C48.23,17.82,53.13,15.48,59.16,15.48L59.16,15.48z'/%3E%3C/svg%3E");
+  --icon-eye: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cg%3E%3Cpath d='M18.3 9.5C15 4.9 8.5 3.8 3.9 7.2c-1.2.9-2.2 2.1-3 3.4.2.4.5.8.8 1.2 3.3 4.6 9.6 5.6 14.2 2.4.9-.7 1.7-1.4 2.4-2.4.3-.4.5-.8.8-1.2-.3-.4-.5-.8-.8-1.1zm-8.2-2.3c.5-.5 1.3-.5 1.8 0s.5 1.3 0 1.8-1.3.5-1.8 0-.5-1.3 0-1.8zm-.1 7.7c-3.1 0-6-1.6-7.7-4.2C3.5 9 5.1 7.8 7 7.2c-.7.8-1 1.7-1 2.7 0 2.2 1.7 4.1 4 4.1 2.2 0 4.1-1.7 4.1-4v-.1c0-1-.4-2-1.1-2.7 1.9.6 3.5 1.8 4.7 3.5-1.7 2.6-4.6 4.2-7.7 4.2z'/%3E%3C/g%3E%3C/svg%3E");
+  --icon-eye-off: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cg%3E%3Cpath d='M17.3 3.3c-.4-.4-1.1-.4-1.6 0l-2.4 2.4c-1.1-.4-2.2-.6-3.3-.6-3.8.1-7.2 2.1-9 5.4.2.4.5.8.8 1.2.8 1.1 1.8 2 2.9 2.7L3 16.1c-.4.4-.5 1.1 0 1.6.4.4 1.1.5 1.6 0L17.3 4.9c.4-.5.4-1.2 0-1.6zm-10.6 9l-1.3 1.3c-1.2-.7-2.3-1.7-3.1-2.9C3.5 9 5.1 7.8 7 7.2c-1.3 1.4-1.4 3.6-.3 5.1zM10.1 9c-.5-.5-.4-1.3.1-1.8.5-.4 1.2-.4 1.7 0L10.1 9zm8.2.5c-.5-.7-1.1-1.4-1.8-1.9l-1 1c.8.6 1.5 1.3 2.1 2.2C15.9 13.4 13 15 9.9 15h-.8l-1 1c.7-.1 1.3 0 1.9 0 3.3 0 6.4-1.6 8.3-4.3.3-.4.5-.8.8-1.2-.3-.3-.5-.7-.8-1zM14 10l-4 4c2.2 0 4-1.8 4-4z'/%3E%3C/g%3E%3C/svg%3E");
+  --icon-lock: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cg%3E%3Cpath d='M15 9h-1V6c0-2.2-1.8-4-4-4S6 3.8 6 6v3H5c-.5 0-1 .5-1 1v7c0 .5.5 1 1 1h10c.5 0 1-.5 1-1v-7c0-.5-.5-1-1-1zm-4 7H9l.4-2.2c-.5-.2-.9-.8-.9-1.3 0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5c0 .6-.3 1.1-.9 1.3L11 16zm1-7H8V6c0-1.1.9-2 2-2s2 .9 2 2v3z'/%3E%3C/g%3E%3C/svg%3E");
+  --icon-unlock: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cg%3E%3Cpath d='M12 9V6c0-1.1-.9-2-2-2s-2 .9-2 2H6c0-2.21 1.79-4 4-4s4 1.79 4 4v3h1c.55 0 1 .45 1 1v7c0 .55-.45 1-1 1H5c-.55 0-1-.45-1-1v-7c0-.55.45-1 1-1h7zm-1 7l-.36-2.15c.51-.24.86-.75.86-1.35 0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5c0 .6.35 1.11.86 1.35L9 16h2z'/%3E%3C/g%3E%3C/svg%3E");
+  --icon-undo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cg%3E%3Cpath d='M12 5H7V2L1 6l6 4V7h5c2.2 0 4 1.8 4 4s-1.8 4-4 4H7v2h5c3.3 0 6-2.7 6-6s-2.7-6-6-6z'/%3E%3C/g%3E%3C/svg%3E");
+  --icon-redo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cg%3E%3Cpath d='M8 5h5V2l6 4-6 4V7H8c-2.2 0-4 1.8-4 4s1.8 4 4 4h5v2H8c-3.3 0-6-2.7-6-6s2.7-6 6-6z'/%3E%3C/g%3E%3C/svg%3E");
+  --icon-minus: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cg%3E%3Cpath d='M4 9h12v2H4V9z'/%3E%3C/g%3E%3C/svg%3E");
+  --icon-plus: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cg%3E%3Cpath d='M17 9v2h-6v6H9v-6H3V9h6V3h2v6h6z'/%3E%3C/g%3E%3C/svg%3E");
+  --icon-download: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cg%3E%3Cpath d='M14.01 4v6h2V2H4v8h2.01V4h8zm-2 2v6h3l-5 6-5-6h3V6h4z'/%3E%3C/g%3E%3C/svg%3E");
+  --icon-trash: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cg%3E%3Cpath d='M12 4h3c.6 0 1 .4 1 1v1H3V5c0-.6.5-1 1-1h3c.2-1.1 1.3-2 2.5-2s2.3.9 2.5 2zM8 4h3c-.2-.6-.9-1-1.5-1S8.2 3.4 8 4zM4 7h11l-.9 10.1c0 .5-.5.9-1 .9H5.9c-.5 0-.9-.4-1-.9L4 7z'/%3E%3C/g%3E%3C/svg%3E");
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  z-index: 1000;
+  color: var(--ink);
+  font-family: var(--ui-mono);
+  font-size: 11px;
+  line-height: 1.4;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+
+  *, *::before, *::after { box-sizing: border-box; }
+  ::selection { background: var(--ink); color: var(--bg); }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  /* ============================ the window ============================
+     Hung from the top right, dragged by its titlebar, never taller than 90vh. Anchored by its top
+     rather than centred, so opening or closing a section leaves the titlebar where it is.
+     A 2px black edge holds the white chrome off whatever is behind it. */
+  .panel {
+    position: fixed;
+    top: var(--panel-gap);
+    right: var(--panel-gap);
+    display: flex;
+    flex-direction: column;
+    width: var(--panel);
+    max-height: 90vh;
+    background: var(--bg);
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    transform-origin: calc(100% - 40px) calc(100vh - 2 * var(--panel-gap));
+    transition: opacity 0.2s ease, transform 0.24s cubic-bezier(0.33, 0, 0.2, 1);
+
+    @media (max-width: 760px) { width: min(88vw, 360px); }
+
+    // The lift: an offset block of hatch rather than a blur, as two strips outside the border box.
+    &::before, &::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Cpath d='M-1 1l2-2M0 10L10 0M9 11l2-2' stroke='%23000' stroke-width='1.5'/%3E%3C/svg%3E");
+      background-size: 5px 5px;
+      background-repeat: repeat;
+    }
+    &::before { top: 10px; bottom: -10px; right: -10px; width: 10px; }
+    &::after { left: 10px; right: -10px; bottom: -10px; height: 10px; }
+
+    &.is-dragging { transition: none; }
+  }
+
+  // Minimized: the window shrinks into the button that brings it back.
+  &.is-minimized .panel {
+    opacity: 0;
+    transform: scale(0.12);
+    pointer-events: none;
+    visibility: hidden;
+    transition: opacity 0.2s ease, transform 0.24s cubic-bezier(0.33, 0, 0.2, 1), visibility 0s linear 0.24s;
+
+    &::before, &::after { display: none; }
+  }
+
+  /* ============================ buttons ============================
+     Outlined at rest, inverted under the pointer. */
+  button {
+    height: var(--ctl);
+    margin: 0;
+    padding: 0 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: var(--bg);
+    color: var(--ink);
+    border: 1px solid var(--ink);
+    border-radius: 0;
+    box-shadow: none;
+    cursor: pointer;
+    font-family: var(--ui-mono);
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: background-color 0.12s ease, color 0.12s ease;
+
+    &:hover { background: var(--ink); color: var(--bg); }
+    &:active { background: var(--muted); border-color: var(--muted); color: var(--bg); }
+  }
+
+  button:disabled, button:disabled:hover { background: var(--bg); color: var(--faint); border-color: var(--faint); cursor: default; }
+
+  // The marks: a mask in currentColor, so one drawing serves a white button and an inverted one.
+  [data-mark="randomize"] { --mark: var(--icon-randomize); }
+  [data-mark="minus"] { --mark: var(--icon-minus); }
+  [data-mark="plus"] { --mark: var(--icon-plus); }
+  [data-mark="undo"] { --mark: var(--icon-undo); }
+  [data-mark="redo"] { --mark: var(--icon-redo); }
+  [data-mark="trash"] { --mark: var(--icon-trash); }
+  [data-mark="pick"] { --mark: var(--icon-refresh); }
+  [data-mark="eraser"] { --mark: var(--icon-eraser); }
+  [data-mark="filter"] { --mark: var(--icon-filter); }
+  [data-mark="save"] { --mark: var(--icon-save); }
+  [data-mark="pin"] { --mark: var(--icon-pin); }
+
+  [data-mark]::before {
+    content: "";
+    flex: none;
+    width: 13px;
+    height: 13px;
+    background: currentColor;
+    -webkit-mask: var(--mark) center / contain no-repeat;
+    mask: var(--mark) center / contain no-repeat;
+  }
+
+  .icon-button {
+    height: 18px;
+    min-width: 20px;
+    padding: 0 4px;
+    gap: 3px;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+
+  // The visibility eye: Photoshop's layer eye - open when shown, struck through and quiet when not.
+  .eye-button {
+    position: relative;
+    width: 22px;
+    height: 18px;
+    padding: 0;
+    font-size: 0;
+    background: transparent;
+    border: 1px solid transparent;
+
+    &:hover { background: transparent; color: var(--ink); border-color: var(--faint); }
+
+    &::before {
+      content: "";
+      display: block;
+      width: 15px;
+      height: 15px;
+      margin: 0 auto;
+      background: currentColor;
+      -webkit-mask: var(--icon-eye) center / contain no-repeat;
+      mask: var(--icon-eye) center / contain no-repeat;
+    }
+
+    &[aria-pressed="false"] { color: var(--faint); }
+    &[aria-pressed="false"]::before { -webkit-mask-image: var(--icon-eye-off); mask-image: var(--icon-eye-off); }
+  }
+
+  // The padlock: open while free to change, shut and inverted while held through a re-roll.
+  .lock-button {
+    position: relative;
+    width: 20px;
+    min-width: 20px;
+    height: 18px;
+    padding: 0;
+    font-size: 0;
+
+    &::before {
+      content: "";
+      display: block;
+      width: 14px;
+      height: 14px;
+      margin: 0 auto;
+      background: currentColor;
+      -webkit-mask: var(--icon-unlock) center / contain no-repeat;
+      mask: var(--icon-unlock) center / contain no-repeat;
+    }
+
+    &[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+    &[aria-pressed="true"]::before { -webkit-mask-image: var(--icon-lock); mask-image: var(--icon-lock); }
+  }
+
+
+  /* ============================ titlebar ============================
+     The one solid black band, and the handle the window is dragged by. */
+  .panel-head {
+    flex: 0 0 auto;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    height: 48px;
+    padding: 0 12px;
+    background: var(--ink);
+    color: var(--bg);
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+
+    b { font-size: 13px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap; }
+    .spacer { flex: 1; }
+
+    button {
+      flex: none;
+      height: 30px;
+      min-width: 30px;
+      background: transparent;
+      color: var(--bg);
+      border: 2px solid var(--bg);
+      font-size: 11px;
+
+      &:hover { background: var(--bg); color: var(--ink); }
+      &:active { background: var(--faint); border-color: var(--faint); color: var(--ink); }
+      &[data-mark]::before { width: 16px; height: 16px; }
+      &[aria-pressed="true"] { background: var(--bg); color: var(--ink); }
+    }
+
+    :focus-visible { outline-color: var(--bg); }
+  }
+  .panel.is-dragging .panel-head { cursor: grabbing; }
+
+  // The scrolling half; a stable gutter so rows do not jump as layers open and close.
+  .panel-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden auto;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: var(--faint) transparent;
+    overscroll-behavior: contain;
+
+    &::-webkit-scrollbar { width: 6px; }
+    &::-webkit-scrollbar-thumb { background: var(--faint); }
+  }
+
+  /* ============================ sections ============================
+     Hairline-ruled, no boxes, no fills. */
+  .group {
+    padding: 10px 14px 14px;
+    border-bottom: 1px solid var(--ink);
+
+    &:last-child { border-bottom: none; }
+  }
+
+  .group > h3, .layer > h4 {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 20px;
+    cursor: pointer;
+    user-select: none;
+    font-family: var(--ui-mono);
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink);
+
+    &:hover { color: var(--muted); }
+    button { letter-spacing: 0; }
+  }
+
+  // The label takes the free room, so the controls sit together at the right edge.
+  .head-label {
+    flex: 1 1 auto;
+    min-width: 0;
+    white-space: nowrap;
+
+    &.is-fixed { flex: 0 0 auto; }
+  }
+
+  .group-body { margin-top: 10px; }
+
+  .group > h3 > [data-mark="filter"] { margin-left: auto; }
+  .group > h3 > [data-mark="filter"][aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+  .puzzle-section button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+
+  .chev {
+    width: 0;
+    height: 0;
+    flex: none;
+    border-left: 5px solid currentColor;
+    border-top: 3.5px solid transparent;
+    border-bottom: 3.5px solid transparent;
+    transform: rotate(90deg);
+    transition: transform 0.12s ease;
+
+    &.is-closed { transform: rotate(0deg); }
+  }
+
+  // The Background header: opacity in tenths, a flat-colour swatch, the dice and the lock.
+  .group > h3 {
+    .alpha { flex: 0 0 56px; width: 56px; }
+    .alpha-value { flex: 0 0 30px; text-align: right; font-size: 9px; font-weight: 500; letter-spacing: 0; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+    .color-button {
+      position: relative;
+      flex: none;
+      width: 20px;
+      height: 18px;
+      border: 1px solid var(--ink);
+      cursor: pointer;
+      background: repeating-linear-gradient(45deg, var(--bg) 0 3px, var(--faint) 3px 4px);
+
+      // Set, the colour is laid over the hatching, so a see-through one shows it.
+      &.is-set { background: linear-gradient(var(--swatch), var(--swatch)), repeating-linear-gradient(45deg, var(--bg) 0 3px, var(--faint) 3px 4px); }
+      input { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; border: 0; opacity: 0; cursor: pointer; }
+    }
+
+    &.no-color .alpha, &.no-color .alpha-value { opacity: 0.35; }
+  }
+
+  /* ---- a sub-layer, boxed ----
+     A light ground draws the group while it is open, the heading inside it with its rows. */
+  .layer {
+    margin-top: 6px;
+    padding: 5px 12px 12px;
+
+    &:not(.is-collapsed) { background: var(--wash); }
+    // Only the bottom changes when it shuts: the heading stays where it is.
+    &.is-collapsed { padding-bottom: 5px; }
+
+    > h4 {
+      // The eye leads the row; the dice takes the push to the right.
+      .eye-button { margin-right: -2px; }
+      .dice { margin-left: auto; }
+    }
+
+    // Off is a state of the LAYER: the eye stays in ink - it is the way back - and the rest grey out.
+    // A lock that is holding something stays in ink.
+    &.is-hidden > h4 { color: var(--faint); }
+    // Off but left open: its controls stay where they were, dimmed, so the panel does not jump.
+    &.is-hidden > .layer-body { opacity: 0.45; }
+    &.is-hidden > h4 .eye-button { color: var(--ink); }
+    &.is-hidden > h4 > button:not(.eye-button) { color: var(--faint); border-color: var(--faint); }
+    &.is-hidden > h4 > .lock-button[aria-pressed="true"] { color: var(--ink); border-color: var(--ink); }
+  }
+
+  .layer-body { margin-top: 8px; }
+
+  /* ============================ rows ============================
+     A fixed label measure down the whole panel. */
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: var(--ctl);
+    margin: 5px 0;
+
+    > label { flex: 0 0 var(--lbl); color: var(--muted); letter-spacing: 0.01em; }
+    > input[type="range"], > input[type="text"], > select, > span, > div { flex: 1 1 auto; min-width: 0; }
+    > input[type="color"], > button { flex: 0 0 auto; }
+    > output { flex: 0 0 auto; min-width: 44px; text-align: right; font-variant-numeric: tabular-nums; font-weight: 500; color: var(--ink); }
+    > span.inline-check { flex: 0 0 auto; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+    > span > label { color: var(--muted); cursor: pointer; }
+    > span > label:hover { color: var(--ink); }
+
+    // Dimmed, but still hoverable: its title is the only thing saying why it is dead.
+    &.is-disabled { opacity: 0.35; cursor: help; }
+  }
+
+  /* ---- fields ---- */
+  input[type="text"] {
+    width: 100%;
+    height: var(--ctl);
+    padding: 0 7px;
+    font-family: var(--ui-mono);
+    font-size: 11px;
+    color: var(--ink);
+    background: var(--bg);
+    border: 1px solid var(--ink);
+    border-radius: 0;
+  }
+
+  input[type="color"] {
+    width: 30px;
+    height: var(--ctl);
+    padding: 0;
+    background: var(--bg);
+    border: 1px solid var(--ink);
+    border-radius: 0;
+    cursor: pointer;
+
+    &::-webkit-color-swatch-wrapper { padding: 2px; }
+    &::-webkit-color-swatch { border: none; }
+  }
+
+  input[type="checkbox"] { width: 14px; height: 14px; margin: 0; accent-color: var(--ink); cursor: pointer; }
+
+  // Sliders: a drawn line with a solid block riding it.
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 18px;
+    margin: 0;
+    background: transparent;
+    cursor: pointer;
+
+    &::-webkit-slider-runnable-track { height: 1px; background: var(--ink); border: none; }
+    &::-webkit-slider-thumb { -webkit-appearance: none; width: 8px; height: 14px; margin-top: -6.5px; background: var(--ink); border: none; border-radius: 0; cursor: grab; }
+    &:hover::-webkit-slider-thumb { width: 10px; height: 16px; margin-top: -7.5px; }
+    &::-moz-range-track { height: 1px; background: var(--ink); border: none; }
+    &::-moz-range-thumb { width: 8px; height: 14px; background: var(--ink); border: none; border-radius: 0; cursor: grab; }
+    &:hover::-moz-range-thumb { width: 10px; height: 16px; }
+    &:disabled { cursor: help; }
+  }
+
+  // Chips: the tag and topic filters.
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+
+    &.tags { margin-bottom: 6px; }
+    input { display: none; }
+
+    label {
+      height: 18px;
+      padding: 0 6px;
+      display: inline-flex;
+      align-items: center;
+      font-family: var(--ui-mono);
+      font-size: 10px;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      color: var(--muted);
+      background: var(--bg);
+      border: 1px solid var(--faint);
+      transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+
+      &:hover { border-color: var(--ink); color: var(--ink); }
+      &:has(input:checked) { color: var(--bg); background: var(--ink); border-color: var(--ink); }
+    }
+  }
+
+  // Tabs, the way an Adobe panel draws them: the open one framed and joined to its content.
+  .tabs {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    margin: 6px 0 8px;
+
+    &::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--ink); }
+
+    button {
+      position: relative;
+      z-index: 1;
+      height: 22px;
+      margin: 0 0 1px;
+      padding: 0 12px;
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid transparent;
+      border-bottom: 0;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+
+      // On the layer's wash ground, a hover a step darker than it.
+      &:hover, &:active { background: color-mix(in srgb, var(--wash) 55%, var(--faint)); color: var(--ink); border-color: transparent; }
+      &[aria-selected="true"] { height: 23px; margin-bottom: 0; background: var(--bg); color: var(--ink); border-color: var(--ink); }
+    }
+  }
+
+  /* ============================ pickers ============================ */
+
+  // The svg library: every background as a live tile.
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(46px, 1fr));
+    gap: 4px;
+    margin-bottom: 4px;
+    padding: 4px;
+    max-height: 232px;
+    overflow: auto;
+    background: var(--bg);
+    border: 1px solid var(--ink);
+    scrollbar-width: thin;
+    scrollbar-color: var(--faint) transparent;
+
+    button {
+      height: auto;
+      aspect-ratio: 1;
+      padding: 0;
+      border: 1px solid var(--faint);
+      transition: border-color 0.12s ease, transform 0.12s ease;
+
+      &:hover { border-color: var(--ink); transform: scale(1.06); }
+    }
+  }
+
+  // The pattern picker: previews, so a grid rather than a select.
+  .pattern-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(28px, 1fr));
+    gap: 3px;
+    margin: 6px 0;
+    padding: 4px;
+    max-height: 190px;
+    overflow: auto;
+    background: var(--bg);
+    border: 1px solid var(--ink);
+    scrollbar-width: thin;
+    scrollbar-color: var(--faint) transparent;
+
+    button {
+      position: relative;
+      height: auto;
+      aspect-ratio: 1;
+      padding: 0;
+      overflow: hidden;
+      color: var(--ink);
+      background-color: var(--bg);
+      border: 1px solid var(--faint);
+
+      &:hover { color: var(--ink); background-color: var(--wash); border-color: var(--ink); }
+      i { position: absolute; inset: 0; }
+    }
+  }
+
+  // The current tile / palette: a black frame set off by a white gap.
+  .tiles button[aria-pressed="true"],
+  .pattern-grid button[aria-pressed="true"],
+  .palette-list button[aria-pressed="true"] {
+    border: 1px solid var(--bg);
+    outline: 2px solid var(--ink);
+    outline-offset: -3px;
+    box-shadow: 0 0 0 2px var(--ink);
+  }
+
+  .current-name {
+    margin: -2px 0 2px;
+    padding-left: 1px;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // Swatches: one per colour found in the svg.
+  .swatches {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 4px;
+    margin: 2px 0 4px;
+  }
+
+  .swatch {
+    position: relative;
+    display: block;
+    aspect-ratio: 1;
+    border: 1px solid var(--ink);
+    cursor: pointer;
+
+    input { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; opacity: 0; border: 0; cursor: pointer; }
+
+    &.is-base::after {
+      content: "bg";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      font-size: 8px;
+      font-weight: 700;
+      line-height: 10px;
+      letter-spacing: 0.08em;
+      text-align: center;
+      background: var(--ink);
+      color: var(--bg);
+      pointer-events: none;
+    }
+
+    &.is-edited::before {
+      content: "";
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 5px;
+      height: 5px;
+      background: var(--bg);
+      box-shadow: 0 0 0 1px var(--ink);
+      pointer-events: none;
+    }
+  }
+
+  // The palette set: strips of colour, several to a line.
+  .palette-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 9px 12px;
+    padding: 8px;
+    margin: 2px 0 4px;
+    max-height: 176px;
+    overflow: auto;
+    background: var(--bg);
+    border: 1px solid var(--ink);
+    scrollbar-width: thin;
+    scrollbar-color: var(--faint) transparent;
+
+    button {
+      height: 16px;
+      padding: 0;
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      border: 1px solid var(--faint);
+      background: var(--bg);
+      transition: border-color 0.12s ease, transform 0.12s ease;
+
+      i { flex: 0 0 12px; }
+      &:hover { background: var(--bg); border-color: var(--ink); transform: scale(1.06); }
+      &.is-none, &.is-none:hover { width: 62px; background: repeating-linear-gradient(45deg, var(--bg) 0 3px, var(--faint) 3px 4px); }
+    }
+  }
+
+  // Running text: the one place the sans face is used.
+  .hint {
+    margin: 8px 0 0;
+    font-family: var(--ui-sans);
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--muted);
+
+    b { color: var(--ink); font-weight: 600; }
+    a { color: var(--ink); }
+  }
+
+  /* ============================ templates ============================ */
+
+  // The fixed / random switch at the end of a row: the die, quiet while fixed, inverted while random.
+  .rule-button {
+    flex: 0 0 auto;
+    width: 20px;
+    min-width: 20px;
+    height: 18px;
+    padding: 0;
+    font-size: 0;
+    color: var(--faint);
+    border-color: var(--faint);
+
+    &::before { width: 12px; height: 12px; }
+    &:hover { background: var(--bg); color: var(--ink); border-color: var(--ink); }
+    &[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  }
+
+  // The svg library's toggle, at the end of the tab strip - out from under the tabs' own button look.
+  .tabs .rule-button {
+    z-index: 1;
+    height: 18px;
+    margin: 0 0 3px auto;
+    padding: 0;
+    background: var(--bg);
+    color: var(--faint);
+    border: 1px solid var(--faint);
+
+    &:hover { background: var(--bg); color: var(--ink); border-color: var(--ink); }
+    &[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  }
+
+  // A random row: min and max where the slider was.
+  .row.is-random > label { color: var(--ink); }
+
+  .range-inputs {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    i { font-style: normal; color: var(--muted); }
+  }
+
+  input[type="number"] {
+    width: 100%;
+    min-width: 0;
+    height: var(--ctl);
+    padding: 0 4px 0 7px;
+    font-family: var(--ui-mono);
+    font-size: 11px;
+    color: var(--ink);
+    background: var(--bg);
+    border: 1px solid var(--ink);
+    border-radius: 0;
+
+    &.short { flex: 0 0 64px; width: 64px; }
+  }
+
+  select {
+    width: 100%;
+    height: var(--ctl);
+    padding: 0 22px 0 7px;
+    font-family: var(--ui-mono);
+    font-size: 11px;
+    color: var(--ink);
+    border: 1px solid var(--ink);
+    border-radius: 0;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    background: var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M0 0h10L5 6z' fill='%23000'/%3E%3C/svg%3E") no-repeat right 7px center / 8px 5px;
+
+    &:hover { background-color: var(--wash); }
+  }
+
+  // Left out of a random library: struck through, still pickable as the fixed one.
+  .is-denied { position: relative; opacity: 0.45; }
+  .tiles .is-denied::after, .pattern-grid .is-denied::after, .palette-list .is-denied::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top right, transparent calc(50% - 1px), var(--ink) calc(50% - 1px), var(--ink) calc(50% + 1px), transparent calc(50% + 1px));
+    pointer-events: none;
+  }
+
+  .image-tiles button { position: relative; overflow: hidden; img { object-fit: cover; } }
+
+  // "use on": a one-line summary that opens the list - drawn like the panel's selects.
+  .row > .puzzle-picker {
+    flex: 1 1 auto;
+    min-width: 0;
+    justify-content: flex-start;
+    padding: 0 22px 0 7px;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    background: var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M0 0h10L5 6z' fill='%23000'/%3E%3C/svg%3E") no-repeat right 7px center / 8px 5px;
+
+    span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    &:hover { color: var(--ink); background-color: var(--wash); }
+    &.is-open { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M0 6h10L5 0z' fill='%23000'/%3E%3C/svg%3E"); }
+  }
+
+  // The open list: two tight columns floating under (or over) the field, placed by the panel
+  // against its own frame so it covers the rows below instead of pushing them down.
+  .puzzle-list {
+    position: absolute;
+    z-index: 5;
+    display: grid;
+    grid-template-columns: max-content max-content;
+    gap: 1px 16px;
+    width: max-content;   // as wide as its content - past the field, or the panel edge, if it needs to be
+    padding: 6px 10px;
+    background: var(--bg);
+    border: 1px solid var(--ink);
+    box-shadow: 3px 4px 0 rgba(0, 0, 0, 0.12);
+
+    > label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 18px;
+      font-size: 10px;
+      color: var(--muted);
+      white-space: nowrap;
+      cursor: pointer;
+
+      &:hover, &:has(input:checked) { color: var(--ink); }
+      &.is-on-screen::after { content: "●"; font-size: 7px; color: var(--ink); }
+    }
+
+    input[type="checkbox"] { width: 12px; height: 12px; }
+  }
+
+  // The weight and the quick picks below the checkboxes, each behind a hairline.
+  .puzzle-section {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 5px;
+    padding-top: 6px;
+    border-top: 1px solid var(--faint);
+
+    > label { margin-right: 6px; font-size: 10px; color: var(--muted); }
+    input[type="number"] { height: 20px; }
+    button { height: 18px; padding: 0 6px; font-size: 9px; }
+  }
+
+  // The name and its dice, one control: a shared edge, no gap, the button as tall as the field.
+  .row > .name-field {
+    display: flex;
+    flex: 1 1 auto;
+    min-width: 0;
+
+    input[type="text"] { flex: 1 1 auto; min-width: 0; }
+    button { flex: none; width: var(--ctl); height: var(--ctl); border-left: 0; }
+  }
+
+  // Enabled, as a checkbox leading the name it belongs to.
+  .row > .enabled-check { flex: 0 0 auto; margin-right: -4px; }
+
+
+
+  .template-list {
+    max-height: 168px;
+    overflow: auto;
+    margin: 2px 0 8px;
+    border: 1px solid var(--ink);
+    scrollbar-width: thin;
+    scrollbar-color: var(--faint) transparent;
+  }
+
+  // One template: its name (the load button), the trashcan when selected, and its weight.
+  .template-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 20px;
+    padding-right: 6px;
+    background: var(--bg);
+    color: var(--muted);
+    font-size: 10px;
+
+    &:hover { background: var(--wash); color: var(--ink); }
+    &.is-selected { background: var(--ink); color: var(--bg); }
+
+    .row-load {
+      flex: 1 1 auto;
+      min-width: 0;
+      justify-content: flex-start;
+      height: 20px;
+      padding: 0 6px;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      text-transform: none;
+
+      &:hover, &:active { background: transparent; color: inherit; }
+    }
+
+    .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .meta { flex: none; font-variant-numeric: tabular-nums; opacity: 0.8; }
+    &.is-off .name { text-decoration: line-through; }
+    &.is-new .name { font-style: italic; }
+    &.is-new:not(.is-selected) { border-bottom: 1px solid var(--faint); }
+
+    // In the inverted row: paper on ink, inverted again under the pointer.
+    .row-delete {
+      flex: none;
+      width: 18px;
+      min-width: 18px;
+      height: 16px;
+      padding: 0;
+      font-size: 0;
+      background: transparent;
+      color: var(--bg);
+      border: 1px solid transparent;
+
+      &::before { width: 11px; height: 11px; }
+      &:hover { background: var(--bg); color: var(--ink); border-color: var(--bg); }
+    }
+  }
+
+  .template-empty { margin: 0; padding: 7px 6px; font-size: 10px; color: var(--muted); }
+
+  /* ============================ minimized ============================
+     The way back in and the way out, with a paper edge and an ink ring so a black
+     button keeps its shape over a dark background. */
+  .panel-show {
+    position: fixed;
+    bottom: 14px;
+    z-index: 1;
+    height: 26px;
+    background: var(--ink);
+    color: var(--bg);
+    border: 1px solid var(--bg);
+    box-shadow: 0 0 0 2px var(--ink);
+
+    &:hover { background: var(--bg); color: var(--ink); }
+  }
+
+  .panel-show { right: 14px; padding: 0 12px; letter-spacing: 0.14em; }
+
+  // What a copy did: one line in the titlebar's black band, top centre, gone after a moment.
+  .toast {
+    position: fixed;
+    top: 16px;
+    left: 50vw;
+    transform: translate(-50%, -8px);
+    padding: 7px 14px;
+    background: var(--ink);
+    color: var(--bg);
+    font: 700 10px/1.4 var(--ui-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    box-shadow: 3px 5px #00000033;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+
+    &.is-shown { opacity: 1; transform: translate(-50%, 0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .panel, button, .chips label, .chev, .toast { transition: none; }
+  }
+}

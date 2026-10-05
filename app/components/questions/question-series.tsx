@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import PuzzleBackground from "../pattern-background/puzzle-background";
 import "./question-series.scss";
 import Answer from "../answer";
 import { useDataStore } from "../zustand-stores/data-store";
@@ -51,7 +51,7 @@ export default function Question_Series() {
 
   return (
     <div className={`nsc--question-series question-container`}>
-      <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" priority/>
+      <PuzzleBackground type="series" />
       <div className="question margin-0-auto position-relative text-shadow-1 text-outline-3 ">{data.seriesText}</div>
 
       <div className="answers style-2 clearfix position-absolute">

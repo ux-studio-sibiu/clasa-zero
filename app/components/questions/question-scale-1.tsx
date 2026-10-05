@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import PuzzleBackground from "../pattern-background/puzzle-background";
 import "./question-scale-1.scss";
 import Answer from "../answer";
 
@@ -53,7 +53,7 @@ export default function Question_Scale_1() {
 
   return (
     <div className={`nsc--question-scale-1 question-container`}>
-      <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" priority/>
+      <PuzzleBackground type="scale-1" />
       <div className="question margin-0-auto position-relative ">
 
         <div className={`container`}>

@@ -1,7 +1,7 @@
 import Script from "next/script";
 import "./styles/globals.scss";
 import localFont from 'next/font/local';
-import ScrollBridge from "./components/client-components/scroll-bridge";
+import BackgroundTools from "./components/client-components/background-tools";
 
 const poppins = localFont({
   src: [
@@ -51,8 +51,8 @@ export default async function RootLayout({children}: {children: React.ReactNode}
     <head><link rel="icon" type="image/jpeg" href="/favicon.jpg" /></head>
 
       <body className={`${poppins.variable} ${melon.variable} ${coiny.variable} ${francoisOne.variable} ${poetsenOne.variable} ${sansita.variable} ${troika.variable} clearfix`}>
-        <ScrollBridge />
           {children}
+        <BackgroundTools />
       </body>
     </html>
   );

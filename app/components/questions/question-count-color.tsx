@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import PuzzleBackground from "../pattern-background/puzzle-background";
 import "./question-count-color.scss";
 import Answer from "../answer";
 
@@ -96,7 +97,7 @@ export default function Question_CountColor() {
   const cssClass_flipImage = Math.random() < 0.5 ? ' flip-x' : '';
   return (
     <div className={`nsc--question-count-color question-container`} style={{ backgroundColor: data.question.backgroundFillColor }}>
-      {data.background && <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" priority/>}
+      <PuzzleBackground type="count-color" color={data.question.backgroundFillColor} />
       <div className="question margin-0-auto position-relative ">
         <Image src={`/images/questions/count-color/${data.question.imageName}.jpg`} fill sizes="100vw" className={`object-contain${cssClass_flipImage}`} alt="background" priority/>
       </div>

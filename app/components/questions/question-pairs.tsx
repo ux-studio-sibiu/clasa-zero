@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import PuzzleBackground from "../pattern-background/puzzle-background";
 import "./question-pairs.scss";
 import Answer from "../answer";
 import { selectUniqueElementsFromArray } from "@/public/lib/utils";
@@ -42,7 +42,7 @@ export default function Question_Pairs() {
 
   return (
     <div className={`nsc--question-pairs question-container`}>
-      <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" priority/>
+      <PuzzleBackground type="pairs" />
       <div className="question margin-0-auto position-relative ">
 
         <div className={`container series-size-9`}>

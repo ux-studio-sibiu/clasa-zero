@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import PuzzleBackground from "../pattern-background/puzzle-background";
 import "./question-hands.scss";
 import Answer from "../answer";
 import { useDataStore } from "../zustand-stores/data-store";
@@ -33,7 +33,7 @@ export default function Question_Hands() {
 
   return (
     <div className={`nsc--question-hands question-container`}>
-      <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" priority/>
+      <PuzzleBackground type="hands" />
       <div className="question margin-0-auto position-relative ">      
         <div  className={`sprite sprite-hands ${data.handCssClass} hand-${data.spriteIndex} margin-0-auto` } ></div>  
       </div>

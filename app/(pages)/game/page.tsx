@@ -19,6 +19,7 @@ import GameMenuContent from '@/app/components/client-components/game-menu-conten
 import GameHud from '@/app/components/client-components/game-hud';
 import { useGameStore } from '@/app/components/zustand-stores/game-store';
 import { startGame } from '@/app/utils/game-controller';
+import { useBackgroundStore } from '@/app/components/zustand-stores/background-store';
 // ------------------------------------------------------------------------
 
 export default function Game() {
@@ -41,9 +42,10 @@ export default function Game() {
   // start of the game
   useEffect(() => { if (slides.length === 0) {
     (async () => {
-      await useDataStore.getState().getQuestionsFromSanity(); 
+      await useDataStore.getState().getQuestionsFromSanity();
       await useDataStore.getState().getShapes();
       await useDataStore.getState().getBackgrounds();
+      await useBackgroundStore.getState().load();
       startGame();
 
     })(); // iife

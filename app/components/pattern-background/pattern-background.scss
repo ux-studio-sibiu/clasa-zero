@@ -1,0 +1,43 @@
+// The wrapper a puzzle drops in: it takes the place of the old background <Image fill>.
+.nsc-puzzle-background {
+  position: absolute;
+  inset: 0;
+}
+
+.nsc-pattern-background {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+
+  .layers, .image-layer, .svg-layer, .pattern-layer {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  // Size containers, so cqmax can say "the longer side".
+  .svg-layer, .pattern-layer { container-type: size; }
+
+  .svg-layer i {
+    position: absolute;
+    inset: 0;
+
+    // Turned: a square 142% of the longer side - past the diagonal, so no rotation shows an edge.
+    &.is-turned {
+      inset: auto;
+      left: 50%;
+      top: 50%;
+      width: 142cqmax;
+      height: 142cqmax;
+    }
+  }
+
+  .pattern-layer i {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 142cqmax;
+    height: 142cqmax;
+  }
+}

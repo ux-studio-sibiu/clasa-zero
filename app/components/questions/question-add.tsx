@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import PuzzleBackground from "../pattern-background/puzzle-background";
 import "./question-add.scss";
 import { useGameStore } from "../zustand-stores/game-store";
 import Answer from "../answer";
@@ -43,7 +43,7 @@ export default function Question_Add() {
 
   return (
     <div className={`nsc--question-add question-container ${cssClass_answered}`}>
-      <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" priority/>
+      <PuzzleBackground type="add" />
       <div className="question margin-0-auto position-relative text-shadow-5 text-outline-3">
         <>
           <span>{data.a}</span> 

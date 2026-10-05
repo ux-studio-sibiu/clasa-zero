@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import PuzzleBackground from "../pattern-background/puzzle-background";
 import "./question-sanity.scss";
 import { useSwiperStore } from "../zustand-stores/swiper-store";
 import { useDataStore } from "../zustand-stores/data-store";
@@ -41,7 +41,7 @@ export default function Question_Sanity() {
 
   return (
     <div className={`nsc--question-sanity question-container`}>
-      <Image src={data.background} fill sizes="100vw" className="object-cover" alt="background" priority/>
+      <PuzzleBackground type="sanity" />
 
       <div className="question margin-0-auto position-relative text-effect-shadow-dance ">{question.question}</div>
 
