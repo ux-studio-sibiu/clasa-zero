@@ -254,7 +254,8 @@ const pick = <T,>(list: T[]) => list[Math.floor(Math.random() * list.length)];
 const between = (lo: number, hi: number, step = 0.01) => +(Math.round((lo + Math.random() * (hi - lo)) / step) * step).toFixed(2);
 
 // `palettes` narrows the svg roll's palette pick - the panel passes the topic it is filtered to.
-export type RollOptions = { palettes?: number[] };
+// `noImage` leaves the jpg out of rollBackground's choice of base layer.
+export type RollOptions = { palettes?: number[]; noImage?: boolean };
 
 // Original colours as often as a palette: these backgrounds were coloured by someone,
 // and a set palette on top is an alternative, not a fix.
@@ -283,7 +284,8 @@ export function rollImage(): PatternBackgroundConfig {
 // A whole random background: one base layer - image, svg OR pattern, never two - with its own
 // settings rolled. What a puzzle gets when its pool has no templates.
 export function rollBackground(options: RollOptions = {}): PatternBackgroundConfig {
-  return { ...DEFAULT_CONFIG, ...pick([rollImage, rollSvg, rollPattern])(options) };
+  const bases = options.noImage ? [rollSvg, rollPattern] : [rollImage, rollSvg, rollPattern];
+  return { ...DEFAULT_CONFIG, ...pick(bases)(options) };
 }
 
 /* ---------------------------------------------------------------- export */

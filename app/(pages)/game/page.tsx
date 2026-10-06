@@ -45,7 +45,7 @@ export default function Game() {
       await useDataStore.getState().getQuestionsFromSanity();
       await useDataStore.getState().getShapes();
       await useDataStore.getState().getBackgrounds();
-      await useBackgroundStore.getState().load();
+      await useBackgroundStore.getState().load(true);
       startGame();
 
     })(); // iife

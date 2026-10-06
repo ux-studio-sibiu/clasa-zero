@@ -8,8 +8,10 @@ import { useGameStore } from "../components/zustand-stores/game-store";
 export function startGame() {
   const { addSlide} = useSwiperStore.getState();
   const { startTimer, settings: { timer }} = useGameStore.getState();
-  addSlide(); 
-  addSlide(); 
+  addSlide();
+  // The next puzzle once the first is up, so its images do not compete with the first one's.
+  if ("requestIdleCallback" in window) requestIdleCallback(() => addSlide(), { timeout: 500 });
+  else setTimeout(() => addSlide(), 200);
   if(timer != 0) {startTimer();}
 }
 

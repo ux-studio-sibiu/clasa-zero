@@ -10,7 +10,7 @@ import type { PuzzleType } from "./templates";
 //   <PuzzleBackground type="count-color" color={variant.backgroundFillColor} />
 export default function PuzzleBackground({ type, color }: { type: PuzzleType; color?: string | null }) {
   const bgId = useId();
-  const [config] = useState(() => useBackgroundStore.getState().pick(type, color));
+  const [config] = useState(() => useBackgroundStore.getState().pick(type, bgId, color));
   const preview = useBackgroundStore((s) => s.preview);
   const previewed = preview && (preview.pinned || preview.targetId === bgId);
   const shown = previewed ? { ...preview.config, ...(preview.usePuzzleColor ? { color: color ?? null } : {}) } : config;

@@ -147,9 +147,10 @@ export function pickTemplate(templates: TemplateDoc[], type: PuzzleType) {
 }
 
 // What a puzzle gets: a look from its pool, or a fully random background when the pool is empty.
-export function pickBackground(templates: TemplateDoc[], type: PuzzleType, ctx: { puzzleColor?: string | null } = {}) {
+// `noImage` keeps a jpg out of that random background (templates still show theirs).
+export function pickBackground(templates: TemplateDoc[], type: PuzzleType, ctx: { puzzleColor?: string | null; noImage?: boolean } = {}) {
   const doc = pickTemplate(templates, type);
-  return doc ? resolveTemplate(doc.template, ctx) : rollBackground();
+  return doc ? resolveTemplate(doc.template, ctx) : rollBackground({ noImage: ctx.noImage });
 }
 
 /* ---------------------------------------------------------------- the panel's draft */
