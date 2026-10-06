@@ -9,6 +9,7 @@ import { LAYERS, draftFromTemplate, resolveTemplate, templateFromDraft, type Bac
 
 const LAYER_ROLLS = { image: rollImage, svg: rollSvg, pattern: rollPattern };
 const NEW_META: TemplateMeta = { name: "", puzzleTypes: [], weight: 1, enabled: true };
+export type DraftSource = "blank" | "current" | null;
 
 interface BackgroundToolsState {
   config: PatternBackgroundConfig;
@@ -17,6 +18,8 @@ interface BackgroundToolsState {
   locked: Record<LayerName, boolean>;   // held through a re-roll
   meta: TemplateMeta;
   id: string | null;
+  // Where an unsaved draft came from, for the list's two top rows: an empty look, or the puzzle on screen.
+  source: DraftSource;
   rev: string | null;
   minimized: boolean;
   pinned: boolean;   // the edited look on every puzzle, incoming ones too - off by default
@@ -26,7 +29,7 @@ interface BackgroundToolsState {
   rollLayer: (layer: LayerName, options: RollOptions) => void;
   rollTemplate: () => void;
   load: (doc: TemplateDoc) => void;
-  showLook: (config: PatternBackgroundConfig, type: PuzzleType | null) => void;
+  showLook: (config: PatternBackgroundConfig, type: PuzzleType | null, source?: DraftSource) => void;
   saved: (doc: TemplateDoc) => void;
   forget: () => void;
   setMeta: (patch: Partial<TemplateMeta>) => void;
@@ -54,6 +57,7 @@ export const useBackgroundToolsStore = create<BackgroundToolsState>()(
       locked: { image: false, svg: false, pattern: false },
       meta: NEW_META,
       id: null,
+      source: null,
       rev: null,
       minimized: false,
       pinned: false,
@@ -92,14 +96,15 @@ export const useBackgroundToolsStore = create<BackgroundToolsState>()(
       load: (doc) => {
         const { config, rules } = draftFromTemplate(doc.template, doc.snapshot);
         set({
-          config, rules, id: doc._id, rev: doc._rev ?? null,
+          config, rules, id: doc._id, rev: doc._rev ?? null, source: null,
           meta: { name: doc.name, puzzleTypes: doc.puzzleTypes, weight: doc.weight, enabled: doc.enabled },
           hidden: Object.fromEntries(LAYERS.map((l) => [l, doc.template[l] == null])) as Record<LayerName, boolean>,
         });
       },
-      // A concrete look that is not a template - what an empty pool rolls. A new, unsaved draft.
-      showLook: (config, type) => set({
-        config: { ...DEFAULT_CONFIG, ...config }, rules: {}, id: null, rev: null,
+      // A concrete look that is not a template, as a new unsaved draft: an empty one, a puzzle's own
+      // background, or what an empty pool rolls.
+      showLook: (config, type, source = null) => set({
+        config: { ...DEFAULT_CONFIG, ...config }, rules: {}, id: null, rev: null, source,
         meta: { ...NEW_META, puzzleTypes: type ? [type] : [] },
         hidden: Object.fromEntries(LAYERS.map((l) => [l, !config[l]])) as Record<LayerName, boolean>,
       }),

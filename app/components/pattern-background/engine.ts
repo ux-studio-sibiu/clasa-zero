@@ -42,16 +42,28 @@ export type PatternBackgroundConfig = {
   patternScale?: number;
   patternRotate?: number;           // 0..360 deg
   patternBlend?: PatternBlend;
+  // Five colours for the puzzle itself to use with its background - carried along, not drawn here.
+  // #rrggbb, or #rrggbbaa when a colour is not fully opaque.
+  puzzleColors?: string[] | null;
 };
 
-type Nullable = "svg" | "palette" | "pattern" | "color" | "image";
+type Nullable = "svg" | "palette" | "pattern" | "color" | "image" | "puzzleColors";
 export const DEFAULT_CONFIG: Required<Omit<PatternBackgroundConfig, Nullable>> & Pick<PatternBackgroundConfig, Nullable> = {
   color: null, opacity: 1,
   image: null, imageOpacity: 1,
   svg: null, palette: null, paletteShift: 0, colors: {},
   hue: 0, saturation: 0, lightness: 0, scale: 1, svgRotate: 0, svgZoom: 1,
   pattern: null, patternColor: "#000000", patternOpacity: 0.35, patternScale: 1, patternRotate: 0, patternBlend: "normal",
+  puzzleColors: null,
 };
+
+// A colour's own opacity: #rrggbbaa <-> its #rrggbb and 0..1. Fully opaque is written without the alpha.
+export const rgbOf = (c: string) => c.slice(0, 7);
+export const alphaOf = (c: string) => (c.length === 9 ? parseInt(c.slice(7), 16) / 255 : 1);
+export const withAlpha = (rgb: string, a: number) => (a >= 1 ? rgb.slice(0, 7) : rgb.slice(0, 7) + Math.round(Math.max(0, a) * 255).toString(16).padStart(2, "0"));
+
+// A palette as five puzzle colours: its first five, repeated from the start when it has fewer.
+export const puzzleColorsOf = (pal: Palette) => Array.from({ length: 5 }, (_, i) => `#${pal.colors[i % pal.colors.length]}`);
 
 // The flat colour at the background's opacity: the hex itself when solid, rgba otherwise.
 export function colorCss(config: PatternBackgroundConfig) {

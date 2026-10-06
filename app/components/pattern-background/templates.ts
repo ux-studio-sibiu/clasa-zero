@@ -12,6 +12,7 @@
 //   paletteShift "random" - a random rotation of the palette's colours
 //   color        "puzzle" - the colour the puzzle passes in (none when it passes none)
 //   *Chance      0..1, how often that layer shows at all (default 1)
+//   puzzleColors five #rrggbb or #rrggbbaa for the puzzle itself - fixed for now
 //
 // Adding a prop: add it to PatternBackgroundConfig, then to NUMBER_KEYS / LAYER_KEYS below.
 
@@ -56,6 +57,7 @@ export type BackgroundTemplate = {
   hue?: NumberRule; saturation?: NumberRule; lightness?: NumberRule; scale?: NumberRule; svgRotate?: NumberRule; svgZoom?: NumberRule;
   pattern?: ChoiceRule<string>; patternChance?: number; patternColor?: string; patternBlend?: PatternBlend;
   patternOpacity?: NumberRule; patternScale?: NumberRule; patternRotate?: NumberRule;
+  puzzleColors?: string[] | null;
 };
 export type TemplateKey = Exclude<keyof BackgroundTemplate, "v">;
 
@@ -115,6 +117,7 @@ export function resolveTemplate(t: BackgroundTemplate, ctx: { puzzleColor?: stri
   const out: PatternBackgroundConfig = { ...DEFAULT_CONFIG, colors: {} };
   out.color = t.color === "puzzle" ? ctx.puzzleColor ?? null : t.color ?? null;
   out.opacity = rollNumber(t.opacity, 1);
+  out.puzzleColors = t.puzzleColors ?? null;
   const shows = (rule: unknown, chance?: number) => rule != null && Math.random() < (chance ?? 1);
 
   if (shows(t.image, t.imageChance)) {
@@ -146,11 +149,13 @@ export function pickTemplate(templates: TemplateDoc[], type: PuzzleType) {
   return pool.find((d) => (r -= d.weight) < 0) || pool[pool.length - 1];
 }
 
-// What a puzzle gets: a look from its pool, or a fully random background when the pool is empty.
-// `noImage` keeps a jpg out of that random background (templates still show theirs).
-export function pickBackground(templates: TemplateDoc[], type: PuzzleType, ctx: { puzzleColor?: string | null; noImage?: boolean } = {}) {
+// What a puzzle gets: a look from its pool, or a fully random background when the pool is empty -
+// with the template it came from (null for the random one). `noImage` keeps a jpg out of that random
+// background (templates still show theirs).
+export type PickedBackground = { config: PatternBackgroundConfig; templateId: string | null };
+export function pickBackground(templates: TemplateDoc[], type: PuzzleType, ctx: { puzzleColor?: string | null; noImage?: boolean } = {}): PickedBackground {
   const doc = pickTemplate(templates, type);
-  return doc ? resolveTemplate(doc.template, ctx) : rollBackground({ noImage: ctx.noImage });
+  return doc ? { config: resolveTemplate(doc.template, ctx), templateId: doc._id } : { config: rollBackground({ noImage: ctx.noImage }), templateId: null };
 }
 
 /* ---------------------------------------------------------------- the panel's draft */
@@ -162,6 +167,7 @@ export function templateFromDraft(config: PatternBackgroundConfig, rules: Partia
   const set = (k: TemplateKey, fixed: unknown) => { const v = rules[k] ?? fixed; if (v !== undefined) (t as Record<string, unknown>)[k] = v; };
   set("color", config.color ?? null);
   set("opacity", config.opacity);
+  if (config.puzzleColors?.length) set("puzzleColors", config.puzzleColors);
   for (const layer of LAYERS) {
     if (config[layer] == null) continue;   // a hidden layer is not part of the template
     for (const k of LAYER_KEYS[layer]) set(k, (config as Record<string, unknown>)[k]);
@@ -185,6 +191,7 @@ export function draftFromTemplate(t: BackgroundTemplate, snapshot?: PatternBackg
 
 type Result<T> = { ok: true; value: T } | { ok: false; error: string };
 const HEX = /^#[0-9a-f]{6}$/i;
+const HEX_ALPHA = /^#[0-9a-f]{6}([0-9a-f]{2})?$/i;
 const isNum = (v: unknown): v is number => typeof v === "number" && Number.isFinite(v);
 
 function checkNumber(k: string, v: unknown) {
@@ -213,6 +220,7 @@ export function validateTemplate(input: unknown): Result<BackgroundTemplate> {
   if (!isRule(input)) return { ok: false, error: "template: expected an object" };
   const t = input as Record<string, unknown>;
   if (t.v !== 1) return { ok: false, error: "template.v: expected 1" };
+  delete t.puzzleColorsOpacity;   // briefly a shared opacity, before each colour got its own
   for (const [k, v] of Object.entries(t)) {
     let error: string | null = null;
     if (k === "v") continue;
@@ -222,6 +230,7 @@ export function validateTemplate(input: unknown): Result<BackgroundTemplate> {
     else if (k === "palette") error = checkChoice(k, v, PALETTES.map((p) => p.id), ["topics"]);
     else if (k === "paletteShift") error = v === "random" || (isNum(v) && v >= 0) ? null : `${k}: a number or "random"`;
     else if (k === "color") error = v === null || v === "puzzle" || (typeof v === "string" && HEX.test(v)) ? null : `${k}: #rrggbb, "puzzle" or null`;
+    else if (k === "puzzleColors") error = v === null || (Array.isArray(v) && v.length === 5 && v.every((c) => typeof c === "string" && HEX_ALPHA.test(c))) ? null : `${k}: five #rrggbb / #rrggbbaa colours, or null`;
     else if (k === "patternColor") error = typeof v === "string" && HEX.test(v) ? null : `${k}: #rrggbb`;
     else if (k === "patternBlend") error = PATTERN_BLENDS.includes(v as PatternBlend) ? null : `${k}: one of ${PATTERN_BLENDS.join(", ")}`;
     else if (k === "colors") error = isRule(v) && Object.entries(v).every(([a, b]) => /^[0-9a-f]{6}$/.test(a) && typeof b === "string" && /^[0-9a-f]{6}$/.test(b)) ? null : `${k}: { rrggbb: rrggbb }`;

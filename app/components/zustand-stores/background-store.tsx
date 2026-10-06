@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import client from "@/sanity/sanity.client";
 import type { PatternBackgroundConfig } from "../pattern-background/engine";
-import { TEMPLATE_QUERY, fromSanity, pickBackground, type PuzzleType, type SanityTemplateDoc, type TemplateDoc } from "../pattern-background/templates";
+import { TEMPLATE_QUERY, fromSanity, pickBackground, type PickedBackground, type PuzzleType, type SanityTemplateDoc, type TemplateDoc } from "../pattern-background/templates";
 
 // The puzzles' backgrounds: every template, read from Sanity once when the game starts, and the
 // pick a puzzle makes from its pool. The ?background-tools panel writes templates back through
@@ -15,11 +15,16 @@ interface BackgroundStoreState {
   // first screen never waits on a photo. Reset when a game starts.
   firstBgId: string | null;
   load: (newGame?: boolean) => Promise<void>;
-  pick: (type: PuzzleType, bgId: string, puzzleColor?: string | null) => PatternBackgroundConfig;
+  pick: (type: PuzzleType, bgId: string, puzzleColor?: string | null) => PickedBackground;
   upsert: (doc: TemplateDoc) => void;
   remove: (id: string) => void;
   setPreview: (preview: BackgroundStoreState["preview"]) => void;
 }
+
+// The look each mounted puzzle background rolled, and the template it came from, by its id - so the panel can pick up a puzzle's
+// background as it is, instead of rolling another. Outside the store state: puzzles mount and unmount
+// constantly and nothing needs to re-render when this changes.
+export const rolledLooks = new Map<string, PickedBackground>();
 
 export const useBackgroundStore = create<BackgroundStoreState>((set, get) => ({
   templates: [],

@@ -12,10 +12,10 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import "./background-tools.scss";
 import { useBackgroundToolsStore, draftTemplate, visibleConfig } from "../zustand-stores/background-tools-store";
-import { useBackgroundStore } from "../zustand-stores/background-store";
+import { rolledLooks, useBackgroundStore } from "../zustand-stores/background-store";
 import {
   DEFAULT_CONFIG, IMAGE_BACKGROUNDS, OVERLAY_PATTERNS, PALETTES, SVG_BACKGROUNDS,
-  colorMapper, colorsOf, imageUrl, minimalConfig, patternLayerCss, rollBackground, svgById, svgLayerCss, tileSizes, toStyle,
+  alphaOf, colorMapper, colorsOf, imageUrl, minimalConfig, puzzleColorsOf, rgbOf, withAlpha, patternLayerCss, rollBackground, svgById, svgLayerCss, tileSizes, toStyle,
 } from "../pattern-background/engine";
 import {
   PUZZLE_TYPES, fromSanity, isRule, pickTemplate,
@@ -24,7 +24,9 @@ import {
 
 const MAX_SWATCHES = 16;
 const API = "/api/background-templates";
-const PALETTE_TOPICS = ["All", ...[...new Set(PALETTES.flatMap((p) => p.topics))].sort()];
+const PALETTE_TOPICS = [...new Set(PALETTES.flatMap((p) => p.topics))].sort();
+// Palettes with any of the ticked topics - every palette when none is ticked.
+const inTopics = (topics: string[]) => PALETTES.filter((p) => !topics.length || p.topics.some((t) => topics.includes(t)));
 const PUZZLE_LABEL = Object.fromEntries(PUZZLE_TYPES.map((t) => [t.key, t.label])) as Record<PuzzleType, string>;
 const ALL_FILTER_KEYS: string[] = [...PUZZLE_TYPES.map((t) => t.key), "none"];
 
@@ -39,6 +41,8 @@ function generateName(taken: string[]) {
   for (let i = 0; i < 12 && (!name || taken.includes(name)); i++) name = `${pickWord(NAME_COLORS)}-${pickWord(NAME_TRAITS)}-${pickWord(NAME_ANIMALS)}`;
   return name;
 }
+const RANDOM_TILE_ON = "Random each time - right-click a tile to leave it out. Click to fix it.";
+const RANDOM_TILE_OFF = "Fixed - click to pick one at random each time";
 const signed = (v: number) => `${v > 0 ? "+" : ""}${v}`;
 const fmt = (v: number) => String(+v.toFixed(2));
 // The puzzle on screen, read off the slide - the panel needs nothing from the game but this.
@@ -57,9 +61,17 @@ export default function BackgroundTools() {
 
 function BackgroundToolsPanel() {
   const s = useBackgroundToolsStore();
-  const { config, rules, hidden, locked, minimized, pinned, meta, id, set, setRule } = s;
+  const { config, rules, hidden, locked, minimized, pinned, meta, id, source, set, setRule } = s;
   const templates = useBackgroundStore((b) => b.templates);
-  const [paletteTopic, setPaletteTopic] = useState("All");
+  const [paletteTopics, setPaletteTopics] = useState<string[]>([]);
+  const [puzzleTopics, setPuzzleTopics] = useState<string[]>([]);
+  // The puzzle colour being edited in its popover, and the swatch it hangs from.
+  const [editingColor, setEditingColor] = useState<number | null>(null);
+  // Puzzle colours held in their slot through the dice, a palette pick and rotate. The panel's own, for
+  // this session - not part of a template.
+  const [lockedColors, setLockedColors] = useState<boolean[]>(() => Array(5).fill(false));
+  const swatchRef = useRef<HTMLButtonElement | null>(null);
+  const colorDropRef = useRef<HTMLDivElement>(null);
   const [tab, setTab] = useState<"svg" | "color" | "adjust">("svg");
   // Each layer opens and shuts on its own - opening one never shuts another, so nothing above a clicked
   // heading changes and it stays where it is. To start with, the layers that are showing are open.
@@ -98,17 +110,39 @@ function BackgroundToolsPanel() {
   }, [config, hidden, rules.color, pinned]);
   useEffect(() => () => useBackgroundStore.getState().setPreview(null), []);
 
-  // Which puzzle is on screen, for "this puzzle" and the list filter.
+  // The background the puzzle on screen rolled, as it is, into the panel - an unnamed draft, ready to save.
+  const activeBgId = () => document.querySelector(".swiper-slide-active [data-bg-id]")?.getAttribute("data-bg-id") ?? null;
+  const takeCurrent = () => {
+    const bgId = activeBgId(), look = bgId ? rolledLooks.get(bgId) : undefined;
+    if (!look) return;
+    useBackgroundToolsStore.getState().showLook(look.config, activePuzzleType(), "current");
+    setTemplateNote("This puzzle's background - tweak it, or name it and save it as a template.");
+  };
+
+  // Which puzzle is on screen, for "this puzzle" and the list filter - and, unpinned, a puzzle newly on
+  // screen hands the panel the background it rolled: every layer and value, as a new unsaved draft, so it
+  // can be tweaked as it is rather than rolled again. Pinned keeps the draft: that is what pinning is for.
+  const seenBgId = useRef<string | null>(null);
+  // The template the background on screen was rolled from - tagged "(parent)" in the list.
+  const [parentId, setParentId] = useState<string | null>(null);
   useEffect(() => {
-    const tick = () => setOnScreen(activePuzzleType());
+    const tick = () => {
+      setOnScreen(activePuzzleType());
+      const bgId = activeBgId();
+      setParentId((bgId && rolledLooks.get(bgId)?.templateId) || null);
+      if (!bgId || bgId === seenBgId.current) return;
+      seenBgId.current = bgId;
+      if (!useBackgroundToolsStore.getState().pinned) takeCurrent();
+    };
     tick();
-    const timer = setInterval(tick, 800);
+    const timer = setInterval(tick, 400);
     return () => clearInterval(timer);
   }, []);
 
   // The two floating lists: "use on" under its field, the filter under the header button.
   const dropPos = useFloating(pickingPuzzles, () => setPickingPuzzles(false), pickerRef, dropRef, panelRef, "left");
   const filterPos = useFloating(filtering, () => setFiltering(false), filterRef, filterDropRef, panelRef, "right");
+  const colorPos = useFloating(editingColor !== null, () => setEditingColor(null), swatchRef, colorDropRef, panelRef, "left");
 
   // Q: open the save fields. It never writes on its own - only Save does.
   useEffect(() => {
@@ -129,7 +163,7 @@ function BackgroundToolsPanel() {
   const svgThumbs = useMemo(() => Object.fromEntries(SVG_BACKGROUNDS.map((b) => [b.id, toStyle(svgLayerCss({ svg: b.id }, true))])), []);
   const patternThumbs = useMemo(() => Object.fromEntries(OVERLAY_PATTERNS.map((p) => [p.name, toStyle(patternLayerCss({ pattern: p.name, patternColor: "currentColor" }, true)!)])), []);
 
-  const palettes = PALETTES.filter((p) => paletteTopic === "All" || p.topics.includes(paletteTopic));
+  const palettes = inTopics(paletteTopics);
   const rollOptions = { palettes: palettes.map((p) => p.id) };
 
   const shown = visibleConfig(config, hidden);
@@ -139,6 +173,10 @@ function BackgroundToolsPanel() {
   const swatches = [...(baseKey ? [baseKey] : []), ...keys].slice(0, MAX_SWATCHES);
   const hiddenShades = keys.length + (baseKey ? 1 : 0) - swatches.length;
   const palette = PALETTES.find((p) => p.id === config.palette);
+  const puzzleColors = config.puzzleColors?.length === 5 ? config.puzzleColors : null;
+  // Which palette the five are, whatever their order - and whatever their opacity.
+  const puzzleKey = (list: string[]) => list.map((c) => rgbOf(c).toLowerCase()).sort().join();
+  const puzzlePalette = puzzleColors ? PALETTES.find((p) => puzzleKey(puzzleColorsOf(p)) === puzzleKey(puzzleColors))?.id ?? null : null;
   const scalable = !!(bg && tileSizes(bg));
   const off: Record<LayerName, boolean> = { image: hidden.image || !config.image, svg: hidden.svg || !config.svg, pattern: hidden.pattern || !config.pattern };
   const editing = templates.find((d) => d._id === id);
@@ -166,17 +204,18 @@ function BackgroundToolsPanel() {
   /* ---- choice rules: a random library draws from the filter, minus what is right-clicked ---- */
   const toggleChoice = (key: "image" | "svg" | "pattern" | "palette", from: Choice["from"], extra: Partial<Choice> = {}) =>
     setRule(key, asChoice(rules[key]) ? undefined : ({ from, ...extra } as ChoiceRule<string>));
+  // Right-click a tile to leave it out. Leaving one out only means something for a random pick, so on a
+  // fixed library it makes the library random first - from everything (the palettes' ticked topics) but that.
   const deny = (key: "image" | "svg" | "pattern" | "palette", value: string | number) => {
-    const r = asChoice(rules[key]);
-    if (!r) return;
+    const r = asChoice(rules[key]) ?? { from: "all" as const, ...(key === "palette" && paletteTopics.length ? { topics: paletteTopics } : {}) };
     const list = r.deny?.includes(value) ? r.deny.filter((x) => x !== value) : [...(r.deny || []), value];
     setRule(key, { ...r, deny: list.length ? list : undefined } as ChoiceRule<string>);
   };
   const isDenied = (key: "image" | "svg" | "pattern" | "palette", value: string | number) => !!asChoice(rules[key])?.deny?.includes(value);
-  const onPaletteTopic = (t: string) => {
-    setPaletteTopic(t);
+  const onPaletteTopics = (topics: string[]) => {
+    setPaletteTopics(topics);
     const r = asChoice(rules.palette);
-    if (r) setRule("palette", { ...r, topics: t === "All" ? undefined : [t] } as ChoiceRule<number>);
+    if (r) setRule("palette", { ...r, topics: topics.length ? topics : undefined } as ChoiceRule<number>);
   };
 
   /* ---- templates ---- */
@@ -238,9 +277,19 @@ function BackgroundToolsPanel() {
   };
   // From scratch: the empty look, unsaved, used on the puzzle on screen.
   const startBlank = () => {
-    s.showLook(DEFAULT_CONFIG, onScreen);
+    s.showLook(DEFAULT_CONFIG, onScreen, "blank");
     setTemplateNote("New blank template - turn a layer on, then name it and save.");
     nameRef.current?.focus();
+  };
+  // New puzzle colours, with the locked ones kept where they are.
+  const setPuzzleColors = (next: string[]) => set({ puzzleColors: next.map((c, i) => (lockedColors[i] && puzzleColors ? puzzleColors[i] : c)) });
+  // Rotate the unlocked colours among the unlocked slots; the locked stay put.
+  const rotatePuzzleColors = () => {
+    if (!puzzleColors) return;
+    const free = puzzleColors.map((_, i) => i).filter((i) => !lockedColors[i]);
+    const next = [...puzzleColors];
+    free.forEach((slot, k) => { next[slot] = puzzleColors[free[(k + 1) % free.length]]; });
+    set({ puzzleColors: next });
   };
   const togglePuzzle = (t: PuzzleType) => s.setMeta({ puzzleTypes: meta.puzzleTypes.includes(t) ? meta.puzzleTypes.filter((x) => x !== t) : [...meta.puzzleTypes, t] });
 
@@ -266,16 +315,9 @@ function BackgroundToolsPanel() {
     return <Slider label="chance" min={0} max={1} step={0.05} value={rules[key] ?? 1} format={(v) => `${Math.round(v * 100)}%`}
       title="How often this layer shows when a puzzle uses the template" onChange={(v) => setRule(key, v >= 1 ? undefined : v)} />;
   };
-  const randomNote = (key: "image" | "svg" | "pattern") => {
-    const r = asChoice(rules[key]);
-    return r && <p className="hint">Random from {r.from === "all" ? "all" : `these ${r.from.length}`}{r.deny?.length ? `, minus ${r.deny.length}` : ""} &mdash; <b>right-click</b> a tile to leave it out.</p>;
-  };
   const libraryRow = (key: "image" | "pattern", count: string) => (
-    <>
-      <div className="row"><label>library</label><span /><output>{count}</output>
-        <RuleToggle on={!!asChoice(rules[key])} onClick={() => toggleChoice(key, "all")} /></div>
-      {randomNote(key)}
-    </>
+    <div className="row"><label>library</label><span /><output>{count}</output>
+      <RuleToggle on={!!asChoice(rules[key])} onClick={() => toggleChoice(key, "all")} title={asChoice(rules[key]) ? RANDOM_TILE_ON : RANDOM_TILE_OFF} /></div>
   );
 
   const layerHead = (layer: LayerName, label: string) => (
@@ -353,12 +395,11 @@ function BackgroundToolsPanel() {
                       <div className="layer-body">
                         <div className="tabs" role="tablist" aria-label="Dynamic SVG">
                           {(["svg", "color", "adjust"] as const).map((t) => <button type="button" key={t} role="tab" aria-selected={tab === t} onClick={() => setTab(t)}>{t}</button>)}
-                          {tab === "svg" && <RuleToggle on={!!asChoice(rules.svg)} onClick={() => toggleChoice("svg", "all")} title={asChoice(rules.svg) ? "Random svg each time - click to fix it" : "Fixed svg - click to pick one at random each time"} />}
+                          {tab === "svg" && <RuleToggle on={!!asChoice(rules.svg)} onClick={() => toggleChoice("svg", "all")} title={asChoice(rules.svg) ? RANDOM_TILE_ON : RANDOM_TILE_OFF} />}
                         </div>
 
                         {tab === "svg" && (
                           <div role="tabpanel">
-                            {randomNote("svg")}
                             <div className="tiles">
                               {SVG_BACKGROUNDS.map((b) => <button type="button" key={b.id} aria-pressed={b.id === config.svg} className={isDenied("svg", b.id) ? "is-denied" : ""} style={svgThumbs[b.id]} onClick={() => set({ svg: b.id, colors: {}, hue: 0, saturation: 0, lightness: 0, scale: 1, svgRotate: 0, svgZoom: 1 })} onContextMenu={(e) => { e.preventDefault(); deny("svg", b.id); }} title={b.name} aria-label={b.name} />)}
                             </div>
@@ -383,20 +424,11 @@ function BackgroundToolsPanel() {
                             <div className="row"><label>from set</label><span />
                               <button type="button" className="icon-button" data-mark="randomize" onClick={() => palettes.length && set({ palette: palettes[Math.floor(Math.random() * palettes.length)].id, paletteShift: 0, colors: {} })} title="Random palette" />
                               <button type="button" className="icon-button" data-mark="redo" disabled={!palette} onClick={() => set({ paletteShift: (config.paletteShift || 0) + 1, colors: {} })} title="Rotate which colour goes where" />
-                              <RuleToggle on={!!asChoice(rules.palette)} onClick={() => toggleChoice("palette", "all", paletteTopic === "All" ? {} : { topics: [paletteTopic] })} title="Random palette each time - from the topic picked below, minus what is right-clicked" /></div>
+                              <RuleToggle on={!!asChoice(rules.palette)} onClick={() => toggleChoice("palette", "all", paletteTopics.length ? { topics: paletteTopics } : {})} title={asChoice(rules.palette) ? "Random palette each time, from the topics picked below - right-click a palette to leave it out. Click to fix it." : "Fixed palette - click to pick one at random each time, from the topics picked below"} /></div>
                             <div className="row"><label>order</label><span className="inline-check"><input type="checkbox" id="bt-pal-rotate" checked={rules.paletteShift === "random"} onChange={(e) => setRule("paletteShift", e.target.checked ? "random" : undefined)} /><label htmlFor="bt-pal-rotate">random rotation</label></span></div>
-                            <div className="chips tags">
-                              {PALETTE_TOPICS.map((t) => <label key={t}><input type="radio" name="bt-palette-topic" checked={t === paletteTopic} onChange={() => onPaletteTopic(t)} />{t.toLowerCase()}</label>)}
-                            </div>
-                            <div className="palette-list">
-                              <button type="button" className="is-none" aria-pressed={!palette} onClick={() => set({ palette: null, paletteShift: 0, colors: {} })} title="None - the colours the background was drawn in" />
-                              {palettes.map((p) => (
-                                <button type="button" key={p.id} aria-pressed={p.id === config.palette} className={isDenied("palette", p.id) ? "is-denied" : ""} onClick={() => set({ palette: p.id, paletteShift: 0, colors: {} })} onContextMenu={(e) => { e.preventDefault(); deny("palette", p.id); }} title={`${p.name} by ${p.by} · ${p.topics.join(", ")}`}>
-                                  {p.colors.map((c, i) => <i key={i} style={{ background: `#${c}` }} />)}
-                                </button>
-                              ))}
-                            </div>
-                            {asChoice(rules.palette) && <p className="hint">Random from {asChoice(rules.palette)?.topics?.length ? <b>{asChoice(rules.palette)?.topics?.join(", ")}</b> : "all palettes"}{asChoice(rules.palette)?.deny?.length ? `, minus ${asChoice(rules.palette)?.deny?.length}` : ""} &mdash; <b>right-click</b> a palette to leave it out.</p>}
+                            <PalettePicker panel={panelRef} topics={paletteTopics} onTopics={onPaletteTopics} selected={config.palette ?? null}
+                              onPick={(palette) => set({ palette, paletteShift: 0, colors: {} })} noneTitle="None - the colours the background was drawn in"
+                              isDenied={(pid) => isDenied("palette", pid)} onDeny={(pid) => deny("palette", pid)} />
                             {!asChoice(rules.palette) && palette && <p className="hint"><b>{palette.name}</b> by {palette.by} &middot; {palette.topics.join(", ")}</p>}
                           </div>
                         )}
@@ -439,6 +471,48 @@ function BackgroundToolsPanel() {
             </div>
 
             <div className="group">
+              <h3 onClick={(e) => { if (!(e.target as HTMLElement).closest("button")) toggleShut("puzzleColors"); }}>
+                <span className={`chev${shut.puzzleColors ? " is-closed" : ""}`} />
+                <span className="head-label">Puzzle colours</span>
+                <button type="button" className="icon-button" data-mark="randomize" onClick={() => { const list = inTopics(puzzleTopics); if (list.length) setPuzzleColors(puzzleColorsOf(list[Math.floor(Math.random() * list.length)])); }} title="Random palette - from the topics picked below; locked colours stay" aria-label="Random puzzle colours" />
+                <button type="button" className="icon-button" data-mark="redo" disabled={!puzzleColors} onClick={rotatePuzzleColors} title="Rotate: every unlocked colour moves one slot" aria-label="Rotate puzzle colours" />
+                <button type="button" className="icon-button" data-mark="eraser" disabled={!puzzleColors} onClick={() => set({ puzzleColors: null })} title="Clear the puzzle colours" aria-label="Clear puzzle colours" />
+              </h3>
+              {!shut.puzzleColors && (
+                <div className="group-body">
+                  <div className="puzzle-swatches">
+                    {Array.from({ length: 5 }, (_, i) => {
+                      const c = puzzleColors?.[i];
+                      return (
+                        <button key={i} type="button" className={`swatch${c ? "" : " is-empty"}${editingColor === i ? " is-editing" : ""}${lockedColors[i] ? " is-locked" : ""}`} style={c ? ({ "--swatch": c } as React.CSSProperties) : undefined}
+                          onClick={(e) => { swatchRef.current = e.currentTarget; setEditingColor(editingColor === i ? null : i); }}
+                          title={c ? `Colour ${i + 1}: ${rgbOf(c)}${alphaOf(c) < 1 ? ` at ${Math.round(alphaOf(c) * 100)}%` : ""}${lockedColors[i] ? " - locked" : ""}` : `Colour ${i + 1} - pick one`} aria-label={`Puzzle colour ${i + 1}`} />
+                      );
+                    })}
+                  </div>
+                  {editingColor !== null && (() => {
+                    const c = puzzleColors?.[editingColor] ?? "#ffffff";
+                    // An empty set starts as five of the first colour picked, to adjust from.
+                    const write = (next: string) => set({ puzzleColors: (puzzleColors ?? Array(5).fill(next)).map((x, j) => (j === editingColor ? next : x)) });
+                    return (
+                      <div ref={colorDropRef} className="color-popover" style={colorPos ?? { visibility: "hidden" }}>
+                        <div className="row"><label>colour {editingColor + 1}</label>
+                          <input type="color" value={rgbOf(c)} onChange={(e) => write(withAlpha(e.target.value, alphaOf(c)))} aria-label="Colour" />
+                          <output>{rgbOf(c)}</output>
+                          <button type="button" className="lock-button" aria-pressed={lockedColors[editingColor]} disabled={!puzzleColors} onClick={() => setLockedColors((locks) => locks.map((l, j) => (j === editingColor ? !l : l)))}
+                            title={lockedColors[editingColor] ? "Locked - stays in its slot through the dice, a palette pick and rotate" : "Lock this colour in its slot"} aria-label={`Lock puzzle colour ${editingColor + 1}`} />
+                        </div>
+                        <Slider label="opacity" min={0} max={1} step={0.05} value={alphaOf(c)} onChange={(a) => write(withAlpha(rgbOf(c), a))} format={(v) => `${Math.round(v * 100)}%`} />
+                      </div>
+                    );
+                  })()}
+                  <PalettePicker panel={panelRef} topics={puzzleTopics} onTopics={setPuzzleTopics} selected={puzzlePalette}
+                    onPick={(pid) => { const pal = PALETTES.find((p) => p.id === pid); if (pal) setPuzzleColors(puzzleColorsOf(pal)); else set({ puzzleColors: null }); }} noneTitle="None - no puzzle colours" noneActive={!puzzleColors} />
+                </div>
+              )}
+            </div>
+
+            <div className="group">
               <h3 onClick={(e) => { if (!(e.target as HTMLElement).closest("button")) toggleShut("templates"); }}>
                 <span className={`chev${shut.templates ? " is-closed" : ""}`} />
                 <span className="head-label is-fixed">Templates</span>
@@ -462,10 +536,16 @@ function BackgroundToolsPanel() {
               {!shut.templates && (
                 <div className="group-body">
                   <div className="template-list">
-                    {/* Always first, whatever the filter: an empty draft to build from. Selected while nothing is loaded. */}
-                    <div className={`template-row is-new${id ? "" : " is-selected"}`}>
-                      <button type="button" className="row-load" aria-pressed={!id} onClick={startBlank} title="Start a template from scratch - every layer off, no colour, every rule fixed">
+                    {/* Always first, whatever the filter: the two unsaved starting points - an empty look, and the
+                        background the puzzle on screen rolled. Each is selected while the draft came from it. */}
+                    <div className={`template-row is-new${!id && source === "blank" ? " is-selected" : ""}`}>
+                      <button type="button" className="row-load" aria-pressed={!id && source === "blank"} onClick={startBlank} title="Start a template from scratch - every layer off, no colour, every rule fixed">
                         <span className="name">new blank template…</span>
+                      </button>
+                    </div>
+                    <div className={`template-row is-new${!id && source === "current" ? " is-selected" : ""}`}>
+                      <button type="button" className="row-load" aria-pressed={!id && source === "current"} disabled={!onScreen} onClick={takeCurrent} title={onScreen ? "The background the puzzle on screen rolled - every prop as it is, unnamed and unsaved" : "No puzzle on screen"}>
+                        <span className="name">current background…</span>
                       </button>
                     </div>
                     {shownTemplates.map((d) => (
@@ -473,9 +553,11 @@ function BackgroundToolsPanel() {
                       <div key={d._id} className={`template-row${d.enabled ? "" : " is-off"}${d._id === id ? " is-selected" : ""}`}>
                         <button type="button" className="row-load" aria-pressed={d._id === id} onClick={() => loadTemplate(d._id)} title={`Load "${d.name}"${d.enabled ? "" : " - disabled, never picked"}`}>
                           <span className="name">{d.name}</span>
+                          {d._id === parentId && <span className="parent" title="The background on screen was rolled from this template">(parent)</span>}
                         </button>
-                        {d._id === id && <button type="button" className="row-delete" data-mark="trash" disabled={saving} onClick={() => removeTemplate(d._id)} title={`Delete "${d.name}" from Sanity`} aria-label={`Delete ${d.name}`} />}
-                        <span className="meta">{d.enabled ? `×${d.weight}` : "off"}</span>
+                        {d._id === id && <button type="button" className="row-action" data-mark="randomize" onClick={s.rollTemplate} title="Sample: roll the random props - what a puzzle could get from this template" aria-label="Sample the template" />}
+                        {d._id === id && <button type="button" className="row-action" data-mark="trash" disabled={saving} onClick={() => removeTemplate(d._id)} title={`Delete "${d.name}" from Sanity`} aria-label={`Delete ${d.name}`} />}
+                        <span className="meta" title={d.enabled ? `Weight ${d.weight}: how often it is picked against the other templates in its pools` : "Disabled - never picked"}>{d.enabled ? `×${d.weight}` : "off"}</span>
                       </div>
                     ))}
                     {!templates.length && <p className="template-empty">No templates yet - make a look and press Q.</p>}
@@ -561,6 +643,42 @@ function useFloating(open: boolean, close: () => void, anchor: React.RefObject<H
     return () => { document.removeEventListener("pointerdown", away); document.removeEventListener("keydown", esc); document.removeEventListener("scroll", scrolled, true); };
   }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
   return pos;
+}
+
+// The topic filter and the palette strips, as both colour sections use them. Topics are a dropdown of
+// checkboxes - none ticked is every palette. `selected` is a palette id, or null for none of them; the
+// hatched "none" at the head of the list is lit by `noneActive`. Right-click excludes, where that applies.
+function PalettePicker({ panel, topics, onTopics, selected, onPick, noneTitle, noneActive = selected === null, isDenied, onDeny }: { panel: React.RefObject<HTMLElement | null>; topics: string[]; onTopics: (topics: string[]) => void; selected: number | null; onPick: (id: number | null) => void; noneTitle: string; noneActive?: boolean; isDenied?: (id: number) => boolean; onDeny?: (id: number) => void }) {
+  const list = inTopics(topics);
+  const [open, setOpen] = useState(false);
+  const fieldRef = useRef<HTMLButtonElement>(null), dropRef = useRef<HTMLDivElement>(null);
+  const pos = useFloating(open, () => setOpen(false), fieldRef, dropRef, panel, "left");
+  const summary = !topics.length ? "all topics" : topics.length <= 2 ? topics.join(", ") : `${topics.slice(0, 2).join(", ")} +${topics.length - 2}`;
+  const toggle = (t: string) => onTopics(topics.includes(t) ? topics.filter((x) => x !== t) : [...topics, t].sort());
+  return (
+    <>
+      <div className="row"><label>topics</label>
+        <button ref={fieldRef} type="button" className={`puzzle-picker${open ? " is-open" : ""}`} aria-expanded={open} onClick={() => setOpen(!open)} title="Show palettes with any of these topics"><span>{summary}</span></button>
+        <output>{list.length}</output>
+      </div>
+      {open && (
+        <div ref={dropRef} className="puzzle-list" style={pos ?? { visibility: "hidden" }}>
+          {PALETTE_TOPICS.map((t) => <label key={t}><input type="checkbox" checked={topics.includes(t)} onChange={() => toggle(t)} />{t}</label>)}
+          <span className="puzzle-section">
+            <button type="button" aria-pressed={!topics.length} onClick={() => onTopics([])}>all</button>
+          </span>
+        </div>
+      )}
+      <div className="palette-list">
+        <button type="button" className="is-none" aria-pressed={noneActive} onClick={() => onPick(null)} title={noneTitle} />
+        {list.map((p) => (
+          <button type="button" key={p.id} aria-pressed={p.id === selected} className={isDenied?.(p.id) ? "is-denied" : ""} onClick={() => onPick(p.id)} onContextMenu={onDeny ? (e) => { e.preventDefault(); onDeny(p.id); } : undefined} title={`${p.name} by ${p.by} · ${p.topics.join(", ")}`}>
+            {p.colors.map((c, i) => <i key={i} style={{ background: `#${c}` }} />)}
+          </button>
+        ))}
+      </div>
+    </>
+  );
 }
 
 // The fixed / random switch at the end of a row.
